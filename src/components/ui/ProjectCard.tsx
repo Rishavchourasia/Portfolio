@@ -5,8 +5,15 @@ import { ProjectPreview } from '@/components/ui/ProjectPreview'
 import type { Project } from '@/types/content'
 import { cn } from '@/lib/utils'
 
+/**
+ * Company work often has nothing to link to — an internal tool, a client's
+ * production system — and that's expected, not a gap to apologise for.
+ * "Links coming soon" only applies to personal projects, where a missing
+ * link really is just not-done-yet.
+ */
 function ProjectLinks({ project }: { project: Project }) {
   if (!project.live && !project.repo) {
+    if (project.category === 'company') return null
     return <p className="font-mono text-[11px] text-muted">Links coming soon</p>
   }
 
@@ -99,9 +106,11 @@ export function ProjectCard({ project, featured }: { project: Project; featured?
             </ul>
           </div>
 
-          <div className="mt-6">
-            <ProjectLinks project={project} />
-          </div>
+          {(project.live || project.repo || project.category !== 'company') && (
+            <div className="mt-6">
+              <ProjectLinks project={project} />
+            </div>
+          )}
         </div>
       </div>
     </SpotlightCard>
