@@ -5,7 +5,6 @@ import { SlideHeading } from '@/components/ui/SlideHeading'
 import { SpotlightCard } from '@/components/ui/SpotlightCard'
 import { experiences } from '@/content'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { EASE } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import type { Experience } from '@/types/content'
 
@@ -139,7 +138,22 @@ export function ExperienceSlide({ label }: { label: string }) {
                 initial={false}
                 variants={cardVariants}
                 animate={i < index ? 'above' : i === index ? 'current' : 'below'}
-                transition={reducedMotion ? { duration: 0 } : { duration: 0.55, ease: EASE }}
+                transition={
+                  reducedMotion
+                    ? { duration: 0 }
+                    : // A spring silently fails to animate this: Framer Motion
+                      // does not interpolate a percentage-based transform (the
+                      // card travels by '100%', its own height, which is what
+                      // lets it work at any content length) under `type: 'spring'`
+                      // — it jumps straight to the end value. A tween has no such
+                      // limit, so smoothness comes from the curve instead: the
+                      // app's usual EASE is expo-out, launching at full speed and
+                      // decelerating, which for a full-height card read as a snap
+                      // followed by a crawl. This symmetric ease-in-out
+                      // accelerates and decelerates evenly, closer to how
+                      // something with real weight actually glides.
+                      { duration: 0.6, ease: [0.65, 0, 0.35, 1] }
+                }
                 className={cn(
                   'col-start-1 row-start-1',
                   i !== index && 'pointer-events-none',
