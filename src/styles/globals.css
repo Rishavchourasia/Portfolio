@@ -67,6 +67,18 @@
   .carousel {
     padding-block: 0.4rem;
   }
+
+  .skill-card {
+    margin-bottom: 0.65rem;
+  }
+
+  .skill-card > * {
+    padding: 0.85rem;
+  }
+
+  .skill-columns {
+    column-gap: 0.65rem;
+  }
 }
 
 :root {

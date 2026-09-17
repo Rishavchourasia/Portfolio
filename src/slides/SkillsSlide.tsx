@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Code2, LayoutGrid, Sparkles, Wrench } from 'lucide-react'
+import { Bot, Braces, Database, FlaskConical, Gauge, LayoutGrid, Sparkles, Wrench } from 'lucide-react'
 import { Slide, slideItem } from '@/components/deck'
 import { SlideHeading } from '@/components/ui/SlideHeading'
 import { SpotlightCard } from '@/components/ui/SpotlightCard'
@@ -7,9 +7,13 @@ import { skills } from '@/content'
 import type { SkillGroup } from '@/types/content'
 
 const ICONS = {
-  code: Code2,
+  braces: Braces,
   layout: LayoutGrid,
   wrench: Wrench,
+  flask: FlaskConical,
+  gauge: Gauge,
+  database: Database,
+  bot: Bot,
   sparkles: Sparkles,
 } as const
 
@@ -17,8 +21,8 @@ function GroupCard({ group }: { group: SkillGroup }) {
   const Icon = ICONS[group.icon]
 
   return (
-    <motion.div variants={slideItem}>
-      <SpotlightCard className="h-full p-6">
+    <motion.div variants={slideItem} className="skill-card mb-4 break-inside-avoid">
+      <SpotlightCard className="p-5">
         <div className="flex items-center gap-3">
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-accent-500/12 text-accent-400">
             <Icon size={18} />
@@ -29,11 +33,11 @@ function GroupCard({ group }: { group: SkillGroup }) {
           </div>
         </div>
 
-        <ul className="mt-5 flex flex-wrap gap-2">
+        <ul className="mt-4 flex flex-wrap gap-1.5">
           {group.skills.map((skill) => (
             <li
               key={skill}
-              className="rounded-lg border border-[var(--border)] bg-[color-mix(in_oklab,var(--text)_5%,transparent)] px-3 py-1.5 text-[13px] transition-colors duration-200 hover:border-accent-500/50 hover:text-accent-400"
+              className="rounded-lg border border-[var(--border)] bg-[color-mix(in_oklab,var(--text)_5%,transparent)] px-2.5 py-1 text-[13px] transition-colors duration-200 hover:border-accent-500/50 hover:text-accent-400"
             >
               {skill}
             </li>
@@ -50,11 +54,11 @@ export function SkillsSlide({ label }: { label: string }) {
       <SlideHeading
         eyebrow="Skills"
         title={<>The toolkit behind the <span className="text-gradient">interface.</span></>}
-        subtitle="Not a list of every logo I've touched — these are the things I reach for when a real deadline shows up."
-        className="mb-10"
+        subtitle="What I reach for when a real deadline shows up."
+        className="mb-8"
       />
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="skill-columns columns-1 gap-4 sm:columns-2 xl:columns-3">
         {skills.groups.map((group) => (
           <GroupCard key={group.title} group={group} />
         ))}

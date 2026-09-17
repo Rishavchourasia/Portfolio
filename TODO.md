@@ -49,11 +49,9 @@ résumé. Two things worth a second look:
 - [ ] `src/content/profile.json` → `bio`, `tagline`, `values`
 - [x] `stats` — now your real figures: 25K+ users, Lighthouse 62→94, 40% faster
       builds. (Previously invented; replaced when the résumé came in.)
-- [ ] `src/content/skills.json` — **still my guesses, not your résumé.** It lists
-      Zustand, Framer Motion, SCSS, Storybook, Webpack and GraphQL, none of which
-      appear in your experience. Your résumé evidences React, Next.js, TypeScript,
-      Node.js, Jest, React Testing Library, REST, JWT/RBAC, PostgreSQL, Redis and
-      JIRA. Worth rewriting before you share the link.
+- [x] `src/content/skills.json` — now your seven real categories, verbatim from
+      what you sent. The one-line `blurb` under each group title is mine; the
+      skills themselves are untouched.
 
 ## 6. Regenerate the social card
 

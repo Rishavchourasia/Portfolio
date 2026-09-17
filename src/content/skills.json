@@ -1,33 +1,64 @@
 {
   "groups": [
     {
-      "title": "Core",
-      "blurb": "The languages I think in every day.",
-      "icon": "code",
-      "skills": ["JavaScript (ES2023)", "TypeScript", "HTML5 & semantics", "CSS3", "Grid & Flexbox"]
+      "title": "Languages",
+      "blurb": "What I think in every day.",
+      "icon": "braces",
+      "skills": ["JavaScript (ES6+)", "TypeScript", "HTML5", "CSS3"]
     },
     {
-      "title": "Frameworks & UI",
-      "blurb": "How I turn designs into products.",
+      "title": "Frontend",
+      "blurb": "Turning designs into products.",
       "icon": "layout",
-      "skills": ["React", "Next.js", "Tailwind CSS", "Redux Toolkit", "Zustand", "Framer Motion", "SCSS"]
+      "skills": [
+        "React.js",
+        "Next.js",
+        "Redux",
+        "Redux-Saga",
+        "Context API",
+        "Tailwind CSS",
+        "SSR",
+        "SSG",
+        "Responsive design",
+        "Accessibility (a11y)",
+        "SEO"
+      ]
     },
     {
-      "title": "Tooling & Platform",
-      "blurb": "Shipping, testing and keeping it fast.",
+      "title": "Build & Tooling",
+      "blurb": "Getting it out the door.",
       "icon": "wrench",
-      "skills": ["Vite", "Webpack", "Git & GitHub Actions", "Jest", "Testing Library", "REST", "GraphQL", "Node.js"]
+      "skills": ["Webpack", "Vite", "npm", "Git", "GitHub", "GitHub Actions (CI/CD)"]
     },
     {
-      "title": "Craft",
-      "blurb": "The parts that make it feel good.",
-      "icon": "sparkles",
-      "skills": ["Accessibility (WCAG 2.2)", "Core Web Vitals", "Design systems", "Responsive design", "Motion design", "Figma"]
+      "title": "Testing",
+      "blurb": "Confidence before the merge.",
+      "icon": "flask",
+      "skills": ["Jest", "React Testing Library", "Cypress (E2E)", "Unit testing", "Integration testing"]
+    },
+    {
+      "title": "Performance & Quality",
+      "blurb": "Measured, not guessed.",
+      "icon": "gauge",
+      "skills": ["Lighthouse", "Core Web Vitals", "Code splitting", "Lazy loading"]
+    },
+    {
+      "title": "Backend & Data",
+      "blurb": "Familiar with — enough to integrate cleanly.",
+      "icon": "database",
+      "skills": ["Node.js", "REST APIs", "Spring Boot", "PostgreSQL", "Redis", "Kafka"]
+    },
+    {
+      "title": "AI-Assisted Development",
+      "blurb": "Part of how I actually work.",
+      "icon": "bot",
+      "skills": ["Cursor", "GitHub Copilot", "Claude Code", "ChatGPT"]
     }
   ],
   "marquee": [
-    "React", "TypeScript", "Next.js", "Tailwind CSS", "JavaScript", "Framer Motion",
-    "Redux", "Vite", "Node.js", "GraphQL", "Jest", "Git", "Figma", "Accessibility",
-    "Web Vitals", "REST APIs"
+    "React.js", "Next.js", "TypeScript", "JavaScript", "Redux", "Redux-Saga",
+    "Tailwind CSS", "SSR", "SSG", "Accessibility", "SEO", "Vite", "Webpack",
+    "GitHub Actions", "Jest", "React Testing Library", "Cypress", "Core Web Vitals",
+    "Node.js", "REST APIs", "PostgreSQL", "Redis", "Kafka"
   ]
 }

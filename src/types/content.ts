@@ -44,7 +44,7 @@ export type Profile = {
 export type SkillGroup = {
   title: string
   blurb: string
-  icon: 'code' | 'layout' | 'wrench' | 'sparkles'
+  icon: 'braces' | 'layout' | 'wrench' | 'flask' | 'gauge' | 'database' | 'bot' | 'sparkles'
   skills: string[]
 }
 
