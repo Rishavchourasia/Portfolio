@@ -1,0 +1,90 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Generating social card…</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@600&family=JetBrains+Mono:wght@500&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  body { font: 15px/1.6 system-ui, sans-serif; background: #0a0c14; color: #e8ebf2; padding: 2rem; }
+  canvas { max-width: 100%; border-radius: 8px; margin-top: 1rem; }
+  code { color: #7dd3fc; }
+</style>
+
+<h1>Social card</h1>
+<p id="status">Rendering…</p>
+<canvas id="c" width="1200" height="630"></canvas>
+
+<script type="module">
+  // Values are passed in the URL hash by scripts/generate-og.mjs so this page
+  // works over file:// with no fetch.
+  const params = new URLSearchParams(location.hash.slice(1))
+  const name = params.get('name') ?? 'Your Name'
+  const role = params.get('role') ?? 'Frontend Engineer'
+  const line2 = params.get('line2') ?? 'crafting interfaces'
+  const skills = params.get('skills') ?? 'React  ·  TypeScript  ·  Accessibility  ·  Performance'
+  const port = params.get('port') ?? '5199'
+
+  const status = document.getElementById('status')
+  const canvas = document.getElementById('c')
+  const ctx = canvas.getContext('2d')
+  const W = canvas.width
+  const H = canvas.height
+
+  await document.fonts.ready
+
+  ctx.fillStyle = '#05060a'
+  ctx.fillRect(0, 0, W, H)
+
+  const orb = (cx, cy, r, rgb, alpha) => {
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r)
+    g.addColorStop(0, `rgba(${rgb},${alpha})`)
+    g.addColorStop(1, `rgba(${rgb},0)`)
+    ctx.fillStyle = g
+    ctx.fillRect(0, 0, W, H)
+  }
+  orb(180, 90, 600, '56,189,248', 0.42)
+  orb(1090, 540, 540, '167,139,250', 0.38)
+  orb(640, 680, 470, '94,234,212', 0.2)
+
+  ctx.strokeStyle = 'rgba(232,235,242,0.055)'
+  ctx.lineWidth = 1
+  for (let i = 0; i <= W; i += 60) {
+    ctx.beginPath(); ctx.moveTo(i + 0.5, 0); ctx.lineTo(i + 0.5, H); ctx.stroke()
+  }
+  for (let i = 0; i <= H; i += 60) {
+    ctx.beginPath(); ctx.moveTo(0, i + 0.5); ctx.lineTo(W, i + 0.5); ctx.stroke()
+  }
+
+  ctx.fillStyle = '#38bdf8'
+  ctx.font = '500 25px "JetBrains Mono", monospace'
+  ctx.fillText(name.toUpperCase().split('').join('').replace(/ /g, '  '), 88, 228)
+
+  const grad = ctx.createLinearGradient(88, 0, 940, 0)
+  grad.addColorStop(0, '#7dd3fc')
+  grad.addColorStop(0.55, '#a78bfa')
+  grad.addColorStop(1, '#5eead4')
+
+  ctx.font = '600 90px "Space Grotesk", system-ui, sans-serif'
+  ctx.fillStyle = grad
+  ctx.fillText(role, 88, 330)
+  ctx.fillStyle = '#e8ebf2'
+  ctx.fillText(line2, 88, 428)
+
+  ctx.fillStyle = '#8b94a8'
+  ctx.font = '400 29px Inter, system-ui, sans-serif'
+  ctx.fillText(skills, 88, 510)
+
+  ctx.fillStyle = '#38bdf8'
+  ctx.fillRect(88, 550, 120, 5)
+
+  const blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', 0.88))
+  try {
+    await fetch(`http://localhost:${port}`, { method: 'POST', mode: 'no-cors', body: blob })
+    status.textContent = `Sent ${Math.round(blob.size / 1024)} KB to public/og.jpg — you can close this tab.`
+  } catch {
+    status.innerHTML = 'Could not reach the receiver. Run <code>npm run og</code> first.'
+  }
+</script>

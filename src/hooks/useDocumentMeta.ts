@@ -22,7 +22,9 @@ export function useDocumentMeta({
     document.title = title
     setMeta('meta[name="description"]', description)
     setMeta('meta[property="og:title"]', title)
+    setMeta('meta[name="twitter:title"]', title)
     setMeta('meta[property="og:description"]', description)
+    setMeta('meta[name="twitter:description"]', description)
     setMeta('meta[name="theme-color"]', themeColor)
   }, [title, description, themeColor])
 }

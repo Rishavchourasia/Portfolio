@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Check, Copy, X } from 'lucide-react'
-import { COLOR_GROUPS, ELEVATIONS, FONTS, readToken, resolveColor } from '@/lib/tokens'
+import { COLOR_GROUPS, ELEVATIONS, FONTS, readColorTokens, readToken } from '@/lib/tokens'
 import { useTheme } from '@/hooks/useTheme'
 import { EASE } from '@/lib/motion'
 import { cn } from '@/lib/utils'
@@ -28,14 +28,17 @@ function CopyButton({ value }: { value: string }) {
   )
 }
 
-function Swatch({ label, varName, note }: { label: string; varName: string; note?: string }) {
-  const [value, setValue] = useState('')
-  const { theme } = useTheme()
-
-  useEffect(() => {
-    setValue(resolveColor(varName))
-  }, [varName, theme])
-
+function Swatch({
+  label,
+  varName,
+  note,
+  value,
+}: {
+  label: string
+  varName: string
+  note?: string
+  value: string
+}) {
   return (
     <li className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2.5">
       <span
@@ -69,9 +72,22 @@ export function StyleGuide({ open, onClose }: { open: boolean; onClose: () => vo
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
-  const fonts = useMemo(
-    () => (open ? FONTS.map((font) => ({ ...font, stack: readToken(font.varName) })) : []),
-    [open],
+  /**
+   * Read during render rather than in an effect: these are pure reads of the
+   * live stylesheet, so deriving them avoids a second render pass on open.
+   * `theme` is a real dependency — it is what swaps the custom properties on
+   * `:root` — and is captured alongside the values it produced.
+   */
+  const snapshot = useMemo(
+    () =>
+      open
+        ? {
+            theme,
+            fonts: FONTS.map((font) => ({ ...font, stack: readToken(font.varName) })),
+            colors: readColorTokens(),
+          }
+        : null,
+    [open, theme],
   )
 
   return (
@@ -103,7 +119,7 @@ export function StyleGuide({ open, onClose }: { open: boolean; onClose: () => vo
               <div>
                 <h2 className="font-display text-lg font-semibold">Design tokens</h2>
                 <p className="text-xs text-muted">
-                  Live values — {theme} theme
+                  Live values — {snapshot?.theme} theme
                 </p>
               </div>
               <button
@@ -121,7 +137,7 @@ export function StyleGuide({ open, onClose }: { open: boolean; onClose: () => vo
                   Typefaces
                 </h3>
                 <ul className="space-y-3">
-                  {fonts.map((font) => (
+                  {snapshot?.fonts.map((font) => (
                     <li
                       key={font.varName}
                       className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4"
@@ -148,7 +164,11 @@ export function StyleGuide({ open, onClose }: { open: boolean; onClose: () => vo
                   <p className="mb-3 text-[11px] text-muted">{group.blurb}</p>
                   <ul className="space-y-2">
                     {group.tokens.map((token) => (
-                      <Swatch key={token.varName} {...token} />
+                      <Swatch
+                        key={token.varName}
+                        {...token}
+                        value={snapshot?.colors[token.varName] ?? token.varName}
+                      />
                     ))}
                   </ul>
                 </section>

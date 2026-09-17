@@ -9,10 +9,17 @@ itself as each slide takes focus.
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
-npm run build    # production build → dist/
-npm run preview  # preview the production build
+npm run dev        # http://localhost:5173
+npm run build      # production build → dist/
+npm run preview    # serve the production build
+npm run typecheck  # tsc, no emit
+npm run lint       # oxlint
+npm run og         # regenerate public/og.jpg
 ```
+
+**New here?** [`TODO.md`](TODO.md) lists every placeholder still in the content
+files. The site builds and deploys as-is; that checklist is what makes it
+yours.
 
 ## Editing content — it's all JSON
 
@@ -31,8 +38,9 @@ component to change what the site says.
 from a raw `.json`, so `src/types/content.ts` stays the single description of
 every shape — a typo in a JSON file fails the build rather than the page.
 
-Drop your résumé at `public/resume.pdf`. Social share image at `public/og.png`
-(1200×630).
+Drop your résumé at `public/resume.pdf` and set `resumeUrl` to `/resume.pdf`.
+It ships as `""`, which hides both Résumé buttons rather than linking to a 404 —
+the same is true of any empty `socials` entry or project `live`/`repo` URL.
 
 ### Reordering or hiding a slide
 
@@ -153,6 +161,14 @@ what keeps a 1280×720 laptop on the full deck.
 
 Verified with no horizontal overflow and a stable snap mode at 375×812,
 430×932, 768×1024, 1024×768, 1280×720, 1440×900, 1920×1080 and 2560×1440.
+
+## Social card
+
+`public/og.jpg` (1200×630) is the image shown when the link is shared. Canvas
+text needs a real browser to rasterise, so `npm run og` opens a local page that
+draws the card and POSTs it back to a short-lived Node receiver, which writes
+the file. Content comes from `src/content/profile.json`, so re-run it after
+changing your name or role.
 
 ## Design tokens panel
 

@@ -52,9 +52,11 @@ export function HeroSlide({ label }: { label: string }) {
           View my work
           <ArrowUpRight size={16} />
         </ButtonLink>
-        <ButtonLink href={profile.resumeUrl} target="_blank" rel="noreferrer" variant="ghost">
-          Download résumé
-        </ButtonLink>
+        {profile.resumeUrl && (
+          <ButtonLink href={profile.resumeUrl} target="_blank" rel="noreferrer" variant="ghost">
+            Download résumé
+          </ButtonLink>
+        )}
 
         <div className="ml-1 flex items-center gap-1">
           {profile.socials.github && (

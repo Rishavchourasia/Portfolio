@@ -83,14 +83,16 @@ export function Navbar() {
             >
               {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
             </button>
-            <a
-              href={profile.resumeUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="hidden rounded-full bg-accent-500 px-5 py-2.5 text-sm font-medium text-ink-950 transition-colors hover:bg-accent-400 sm:inline-flex"
-            >
-              Resume
-            </a>
+            {profile.resumeUrl && (
+              <a
+                href={profile.resumeUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="hidden rounded-full bg-accent-500 px-5 py-2.5 text-sm font-medium text-ink-950 transition-colors hover:bg-accent-400 sm:inline-flex"
+              >
+                Resume
+              </a>
+            )}
             <button onClick={() => setOpen(true)} aria-label="Open menu" className="glass rounded-full p-2.5 md:hidden">
               <Menu size={15} />
             </button>

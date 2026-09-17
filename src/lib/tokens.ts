@@ -84,12 +84,26 @@ export const ELEVATIONS = [
 export const readToken = (varName: string) =>
   getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
 
-/** Resolves a token to a concrete rgb()/hsl() string a swatch can display. */
-export function resolveColor(varName: string): string {
-  const probe = document.createElement('span')
-  probe.style.cssText = `position:absolute;visibility:hidden;color:var(${varName})`
-  document.body.appendChild(probe)
-  const value = getComputedStyle(probe).color
-  probe.remove()
-  return value
+const ALIAS = /^var\(\s*(--[\w-]+)\s*\)$/
+
+/**
+ * Resolves a token to a displayable value, following `var()` aliases.
+ *
+ * Several tokens point at another token (`--bg: var(--color-ink-950)`), so a
+ * single read would show the reference rather than the colour. A pure chain of
+ * reads keeps this safe to call during render.
+ */
+export function resolveToken(varName: string, depth = 0): string {
+  const value = readToken(varName)
+  const alias = value.match(ALIAS)
+  return alias && depth < 8 ? resolveToken(alias[1], depth + 1) : value
+}
+
+/** Every colour token's resolved value, keyed by custom-property name. */
+export function readColorTokens(): Record<string, string> {
+  return Object.fromEntries(
+    COLOR_GROUPS.flatMap((group) =>
+      group.tokens.map((token) => [token.varName, resolveToken(token.varName)]),
+    ),
+  )
 }
