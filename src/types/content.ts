@@ -26,6 +26,14 @@ export type SiteContent = {
   }
 }
 
+export type Education = {
+  school: string
+  degree: string
+  field: string
+  location: string
+  period: string
+}
+
 export type Profile = {
   name: string
   firstName: string
@@ -39,6 +47,8 @@ export type Profile = {
   values: string[]
   socials: { github: string; linkedin: string; twitter: string }
   stats: { value: string; label: string }[]
+  /** Secondary info — shown as a small footnote, not a headline. */
+  education: Education
 }
 
 export type SkillGroup = {
@@ -64,9 +74,13 @@ export type Experience = {
   stack: string[]
 }
 
+export type ProjectCategory = 'company' | 'personal'
+
 export type Project = {
   slug: string
   title: string
+  /** Company work vs. personal builds — drives the tab filter on the Work slide. */
+  category: ProjectCategory
   tagline: string
   description: string
   highlights?: string[]

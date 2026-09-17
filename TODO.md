@@ -35,16 +35,28 @@ résumé. Two things worth a second look:
 
 ## 4. Your real projects
 
-`src/content/projects.json` — four entries, only the first is real. For each:
+The Work slide now splits into **Company** and **Personal** tabs
+(`category: "company" | "personal"` in `src/content/projects.json`).
 
-- [ ] `title`, `tagline`, `description`
-- [ ] `live` and/or `repo` URLs (omit or leave `""` to hide that button)
-- [ ] `tags`, `year`
-- [ ] `image` — put a screenshot in `public/projects/` and point at it, e.g.
-      `"/projects/my-app.png"`. Without one you get a generated gradient, which
-      looks fine but a real screenshot is better.
+- [x] Company — both real, from your résumé: **Contact Center Admin** (internal
+      data portal) and the **Static Site** (marketing/content, Next.js SSG).
+      Both ship with `live`/`repo` empty since they're internal or you didn't
+      give me a URL — the card just says "Links coming soon" instead of a dead
+      link. Add a `live` URL to the static site if it's public.
+- [ ] Personal — three of four are still placeholders (`Project Two/Three/Four`).
+      For each: `title`, `tagline`, `description`, `live`/`repo`, `tags`, `year`.
+- [ ] `image` on any project — put a screenshot in `public/projects/` and point
+      at it, e.g. `"/projects/my-app.png"`. Without one you get a generated
+      gradient, which looks fine but a real screenshot is better.
 
-## 5. Check the copy is actually yours
+## 5. Education — added, check it's right
+
+`src/content/profile.json` → `education`. Shown as a small one-line footnote
+under your bio on the About slide (not a headline, per your call) — BMS
+Institute of Technology, B.Tech Information Science, 2018–2022. If you'd
+rather it wasn't shown at all, delete that block from `AboutSlide.tsx`.
+
+## 6. Check the copy is actually yours
 
 - [ ] `src/content/profile.json` → `bio`, `tagline`, `values`
 - [x] `stats` — now your real figures: 25K+ users, Lighthouse 62→94, 40% faster
@@ -53,7 +65,7 @@ résumé. Two things worth a second look:
       what you sent. The one-line `blurb` under each group title is mine; the
       skills themselves are untouched.
 
-## 6. Regenerate the social card
+## 7. Regenerate the social card
 
 Once your name or role changes:
 
@@ -64,6 +76,6 @@ npm run og
 Opens a page that renders the card and writes `public/og.jpg`. Close the tab
 when it says it's done.
 
-## 7. Deploy
+## 8. Deploy
 
 See the README. Vercel gives you `your-name.vercel.app` for free.

@@ -29,7 +29,7 @@ component to change what the site says.
 | File | What it controls |
 | --- | --- |
 | `site.json` | Slide order, nav labels, background hue per slide, page metadata |
-| `profile.json` | Name, role, tagline, bio, email, socials, résumé link, stats, values |
+| `profile.json` | Name, role, tagline, bio, email, socials, résumé link, stats, values, education |
 | `skills.json` | Skill groups (plain lists, no ratings) + the marquee strip |
 | `experience.json` | Work history — rendered as tabs |
 | `projects.json` | Project cards — links, screenshots, highlights |
@@ -57,12 +57,14 @@ Adding a brand-new slide also needs a component and one line in
 
 ### Adding a project
 
-Append to `projects.json`:
+The Work slide splits projects into two tabs — **Company** and **Personal** —
+by the `category` field. Append to `projects.json`:
 
 ```json
 {
   "slug": "unique-id",
   "title": "Project name",
+  "category": "company",
   "tagline": "One line hook.",
   "description": "What it does and the hard part you solved.",
   "highlights": ["A measurable outcome."],
@@ -75,9 +77,16 @@ Append to `projects.json`:
 }
 ```
 
-`live`, `repo`, `image` and `status` are all optional — a missing link hides its
-button, and a missing image falls back to a generated gradient so the card never
-looks broken. Screenshots go in `public/projects/` (PNG or WebP, ~1600×1000).
+`category` is `"company"` or `"personal"` and decides which tab a project shows
+under. `live`, `repo`, `image` and `status` are all optional — a missing link
+hides its button, and a missing image falls back to a generated gradient so the
+card never looks broken. Screenshots go in `public/projects/` (PNG or WebP,
+~1600×1000).
+
+A featured card's highlight list is capped to 3 bullets on shorter screens
+(`.project-highlights` in `globals.css`) so one long project can't push the
+whole deck out of its one-screen mode — the full list still shows wherever
+there's room.
 
 ## Structure
 

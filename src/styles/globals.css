@@ -37,6 +37,15 @@
   html {
     font-size: clamp(13px, 1.62vh, 16px);
   }
+
+  /* A featured card's height should not depend on how many bullets a given
+     project happens to list — cap what's shown so one longer project can't
+     push the whole deck out of mandatory snapping the way a 4th highlight
+     did at this height. The full list is still there for anyone reading on a
+     screen with room (proximity mode leaves this rule inactive). */
+  .project-highlights > :nth-child(n + 4) {
+    display: none;
+  }
 }
 
 /* Below the font-size floor, trim the frame instead of the type: drop the
@@ -67,6 +76,7 @@
   .carousel {
     padding-block: 0.4rem;
   }
+
 
   .skill-card {
     margin-bottom: 1rem;

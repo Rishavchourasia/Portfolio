@@ -77,7 +77,7 @@ export function ProjectCard({ project, featured }: { project: Project; featured?
             <p className="mt-4 text-sm leading-relaxed text-muted text-pretty">{project.description}</p>
 
             {project.highlights && project.highlights.length > 0 && (
-              <ul className="mt-4 space-y-2">
+              <ul className="project-highlights mt-4 space-y-2">
                 {project.highlights.map((highlight) => (
                   <li
                     key={highlight}

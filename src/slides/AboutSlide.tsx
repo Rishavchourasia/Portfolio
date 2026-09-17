@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { MapPin, Sparkles } from 'lucide-react'
+import { GraduationCap, MapPin, Sparkles } from 'lucide-react'
 import { Slide, slideItem } from '@/components/deck'
 import { SlideHeading } from '@/components/ui/SlideHeading'
 import { SpotlightCard } from '@/components/ui/SpotlightCard'
@@ -16,13 +16,26 @@ export function AboutSlide({ label }: { label: string }) {
 
       <div className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
         <motion.div variants={slideItem}>
-          <SpotlightCard className="h-full p-7 sm:p-9">
+          <SpotlightCard className="flex h-full flex-col p-7 sm:p-9">
             <div className="space-y-4">
               {profile.bio.map((paragraph) => (
                 <p key={paragraph.slice(0, 24)} className="leading-relaxed text-muted text-pretty">
                   {paragraph}
                 </p>
               ))}
+            </div>
+
+            {/*
+              Education, kept deliberately small: a footnote under the bio
+              rather than its own card or slide, since it isn't what should
+              carry the weight of this page.
+            */}
+            <div className="mt-5 flex items-center gap-2.5 border-t border-[var(--border)] pt-4 text-xs text-muted">
+              <GraduationCap size={14} className="shrink-0 text-accent-400/70" />
+              <span>
+                {profile.education.degree}, {profile.education.field} · {profile.education.school} ·{' '}
+                {profile.education.period}
+              </span>
             </div>
           </SpotlightCard>
         </motion.div>

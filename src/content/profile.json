@@ -4,13 +4,13 @@
   "role": "Frontend Engineer",
   "tagline": "I build fast, accessible, delightfully animated interfaces for the web.",
   "bio": [
-    "I'm a frontend engineer who cares about the details most people only feel — the 80ms that a page takes to become interactive, the easing curve on a modal, the focus ring that makes a form usable with a keyboard.",
+    "I'm a frontend engineer who cares about the details most people only feel \u2014 the 80ms that a page takes to become interactive, the easing curve on a modal, the focus ring that makes a form usable with a keyboard.",
     "I work mostly in React and TypeScript, shaping design systems and product UI that scale past the first sprint. I like owning a feature end to end: from a Figma file and a vague ticket to a shipped, measured, accessible thing in production."
   ],
   "location": "India",
   "email": "rishav.chourasia4@gmail.com",
   "resumeUrl": "",
-  "availability": "Open to frontend roles",
+  "availability": "Open to opportunities",
   "values": [
     "Accessibility by default",
     "Performance budgets, not vibes",
@@ -23,8 +23,24 @@
     "twitter": ""
   },
   "stats": [
-    { "value": "25K+", "label": "People using what I've shipped" },
-    { "value": "94", "label": "Lighthouse score, lifted from 62" },
-    { "value": "40%", "label": "Faster builds from a shared component library" }
-  ]
+    {
+      "value": "25K+",
+      "label": "People using what I've shipped"
+    },
+    {
+      "value": "98",
+      "label": "Lighthouse score, lifted from 62"
+    },
+    {
+      "value": "40%",
+      "label": "Faster builds from a shared component library"
+    }
+  ],
+  "education": {
+    "school": "BMS Institute of Technology",
+    "degree": "B.Tech",
+    "field": "Information Science",
+    "location": "Bengaluru",
+    "period": "2018 — 2022"
+  }
 }

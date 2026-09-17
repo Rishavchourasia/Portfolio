@@ -1,7 +1,40 @@
 [
   {
+    "slug": "contact-center-admin",
+    "title": "Contact Center Admin — Internal Data Portal",
+    "category": "company",
+    "tagline": "Replaced manual DB edits and ad-hoc scripts with a real admin portal.",
+    "description": "Frontend architecture for a multi-module internal admin portal used to manage contact center data, built to replace direct database edits and one-off scripts with a proper interface.",
+    "highlights": [
+      "Reusable data-table components with server-driven search, filtering, sorting and pagination for 10K+ rows.",
+      "Schema-driven form flows with client and server validation, inline errors and optimistic updates.",
+      "Role-based access control across every module.",
+      "Bulk CSV import/export with per-row error reporting and audit logging."
+    ],
+    "tags": ["React", "Next.js", "Redux", "Tailwind CSS", "Spring Boot", "PostgreSQL"],
+    "year": "2025",
+    "live": "",
+    "repo": ""
+  },
+  {
+    "slug": "static-marketing-site",
+    "title": "Static Site — Public Marketing & Content Website",
+    "category": "company",
+    "tagline": "A statically-generated marketing site with automated rebuilds on every content change.",
+    "description": "Public marketing and content website built with Next.js SSG, consuming Spring Boot APIs, with automated CI/CD rebuilds and CDN delivery.",
+    "highlights": [
+      "Optimised images, fonts, bundle size and code splitting for page performance and SEO.",
+      "Reusable Tailwind + TypeScript layout system for consistent page development."
+    ],
+    "tags": ["Next.js", "React", "TypeScript", "Tailwind CSS", "CI/CD"],
+    "year": "2025",
+    "live": "",
+    "repo": ""
+  },
+  {
     "slug": "portfolio",
     "title": "Developer Portfolio",
+    "category": "personal",
     "tagline": "The deck you are looking at right now.",
     "description": "A slide-based portfolio driven entirely by JSON content files. Native CSS scroll-snap gives it a deck feel without hijacking the scroll wheel, and the background re-tints itself as each slide takes focus.",
     "highlights": [
@@ -18,6 +51,7 @@
   {
     "slug": "project-two",
     "title": "Project Two",
+    "category": "personal",
     "tagline": "A one-line hook for what it does.",
     "description": "Replace this with what the product is, who it is for, and the hard problem you solved — not \"a web app built with React\".",
     "highlights": ["A measurable outcome.", "A technical decision you can defend."],
@@ -29,6 +63,7 @@
   {
     "slug": "project-three",
     "title": "Project Three",
+    "category": "personal",
     "tagline": "A one-line hook for what it does.",
     "description": "What it is, the constraint you worked under, and the result it produced.",
     "highlights": ["A measurable outcome."],
@@ -40,6 +75,7 @@
   {
     "slug": "project-four",
     "title": "Project Four",
+    "category": "personal",
     "tagline": "A component library, tool or experiment.",
     "description": "Smaller side projects still count — show the thing you would happily walk an interviewer through.",
     "tags": ["React", "Storybook", "Accessibility"],
