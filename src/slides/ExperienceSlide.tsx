@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { Slide, slideItem } from '@/components/deck'
 import { SlideHeading } from '@/components/ui/SlideHeading'
 import { SpotlightCard } from '@/components/ui/SpotlightCard'
@@ -8,23 +8,43 @@ import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { EASE } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
+/** How far a resting panel sits above or below the visible one. */
+const TRAVEL = 26
+
+/**
+ * `custom` is the panel's offset: negative for roles above the selected one,
+ * positive for those below. Selecting a later role therefore sends the current
+ * panel up and out while the next rises into its place.
+ *
+ * The labels are deliberately not `active`/`idle`: those are the slide's own
+ * variant names, and a parent's labels propagate down to any child that
+ * defines them — which would hand control of these panels to the slide.
+ */
+const panelVariants: Variants = {
+  hidden: (offset: number) => ({
+    opacity: 0,
+    y: offset,
+    transition: { duration: 0.32, ease: EASE },
+  }),
+  shown: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: EASE, staggerChildren: 0.05, delayChildren: 0.08 },
+  },
+}
+
+const lineVariants: Variants = {
+  hidden: { opacity: 0, y: 8 },
+  shown: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE } },
+}
+
 /**
  * Roles are a tab list rather than a long timeline: a deck slide has one
  * viewport to work with, and tabs keep every role one click away.
  */
 export function ExperienceSlide({ label }: { label: string }) {
-  // Index and direction move together — the direction decides which way the
-  // incoming panel travels, so the motion matches the click.
-  const [tab, setTab] = useState({ index: 0, direction: 1 })
+  const [index, setIndex] = useState(0)
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
-
-  const job = experiences[tab.index]
-  if (!job) return null
-
-  const select = (next: number) =>
-    setTab({ index: next, direction: next > tab.index ? 1 : -1 })
-
-  const offset = reducedMotion ? 0 : 28 * tab.direction
 
   return (
     <Slide id="experience" label={label}>
@@ -42,13 +62,15 @@ export function ExperienceSlide({ label }: { label: string }) {
             className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0"
           >
             {experiences.map((item, i) => {
-              const active = i === tab.index
+              const active = i === index
               return (
                 <li key={`${item.company}-${item.period}`} className="shrink-0 lg:shrink">
                   <button
                     role="tab"
+                    id={`role-tab-${i}`}
+                    aria-controls={`role-panel-${i}`}
                     aria-selected={active}
-                    onClick={() => select(i)}
+                    onClick={() => setIndex(i)}
                     className={cn(
                       'relative w-full rounded-xl px-4 py-3 text-left transition-colors duration-200',
                       active ? 'text-[var(--text)]' : 'text-muted hover:text-[var(--text)]',
@@ -74,29 +96,28 @@ export function ExperienceSlide({ label }: { label: string }) {
 
         <motion.div variants={slideItem}>
           {/*
-            Two things make the swap smooth. `mode="popLayout"` takes the
-            outgoing role out of flow the moment it starts leaving, so the
-            container's height becomes the incoming role's straight away and
-            the two crossfade instead of queueing. `layout` on that container
-            then eases between those heights, which is what the roles' differing
-            bullet counts used to jump between.
+            Every role is rendered into the same grid cell, so the card is
+            always as tall as the longest one. Nothing around it — the heading,
+            the tab list, the slide — shifts when you switch; only the panel
+            inside moves.
           */}
           <SpotlightCard className="h-full" staticLift>
-            <motion.div
-              layout
-              transition={{ duration: 0.45, ease: EASE }}
-              className="p-7 sm:p-9"
-            >
-              <AnimatePresence initial={false} mode="popLayout">
+            <div className="grid p-7 sm:p-9">
+              {experiences.map((job, i) => (
                 <motion.div
-                  key={job.company + job.period}
-                  initial={{ opacity: 0, x: offset }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -offset }}
-                  transition={{
-                    opacity: { duration: 0.28, ease: 'easeOut' },
-                    x: { duration: 0.45, ease: EASE },
-                  }}
+                  key={`${job.company}-${job.period}`}
+                  role="tabpanel"
+                  id={`role-panel-${i}`}
+                  aria-labelledby={`role-tab-${i}`}
+                  aria-hidden={i !== index}
+                  custom={reducedMotion ? 0 : i < index ? -TRAVEL : TRAVEL}
+                  initial={false}
+                  animate={i === index ? 'shown' : 'hidden'}
+                  variants={panelVariants}
+                  className={cn(
+                    'col-start-1 row-start-1',
+                    i !== index && 'pointer-events-none',
+                  )}
                 >
                   <p className="font-mono text-[11px] tracking-[0.18em] text-accent-400 uppercase">
                     {job.period}
@@ -111,16 +132,10 @@ export function ExperienceSlide({ label }: { label: string }) {
                   <p className="mt-4 leading-relaxed text-muted">{job.summary}</p>
 
                   <ul className="mt-5 space-y-2.5">
-                    {job.highlights.map((highlight, i) => (
+                    {job.highlights.map((highlight) => (
                       <motion.li
                         key={highlight}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          duration: 0.4,
-                          ease: EASE,
-                          delay: reducedMotion ? 0 : 0.12 + i * 0.05,
-                        }}
+                        variants={lineVariants}
                         className="flex items-start gap-3 text-sm leading-relaxed text-muted"
                       >
                         <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500" />
@@ -137,8 +152,8 @@ export function ExperienceSlide({ label }: { label: string }) {
                     ))}
                   </ul>
                 </motion.div>
-              </AnimatePresence>
-            </motion.div>
+              ))}
+            </div>
           </SpotlightCard>
         </motion.div>
       </div>
