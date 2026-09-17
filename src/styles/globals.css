@@ -18,33 +18,116 @@
   --color-mint: #5eead4;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Fluid rhythm — every slide's breathing room scales with the viewport
+     rather than stepping at breakpoints. */
+  --slide-pad-top: clamp(5.5rem, 4rem + 6vh, 7.5rem);
+  --slide-pad-bottom: clamp(2rem, 1rem + 4vh, 3.5rem);
+  --slide-gutter: clamp(1.25rem, 0.5rem + 3vw, 2.5rem);
+  --stack-sm: clamp(1rem, 0.6rem + 1.4vh, 1.5rem);
+  --stack-md: clamp(1.75rem, 1rem + 3vh, 3rem);
+}
+
+/* Short laptop screens: scale the whole UI with viewport height so a slide
+   still fits one screen and the deck keeps snapping, instead of falling back
+   to plain scrolling. Every size in the app is rem-based, so this shrinks
+   type and spacing together and keeps proportions intact. Clamped at 13px so
+   body copy never drops below a comfortable reading size. */
+@media (min-width: 768px) and (max-height: 900px) {
+  html {
+    font-size: clamp(13px, 1.62vh, 16px);
+  }
+}
+
+/* Below the font-size floor, trim the frame instead of the type: drop the
+   optional slide subtitles and tighten the project card. Keeps a 1280x720
+   laptop on the full deck rather than dropping it to proximity snapping. */
+@media (min-width: 768px) and (max-height: 780px) {
+  .slide-subtitle {
+    display: none;
+  }
+
+  .project-card__body {
+    padding: 1.15rem;
+    gap: 1.15rem;
+  }
+
+  .project-preview__frame {
+    aspect-ratio: 16 / 9;
+  }
+
+  .project-dots {
+    margin-top: 0.5rem;
+  }
+
+  .work-header {
+    margin-bottom: 0.9rem;
+  }
+
+  .carousel {
+    padding-block: 0.4rem;
+  }
 }
 
 :root {
   color-scheme: dark;
+
   --bg: var(--color-ink-950);
   --surface: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(255, 255, 255, 0.06);
   --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
   --text: #e8ebf2;
   --text-muted: #8b94a8;
+
   --grad-1: var(--color-accent-400);
   --grad-2: var(--color-violet-alt);
   --grad-3: var(--color-mint);
+
+  /* Elevation reads as depth on dark: a cast shadow plus a lit top edge. */
+  --elev-1: 0 1px 0 0 rgba(255, 255, 255, 0.05) inset, 0 8px 24px -12px rgba(0, 0, 0, 0.8);
+  --elev-2: 0 1px 0 0 rgba(255, 255, 255, 0.07) inset, 0 24px 48px -20px rgba(0, 0, 0, 0.9);
+  --elev-3: 0 1px 0 0 rgba(255, 255, 255, 0.09) inset, 0 40px 80px -28px rgba(0, 0, 0, 0.95);
+
+  /* Background orbs: saturated and bright against near-black. */
+  --orb-sat: 85%;
+  --orb-light: 58%;
+  --orb-alpha: 1;
+  --grid-ink: 6%;
+  --scrim: 0.25;
 }
 
 [data-theme="light"] {
   color-scheme: light;
-  --bg: #f7f8fb;
-  --surface: rgba(10, 12, 20, 0.035);
-  --border: rgba(10, 12, 20, 0.1);
-  --text: #0d1017;
-  --text-muted: #5a6376;
-  /* darker stops so gradient headings stay readable on a light ground */
-  /* accent-400 is used for small text/links — darken it for contrast on light */
+
+  /* A cool paper ground rather than pure white — white cards on a white page
+     have no edge to sit on, which is what made the old light theme look flat. */
+  --bg: #eef1f7;
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-strong: #ffffff;
+  --border: rgba(12, 18, 32, 0.09);
+  --border-strong: rgba(12, 18, 32, 0.16);
+  --text: #0b0e16;
+  --text-muted: #55607a;
+
+  /* accent-400 carries small text and links — darken it for contrast here. */
   --color-accent-400: #0369a1;
-  --grad-1: #0284c7;
-  --grad-2: #7c3aed;
-  --grad-3: #0d9488;
+  --color-accent-500: #0284c7;
+  --grad-1: #0369a1;
+  --grad-2: #6d28d9;
+  --grad-3: #0f766e;
+
+  /* On light, elevation is a soft cast shadow — no inset highlight. */
+  --elev-1: 0 1px 2px rgba(12, 18, 32, 0.05), 0 4px 12px -4px rgba(12, 18, 32, 0.08);
+  --elev-2: 0 2px 4px rgba(12, 18, 32, 0.05), 0 16px 32px -12px rgba(12, 18, 32, 0.14);
+  --elev-3: 0 4px 8px rgba(12, 18, 32, 0.06), 0 32px 64px -20px rgba(12, 18, 32, 0.2);
+
+  /* Pale, desaturated orbs — the dark values turn to mud over paper. */
+  --orb-sat: 68%;
+  --orb-light: 74%;
+  --orb-alpha: 0.5;
+  --grid-ink: 9%;
+  --scrim: 0.5;
 }
 
 * { border-color: var(--border); }
@@ -84,8 +167,12 @@ body {
   display: none;
 }
 
-.deck[data-snap='on'] {
+.deck[data-snap='mandatory'] {
   scroll-snap-type: y mandatory;
+}
+
+.deck[data-snap='proximity'] {
+  scroll-snap-type: y proximity;
 }
 
 .slide {
@@ -95,24 +182,43 @@ body {
   min-height: 100dvh;
 }
 
-/* When snapping is on, a slide is exactly one viewport — that is what makes
-   the deck feel like slides rather than a long page. */
-.deck[data-snap='on'] .slide {
+.deck[data-snap='mandatory'] .slide,
+.deck[data-snap='proximity'] .slide {
+  scroll-snap-align: start;
+}
+
+/* Under mandatory snapping a slide is exactly one viewport — that is what
+   makes the deck feel like slides rather than a long page. */
+.deck[data-snap='mandatory'] .slide {
   height: 100dvh;
   min-height: 0;
-  scroll-snap-align: start;
   /* stops fast trackpad flicks from skipping past a slide */
   scroll-snap-stop: always;
+}
+
+/* Only a fixed-height slide has anything to fill. Scoping this to mandatory
+   keeps a slide's measured content height the same in every mode, which is
+   what stops the fit check below from flip-flopping between modes. */
+.deck[data-snap='mandatory'] .slide__inner--fill {
+  height: 100%;
+}
+
+/* Under proximity snapping slides keep their natural height, so long content
+   on a phone scrolls normally instead of hiding inside a fixed-height slide. */
+.deck[data-snap='proximity'] .slide__inner {
+  max-height: none;
+  overflow-y: visible;
 }
 
 /* Padding lives on the inner element, not the slide, so that content which
    does outgrow the viewport scrolls instead of being clipped. Snapping must
    never make content unreachable. */
 .slide__inner {
+  position: relative; /* makes children's offsetTop measurable against it */
   width: 100%;
   max-height: 100%;
   overflow-y: auto;
-  padding-block: 6.5rem 3.5rem;
+  padding-block: var(--slide-pad-top) var(--slide-pad-bottom);
   scrollbar-width: none;
 }
 
@@ -124,6 +230,8 @@ body {
 .carousel {
   scrollbar-width: none;
   scroll-padding-inline: 1.5rem;
+  /* room for the cards' lift and shadow, which would otherwise be clipped */
+  perspective: 1400px;
 }
 
 .carousel::-webkit-scrollbar {
@@ -134,6 +242,16 @@ body {
   .deck {
     scroll-behavior: auto;
     scroll-snap-type: none;
+  }
+
+  .deck .slide {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .deck .slide__inner {
+    max-height: none;
+    overflow-y: visible;
   }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -155,10 +273,28 @@ body {
 /* ---- utilities ---- */
 @utility text-muted { color: var(--text-muted); }
 
+/* Horizontal padding that tracks the viewport instead of stepping. */
+@utility px-gutter {
+  padding-inline: var(--slide-gutter);
+}
+
+@utility -mx-gutter {
+  margin-inline: calc(var(--slide-gutter) * -1);
+}
+
 @utility glass {
   background: var(--surface);
   border: 1px solid var(--border);
   backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: var(--elev-1);
+}
+
+@utility elevate-2 {
+  box-shadow: var(--elev-2);
+}
+
+@utility elevate-3 {
+  box-shadow: var(--elev-3);
 }
 
 @utility text-gradient {
@@ -170,8 +306,8 @@ body {
 
 @utility grid-bg {
   background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--text) 6%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--text) 6%, transparent) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in oklab, var(--text) var(--grid-ink), transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--text) var(--grid-ink), transparent) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
 }

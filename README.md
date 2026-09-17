@@ -79,13 +79,15 @@ src/
 ├── types/content.ts     the shapes the JSON must satisfy
 ├── components/
 │   ├── deck/            Deck, Slide, SlideRail, SlideProgress, SlideHint,
-│   │                    DeckContext, useDeckNavigation, slideMotion
+│   │                    DeckContext, useDeckNavigation, useContentFits,
+│   │                    slideMotion
 │   ├── background/      AnimatedBackground, OrbField, GridLayer, NoiseLayer
 │   ├── layout/          Navbar
-│   └── ui/              SlideHeading, SpotlightCard, ProjectCard,
-│                        ProjectPreview, SkillMarquee, Button, BrandIcons
-├── hooks/               useTheme, useMediaQuery, useCarousel
-├── lib/                 utils (cn), motion (shared easing)
+│   └── ui/              SlideHeading, SpotlightCard, ProjectCard, CarouselItem,
+│                        ProjectPreview, SkillMarquee, StyleGuide,
+│                        CursorFollower, Button, BrandIcons
+├── hooks/               useTheme, useMediaQuery, useCarousel, useDocumentMeta
+├── lib/                 utils (cn), motion (easing), tokens (style-guide data)
 ├── slides/              HeroSlide … ContactSlide + registry
 └── styles/globals.css   design tokens, deck/slide CSS, utilities, keyframes
 ```
@@ -102,12 +104,23 @@ momentum, trackpad gestures and assistive-tech scrolling all behave normally.
 **Keyboard**: ↑/↓, PageUp/PageDown, Home/End move one slide at a time.
 Key handling is skipped while focus is in a form field, link or button.
 
-**It degrades on purpose.** Snapping turns off — slides revert to natural height
-and the page scrolls normally — when the viewport is shorter than 620px or the
-visitor has `prefers-reduced-motion: reduce`. Mandatory snapping plus content
-taller than the screen is how snap decks trap content; this avoids it. As a
-second guard, a slide's inner wrapper scrolls internally if its content ever
-outgrows the viewport.
+**Three snap modes, chosen at runtime.** Mandatory snapping plus content taller
+than the screen is how snap decks trap content, so the deck refuses to use it
+unless the content measurably fits:
+
+| Mode | When | Behaviour |
+| --- | --- | --- |
+| `mandatory` | Viewport ≥768×640 **and** every slide measurably fits | Full deck: fixed-height slides, one per screen |
+| `proximity` | Phones, short windows, or any slide that overflows | Slides take their natural height; the browser snaps only if you already land near a boundary |
+| `none` | `prefers-reduced-motion: reduce` | Plain scrolling |
+
+`useContentFits` does the measuring. It deliberately builds each slide's height
+from `offsetTop`/`offsetHeight` rather than `scrollHeight`, because slide
+children rest at a translated `y` until their slide becomes active and
+`scrollHeight` counts that entrance offset as overflow. Two thresholds (8px to
+fail, 32px to recover) give the result hysteresis so a borderline slide can't
+oscillate the deck between modes. A `ResizeObserver` plus `document.fonts.ready`
+re-measures on reflow.
 
 **Animations replay.** `<Slide>` flips a `motion` variant scope between `idle`
 and `active`, so anything using the exported `slideItem` variant animates in
@@ -120,11 +133,53 @@ across the deck as you advance. A masked grid sits behind and an inlined SVG
 grain sits on top to kill gradient banding. The continuous float animation is
 dropped under reduced motion.
 
+## Responsive behaviour
+
+Sizing is fluid rather than stepped. Spacing comes from `clamp()` tokens
+(`--slide-pad-top`, `--slide-gutter`, …) and headings from `clamp()` with `vw`,
+so there are no layout jumps between breakpoints.
+
+Because every size is rem-based, short screens scale the whole UI at once:
+
+```css
+@media (min-width: 768px) and (max-height: 900px) {
+  html { font-size: clamp(13px, 1.62vh, 16px); }
+}
+```
+
+Below that 13px floor a second query trims the frame instead of the type —
+optional slide subtitles are hidden and the project card tightens — which is
+what keeps a 1280×720 laptop on the full deck.
+
+Verified with no horizontal overflow and a stable snap mode at 375×812,
+430×932, 768×1024, 1024×768, 1280×720, 1440×900, 1920×1080 and 2560×1440.
+
+## Design tokens panel
+
+The palette icon in the navbar opens a slide-over listing the typefaces,
+colour tokens and elevation ramp actually in use. Values are read off the live
+stylesheet with `getComputedStyle`, so the panel reflects the current theme and
+can never drift from what the page paints. Each value is click-to-copy.
+
+Edit the registry in `src/lib/tokens.ts` to document a new token.
+
 ## Design notes
 
-- Dark-first with a light theme toggle; both are driven by CSS custom properties
-  in `globals.css`. Gradient and accent colours resolve per theme so headings
-  stay readable on a light ground.
+- Dark-first with a light theme toggle. Light is a cool paper ground (`#eef1f7`),
+  not white — white cards on a white page have no edge to sit on. Accent and
+  gradient colours darken in light mode so headings and links keep their
+  contrast, and the background orbs desaturate so they read as washes instead
+  of mud.
+- Depth comes from three `--elev-*` tokens: a cast shadow plus a lit top edge on
+  dark, a soft cast shadow alone on light. Cards rest at elevation 1–2 and lift
+  to 3 on hover.
+- Theme lives in a module-level store (`useSyncExternalStore`) because the navbar
+  writes it and the animated background reads it.
+- Project cards are scroll-linked: scale, opacity and a slight Y-rotation track
+  each card's distance from the centre of the track, so cards settle into focus
+  as you scroll.
+- A cursor ring follows the pointer and snaps around whatever nav item or button
+  is under it. Fine pointers only, and never under reduced motion.
 - Colours, fonts and easing live in the `@theme` block — change them there once.
 - Skip link, visible focus rings, semantic landmarks, `aria-current` on nav.
 

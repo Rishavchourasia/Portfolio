@@ -98,7 +98,7 @@ export function HeroSlide({ label }: { label: string }) {
         ))}
       </motion.dl>
 
-      <motion.div variants={slideItem} className="mt-12 -mx-6">
+      <motion.div variants={slideItem} className="mt-12 -mx-gutter">
         <SkillMarquee items={skills.marquee} />
       </motion.div>
     </Slide>

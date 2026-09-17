@@ -14,6 +14,12 @@ type Props = {
   contentClassName?: string
   /** Opt out of the centred max-width shell (used by the closing slide). */
   bare?: boolean
+  /**
+   * Stretch the inner wrapper to the full slide height, so a bottom-anchored
+   * child (the footer) sits flush. Only takes effect under mandatory snapping
+   * — elsewhere the slide has no fixed height to fill.
+   */
+  fill?: boolean
 }
 
 /**
@@ -23,7 +29,7 @@ type Props = {
  * `slideItem` variant animates in every time the slide becomes active, so
  * moving back up the deck feels as alive as moving down.
  */
-export function Slide({ id, label, children, className, contentClassName, bare }: Props) {
+export function Slide({ id, label, children, className, contentClassName, bare, fill }: Props) {
   const isActive = useIsActiveSlide(id)
 
   return (
@@ -37,7 +43,8 @@ export function Slide({ id, label, children, className, contentClassName, bare }
         }}
         className={cn(
           'slide__inner',
-          !bare && 'mx-auto w-full max-w-6xl px-6',
+          fill && 'slide__inner--fill',
+          !bare && 'mx-auto w-full max-w-6xl px-gutter',
           contentClassName,
         )}
       >

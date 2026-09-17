@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { DeckContext, type DeckState } from './DeckContext'
 import { useDeckNavigation } from './useDeckNavigation'
+import { useContentFits } from './useContentFits'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import type { SlideId } from '@/types/content'
 
@@ -21,11 +22,21 @@ export function Deck({ slideIds, children }: Props) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [hasMoved, setHasMoved] = useState(false)
 
-  // Snapping is disabled where it would trap content: short viewports and
-  // users who asked for reduced motion. Keyboard paging follows the same rule.
+  /**
+   * Three snap modes, because one screen size does not fit all:
+   *
+   * - `mandatory` — the full deck. Requires a roomy viewport *and* content
+   *   that measurably fits it, so a long bio can't strand text off-screen.
+   * - `proximity` — phones, short windows, overflowing slides. Slides grow to
+   *   their natural height and the browser only snaps when you already land
+   *   near a boundary: still reads as sections, nothing ever trapped.
+   * - `none` — reduced motion. Plain scrolling.
+   */
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
-  const shortViewport = useMediaQuery('(max-height: 620px)')
-  const snapEnabled = !reducedMotion && !shortViewport
+  const roomy = useMediaQuery('(min-width: 768px) and (min-height: 640px)')
+  const fits = useContentFits(containerRef)
+
+  const snapMode = reducedMotion ? 'none' : roomy && fits ? 'mandatory' : 'proximity'
 
   // Track the slide filling most of the viewport.
   useEffect(() => {
@@ -74,7 +85,7 @@ export function Deck({ slideIds, children }: Props) {
   const next = useCallback(() => goToIndex(activeIndex + 1), [goToIndex, activeIndex])
   const prev = useCallback(() => goToIndex(activeIndex - 1), [goToIndex, activeIndex])
 
-  useDeckNavigation({ next, prev, goToIndex, total: slideIds.length, enabled: snapEnabled })
+  useDeckNavigation({ next, prev, goToIndex, total: slideIds.length, enabled: snapMode !== 'none' })
 
   const value = useMemo<DeckState>(
     () => ({
@@ -95,7 +106,7 @@ export function Deck({ slideIds, children }: Props) {
     <DeckContext.Provider value={value}>
       <div
         ref={containerRef}
-        data-snap={snapEnabled ? 'on' : 'off'}
+        data-snap={snapMode}
         className="deck"
       >
         {children}

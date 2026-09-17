@@ -28,7 +28,7 @@ export function ProjectPreview({ title, slug, image, status, className }: Props)
   return (
     <div
       className={cn(
-        'relative overflow-hidden rounded-xl border border-[var(--border)] bg-[color-mix(in_oklab,var(--text)_4%,transparent)]',
+        'relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] shadow-[var(--elev-2)]',
         className,
       )}
     >
@@ -45,7 +45,7 @@ export function ProjectPreview({ title, slug, image, status, className }: Props)
         )}
       </div>
 
-      <div className="relative aspect-[16/10] overflow-hidden">
+      <div className="project-preview__frame relative aspect-[16/10] overflow-hidden">
         {image ? (
           <img
             src={image}

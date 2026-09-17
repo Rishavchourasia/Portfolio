@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useDeck } from '@/components/deck'
 import { hueBySlide } from '@/content'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { useTheme } from '@/hooks/useTheme'
 import { GridLayer } from './GridLayer'
 import { NoiseLayer } from './NoiseLayer'
 import { OrbField } from './OrbField'
@@ -17,6 +18,7 @@ import { OrbField } from './OrbField'
 export function AnimatedBackground() {
   const { activeIndex, total, activeId } = useDeck()
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const { isDark } = useTheme()
 
   const hue = hueBySlide[activeId] ?? 199
   const progress = total > 1 ? activeIndex / (total - 1) : 0
@@ -35,7 +37,11 @@ export function AnimatedBackground() {
       <motion.div
         className="absolute inset-0"
         initial={false}
-        animate={{ backgroundColor: `hsl(${hue} 60% 6% / 0.35)` }}
+        animate={{
+          backgroundColor: isDark
+            ? `hsl(${hue} 60% 6% / 0.35)`
+            : `hsl(${hue} 46% 96% / 0.6)`,
+        }}
         transition={{ duration: 1.2, ease: 'easeInOut' }}
       />
 
@@ -43,8 +49,9 @@ export function AnimatedBackground() {
       <OrbField hue={hue} drift={drift} animate={!reducedMotion} />
       <NoiseLayer />
 
-      {/* keeps text legible over the brightest orb */}
-      <div className="absolute inset-0 bg-[var(--bg)]/25" />
+      {/* Scrim keeps text legible over the brightest orb. Light needs more of
+          it than dark, since pale orbs sit close to the text background. */}
+      <div className="absolute inset-0 bg-[var(--bg)] opacity-[var(--scrim)]" />
     </div>
   )
 }

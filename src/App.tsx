@@ -1,6 +1,7 @@
 import { AnimatedBackground } from '@/components/background'
 import { Deck, SlideHint, SlideProgress, SlideRail } from '@/components/deck'
 import { Navbar } from '@/components/layout/Navbar'
+import { CursorFollower } from '@/components/ui/CursorFollower'
 import { SLIDE_REGISTRY } from '@/slides/registry'
 import { site, slideIds } from '@/content'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
@@ -18,6 +19,7 @@ export default function App() {
       </a>
 
       <AnimatedBackground />
+      <CursorFollower />
       <SlideProgress />
       <Navbar />
       <SlideRail />

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Menu, Moon, Sun, X } from 'lucide-react'
+import { Menu, Moon, Palette, Sun, X } from 'lucide-react'
 import { useDeck } from '@/components/deck'
 import { navSlides, profile } from '@/content'
 import { useTheme } from '@/hooks/useTheme'
+import { StyleGuide } from '@/components/ui/StyleGuide'
 import { cn } from '@/lib/utils'
 import type { SlideId } from '@/types/content'
 
@@ -11,6 +12,7 @@ export function Navbar() {
   const { activeId, goTo, hasMoved } = useDeck()
   const { theme, toggle } = useTheme()
   const [open, setOpen] = useState(false)
+  const [guideOpen, setGuideOpen] = useState(false)
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -67,6 +69,14 @@ export function Navbar() {
 
           <div className="flex items-center gap-2">
             <button
+              onClick={() => setGuideOpen(true)}
+              aria-label="Show fonts and colours used"
+              title="Fonts & colours"
+              className="glass rounded-full p-2.5 transition-colors hover:border-accent-500/50"
+            >
+              <Palette size={15} />
+            </button>
+            <button
               onClick={toggle}
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
               className="glass rounded-full p-2.5 transition-colors hover:border-accent-500/50"
@@ -118,9 +128,24 @@ export function Navbar() {
                 </motion.li>
               ))}
             </ul>
+
+            <div className="mt-8 px-8">
+              <button
+                onClick={() => {
+                  setOpen(false)
+                  setGuideOpen(true)
+                }}
+                className="glass inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm"
+              >
+                <Palette size={15} />
+                Fonts &amp; colours
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <StyleGuide open={guideOpen} onClose={() => setGuideOpen(false)} />
     </>
   )
 }

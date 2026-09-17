@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Slide, slideItem } from '@/components/deck'
 import { SlideHeading } from '@/components/ui/SlideHeading'
 import { ProjectCard } from '@/components/ui/ProjectCard'
+import { CarouselItem } from '@/components/ui/CarouselItem'
 import { projects } from '@/content'
 import { useCarousel } from '@/hooks/useCarousel'
 import { cn } from '@/lib/utils'
@@ -16,7 +17,7 @@ export function WorkSlide({ label }: { label: string }) {
 
   return (
     <Slide id="work" label={label}>
-      <div className="mb-7 flex flex-wrap items-end justify-between gap-6">
+      <div className="work-header mb-7 flex flex-wrap items-end justify-between gap-6">
         <SlideHeading
           eyebrow="Selected work"
           title={<>Things I&apos;ve <span className="text-gradient">built.</span></>}
@@ -46,21 +47,17 @@ export function WorkSlide({ label }: { label: string }) {
       <motion.div variants={slideItem}>
         <div
           ref={trackRef}
-          className="carousel -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-3"
+          className="carousel -mx-gutter flex snap-x snap-mandatory gap-5 overflow-x-auto px-gutter py-4"
         >
           {projects.map((project, i) => (
-            <article
-              key={project.slug}
-              data-index={i}
-              className="w-[min(92vw,58rem)] shrink-0 snap-start"
-            >
+            <CarouselItem key={project.slug} index={i} containerRef={trackRef}>
               <ProjectCard project={project} featured />
-            </article>
+            </CarouselItem>
           ))}
         </div>
       </motion.div>
 
-      <motion.div variants={slideItem} className="mt-4 flex items-center gap-4">
+      <motion.div variants={slideItem} className="project-dots mt-4 flex items-center gap-4">
         <ul className="flex items-center gap-2">
           {projects.map((project, i) => (
             <li key={project.slug}>

@@ -33,7 +33,7 @@ export function SlideHeading({
       </motion.h2>
 
       {subtitle && (
-        <motion.p variants={slideItem} className="mt-4 leading-relaxed text-muted text-pretty">
+        <motion.p variants={slideItem} className="slide-subtitle mt-4 leading-relaxed text-muted text-pretty">
           {subtitle}
         </motion.p>
       )}

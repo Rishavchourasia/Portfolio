@@ -45,11 +45,11 @@ function ProjectLinks({ project }: { project: Project }) {
  */
 export function ProjectCard({ project, featured }: { project: Project; featured?: boolean }) {
   return (
-    <SpotlightCard className="h-full">
+    <SpotlightCard className="h-full" elevation={2} staticLift={featured}>
       <div
         className={cn(
-          'flex h-full flex-col gap-6 p-5 sm:p-7',
-          featured && 'lg:grid lg:grid-cols-2 lg:items-center lg:gap-9 lg:p-8',
+          'project-card__body flex h-full flex-col gap-6 p-5 sm:p-7',
+          featured && 'md:grid md:grid-cols-2 md:items-center md:gap-7 md:p-7 lg:gap-9 lg:p-8',
         )}
       >
         <ProjectPreview
@@ -57,10 +57,10 @@ export function ProjectCard({ project, featured }: { project: Project; featured?
           slug={project.slug}
           image={project.image}
           status={project.status}
-          className={cn(featured && 'lg:order-2')}
+          className={cn(featured && 'md:order-2')}
         />
 
-        <div className={cn('flex flex-1 flex-col', featured && 'lg:order-1')}>
+        <div className={cn('flex flex-1 flex-col', featured && 'md:order-1')}>
           <div className="flex-1">
             <div className="flex items-center gap-3">
               <span className="font-mono text-[11px] tracking-[0.18em] text-muted uppercase">

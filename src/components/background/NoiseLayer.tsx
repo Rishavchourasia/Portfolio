@@ -8,7 +8,7 @@ const NOISE =
 export function NoiseLayer() {
   return (
     <div
-      className="absolute inset-0 opacity-[0.035] mix-blend-overlay"
+      className="absolute inset-0 opacity-[0.03] mix-blend-overlay"
       style={{ backgroundImage: NOISE }}
     />
   )

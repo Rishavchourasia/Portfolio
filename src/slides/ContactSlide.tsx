@@ -12,8 +12,8 @@ export function ContactSlide({ label }: { label: string }) {
   const year = new Date().getFullYear()
 
   return (
-    <Slide id="contact" label={label} bare contentClassName="flex h-full flex-col justify-between !pb-0">
-      <div className="mx-auto flex w-full max-w-6xl flex-1 items-center px-6">
+    <Slide id="contact" label={label} bare fill contentClassName="flex flex-col justify-between pt-20! pb-0!">
+      <div className="mx-auto flex w-full max-w-6xl flex-1 items-center px-gutter">
         <div className="flex w-full flex-col items-center justify-center text-center">
           <motion.p
             variants={slideItem}
@@ -24,20 +24,20 @@ export function ContactSlide({ label }: { label: string }) {
 
           <motion.h2
             variants={slideItem}
-            className="font-display mt-5 max-w-3xl text-[clamp(2rem,5.5vw,4rem)] leading-[1.05] font-semibold tracking-tight text-balance"
+            className="font-display mt-4 max-w-3xl text-[clamp(1.9rem,4.6vw,3.4rem)] leading-[1.05] font-semibold tracking-tight text-balance"
           >
             Have a role or an idea? <span className="text-gradient">Let&apos;s talk.</span>
           </motion.h2>
 
           <motion.p
             variants={slideItem}
-            className="mt-5 max-w-lg leading-relaxed text-muted text-pretty"
+            className="mt-4 max-w-lg leading-relaxed text-muted text-pretty"
           >
             I reply to everything — whether it&apos;s a job, a freelance build, or a question about
             something in this deck.
           </motion.p>
 
-          <motion.div variants={slideItem} className="mt-7 flex flex-wrap items-center justify-center gap-3">
+          <motion.div variants={slideItem} className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <ButtonLink href={`mailto:${profile.email}`}>
               <Mail size={16} />
               Say hello
@@ -65,7 +65,7 @@ export function ContactSlide({ label }: { label: string }) {
           <SkillMarquee items={skills.marquee} />
         </div>
 
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-gutter py-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted">
             © {year} {profile.name}. Built with React, TypeScript &amp; Tailwind.
           </p>

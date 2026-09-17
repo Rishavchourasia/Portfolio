@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion'
-import { cn } from '@/lib/utils'
 
 type Orb = {
   /** Offset from the active hue, so the trio always harmonises. */
   hueShift: number
   size: string
-  /** Base position in percent. */
+  /** Base position, in percent of the viewport. */
   x: number
   y: number
+  /** Multiplied by the theme's --orb-alpha. */
   opacity: number
   duration: number
   delay: number
@@ -25,23 +25,30 @@ type Props = {
   animate: boolean
 }
 
-/** Three blurred colour orbs that re-tint and re-position per slide. */
+/**
+ * Three blurred colour orbs that re-tint and re-position per slide.
+ *
+ * Saturation, lightness and alpha come from `--orb-*` custom properties, so
+ * the light theme gets pale washes instead of the muddy, oversaturated blobs
+ * that the dark values produce over paper.
+ */
 export function OrbField({ hue, drift, animate }: Props) {
   return (
     <>
       {ORBS.map((orb, i) => (
         <motion.div
           key={i}
-          className={cn('absolute rounded-full blur-[130px] will-change-transform')}
+          className="absolute rounded-full blur-[130px] will-change-transform"
           style={{
             width: orb.size,
             height: orb.size,
             left: `${orb.x}%`,
             top: `${orb.y}%`,
+            opacity: `calc(${orb.opacity} * var(--orb-alpha))`,
           }}
           initial={false}
           animate={{
-            backgroundColor: `hsl(${hue + orb.hueShift} 85% 58% / ${orb.opacity})`,
+            backgroundColor: `hsl(${hue + orb.hueShift} var(--orb-sat) var(--orb-light))`,
             x: `${drift.x * (i + 1) * 0.6}%`,
             y: `${drift.y * (i + 1) * 0.4}%`,
           }}
