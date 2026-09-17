@@ -27,6 +27,9 @@
   --border: rgba(255, 255, 255, 0.09);
   --text: #e8ebf2;
   --text-muted: #8b94a8;
+  --grad-1: var(--color-accent-400);
+  --grad-2: var(--color-violet-alt);
+  --grad-3: var(--color-mint);
 }
 
 [data-theme="light"] {
@@ -36,6 +39,12 @@
   --border: rgba(10, 12, 20, 0.1);
   --text: #0d1017;
   --text-muted: #5a6376;
+  /* darker stops so gradient headings stay readable on a light ground */
+  /* accent-400 is used for small text/links — darken it for contrast on light */
+  --color-accent-400: #0369a1;
+  --grad-1: #0284c7;
+  --grad-2: #7c3aed;
+  --grad-3: #0d9488;
 }
 
 * { border-color: var(--border); }
@@ -82,7 +91,7 @@ body {
 }
 
 @utility text-gradient {
-  background-image: linear-gradient(100deg, var(--color-accent-400) 0%, var(--color-violet-alt) 55%, var(--color-mint) 100%);
+  background-image: linear-gradient(100deg, var(--grad-1) 0%, var(--grad-2) 55%, var(--grad-3) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
