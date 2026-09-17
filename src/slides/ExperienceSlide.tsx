@@ -7,35 +7,58 @@ import { experiences } from '@/content'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { EASE } from '@/lib/motion'
 import { cn } from '@/lib/utils'
-
-/** How far a resting panel sits above or below the visible one. */
-const TRAVEL = 26
+import type { Experience } from '@/types/content'
 
 /**
- * `custom` is the panel's offset: negative for roles above the selected one,
- * positive for those below. Selecting a later role therefore sends the current
- * panel up and out while the next rises into its place.
+ * Where each card rests relative to the window it slides through.
  *
- * The labels are deliberately not `active`/`idle`: those are the slide's own
- * variant names, and a parent's labels propagate down to any child that
- * defines them — which would hand control of these panels to the slide.
+ * Labels rather than an inline `animate` object: a motion child of a
+ * variant-driven parent — which every slide is — does not pick up changes to
+ * an object `animate` prop, but does respond to a label. The names avoid the
+ * slide's own `active`/`idle`, since a parent's labels propagate to any child
+ * that defines them.
  */
-const panelVariants: Variants = {
-  hidden: (offset: number) => ({
-    opacity: 0,
-    y: offset,
-    transition: { duration: 0.32, ease: EASE },
-  }),
-  shown: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.45, ease: EASE, staggerChildren: 0.05, delayChildren: 0.08 },
-  },
+const cardVariants: Variants = {
+  above: { y: '-100%' },
+  current: { y: '0%' },
+  below: { y: '100%' },
 }
 
-const lineVariants: Variants = {
-  hidden: { opacity: 0, y: 8 },
-  shown: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE } },
+function RoleCard({ job }: { job: Experience }) {
+  return (
+    <SpotlightCard className="h-full" staticLift>
+      <div className="p-7 sm:p-9">
+        <p className="font-mono text-[11px] tracking-[0.18em] text-accent-400 uppercase">
+          {job.period}
+          {job.location && <span className="text-muted"> · {job.location}</span>}
+        </p>
+
+        <h3 className="font-display mt-2 text-2xl font-semibold tracking-tight">
+          {job.role}
+          <span className="text-muted"> · {job.company}</span>
+        </h3>
+
+        <p className="mt-4 leading-relaxed text-muted">{job.summary}</p>
+
+        <ul className="mt-5 space-y-2.5">
+          {job.highlights.map((highlight) => (
+            <li key={highlight} className="flex items-start gap-3 text-sm leading-relaxed text-muted">
+              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500" />
+              {highlight}
+            </li>
+          ))}
+        </ul>
+
+        <ul className="mt-6 flex flex-wrap gap-2">
+          {job.stack.map((tech) => (
+            <li key={tech} className="glass rounded-full px-3 py-1 font-mono text-[11px] text-muted">
+              {tech}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </SpotlightCard>
+  )
 }
 
 /**
@@ -96,65 +119,37 @@ export function ExperienceSlide({ label }: { label: string }) {
 
         <motion.div variants={slideItem}>
           {/*
-            Every role is rendered into the same grid cell, so the card is
-            always as tall as the longest one. Nothing around it — the heading,
-            the tab list, the slide — shifts when you switch; only the panel
-            inside moves.
+            A fixed window that whole cards travel through: every role sits in
+            the same grid cell, so the window is always as tall as the longest
+            one and never resizes. Grid items stretch to that height, which is
+            what makes `y: 100%` exactly one window — the outgoing card clears
+            the top as the next arrives from below.
+
+            The elevation lives out here because a card's own shadow would be
+            clipped by the window it slides inside.
           */}
-          <SpotlightCard className="h-full" staticLift>
-            <div className="grid p-7 sm:p-9">
-              {experiences.map((job, i) => (
-                <motion.div
-                  key={`${job.company}-${job.period}`}
-                  role="tabpanel"
-                  id={`role-panel-${i}`}
-                  aria-labelledby={`role-tab-${i}`}
-                  aria-hidden={i !== index}
-                  custom={reducedMotion ? 0 : i < index ? -TRAVEL : TRAVEL}
-                  initial={false}
-                  animate={i === index ? 'shown' : 'hidden'}
-                  variants={panelVariants}
-                  className={cn(
-                    'col-start-1 row-start-1',
-                    i !== index && 'pointer-events-none',
-                  )}
-                >
-                  <p className="font-mono text-[11px] tracking-[0.18em] text-accent-400 uppercase">
-                    {job.period}
-                    {job.location && <span className="text-muted"> · {job.location}</span>}
-                  </p>
-
-                  <h3 className="font-display mt-2 text-2xl font-semibold tracking-tight">
-                    {job.role}
-                    <span className="text-muted"> · {job.company}</span>
-                  </h3>
-
-                  <p className="mt-4 leading-relaxed text-muted">{job.summary}</p>
-
-                  <ul className="mt-5 space-y-2.5">
-                    {job.highlights.map((highlight) => (
-                      <motion.li
-                        key={highlight}
-                        variants={lineVariants}
-                        className="flex items-start gap-3 text-sm leading-relaxed text-muted"
-                      >
-                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500" />
-                        {highlight}
-                      </motion.li>
-                    ))}
-                  </ul>
-
-                  <ul className="mt-6 flex flex-wrap gap-2">
-                    {job.stack.map((tech) => (
-                      <li key={tech} className="glass rounded-full px-3 py-1 font-mono text-[11px] text-muted">
-                        {tech}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
-            </div>
-          </SpotlightCard>
+          <div className="relative grid overflow-hidden rounded-2xl shadow-[var(--elev-2)]">
+            {experiences.map((job, i) => (
+              <motion.div
+                key={`${job.company}-${job.period}`}
+                role="tabpanel"
+                id={`role-panel-${i}`}
+                aria-labelledby={`role-tab-${i}`}
+                aria-hidden={i !== index}
+                initial={false}
+                variants={cardVariants}
+                animate={i < index ? 'above' : i === index ? 'current' : 'below'}
+                transition={reducedMotion ? { duration: 0 } : { duration: 0.55, ease: EASE }}
+                className={cn(
+                  'col-start-1 row-start-1',
+                  i !== index && 'pointer-events-none',
+                  reducedMotion && i !== index && 'invisible',
+                )}
+              >
+                <RoleCard job={job} />
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </Slide>
