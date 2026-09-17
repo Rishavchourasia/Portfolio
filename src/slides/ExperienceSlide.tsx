@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, type Variants } from 'framer-motion'
+import { ActivePill } from '@/components/ui/ActivePill'
 import { Slide, slideItem } from '@/components/deck'
 import { SlideHeading } from '@/components/ui/SlideHeading'
 import { SpotlightCard } from '@/components/ui/SpotlightCard'
@@ -99,10 +100,9 @@ export function ExperienceSlide({ label }: { label: string }) {
                     )}
                   >
                     {active && (
-                      <motion.span
+                      <ActivePill
                         layoutId="experience-tab"
-                        className="glass absolute inset-0 -z-10 rounded-xl border-accent-500/40"
-                        transition={{ type: 'spring', stiffness: 420, damping: 36 }}
+                        className="glass -z-10 rounded-xl border-accent-500/40"
                       />
                     )}
                     <span className="block text-sm font-medium whitespace-nowrap">{item.company}</span>

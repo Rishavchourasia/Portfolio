@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Check, Copy, X } from 'lucide-react'
 import { COLOR_GROUPS, ELEVATIONS, FONTS, readColorTokens, readToken } from '@/lib/tokens'
@@ -62,6 +62,8 @@ function Swatch({
  */
 export function StyleGuide({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { theme } = useTheme()
+  const panelRef = useRef<HTMLElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (!open) return
@@ -71,6 +73,46 @@ export function StyleGuide({ open, onClose }: { open: boolean; onClose: () => vo
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
+
+  /**
+   * The WAI-ARIA dialog pattern this panel follows requires focus to move
+   * into it on open, stay trapped there while it's open, and return to
+   * whatever triggered it on close — none of which `role="dialog"` provides
+   * on its own. There's only one dialog in the app; if a second one shows up,
+   * this is worth lifting into a shared `useFocusTrap` hook instead of
+   * copying it.
+   */
+  useEffect(() => {
+    if (!open) return
+
+    const previouslyFocused = document.activeElement as HTMLElement | null
+    closeButtonRef.current?.focus()
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab' || !panelRef.current) return
+
+      const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+        'button, a[href], [tabindex]:not([tabindex="-1"])',
+      )
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (!first || !last) return
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      previouslyFocused?.focus()
+    }
+  }, [open])
 
   /**
    * Read during render rather than in an effect: these are pure reads of the
@@ -83,6 +125,9 @@ export function StyleGuide({ open, onClose }: { open: boolean; onClose: () => vo
       open
         ? {
             theme,
+            // Three items, read only when this panel is opened — the spread
+            // here is not a hot path, and it's the more readable form.
+            // eslint-disable-next-line oxc/no-map-spread
             fonts: FONTS.map((font) => ({ ...font, stack: readToken(font.varName) })),
             colors: readColorTokens(),
           }
@@ -102,7 +147,18 @@ export function StyleGuide({ open, onClose }: { open: boolean; onClose: () => vo
             className="fixed inset-0 z-70 bg-black/45 backdrop-blur-sm"
           />
 
+          {/*
+            A native <dialog> would need `showModal()`/`close()` coordinated
+            against AnimatePresence's own exit-animation lifecycle — two
+            imperative systems fighting for when the element actually leaves
+            the DOM — for a slide-over that already implements the WAI-ARIA
+            dialog pattern by hand (focus moved in and trapped above, role,
+            aria-modal, an accessible label, Escape to close). Every major
+            headless UI library makes the same call for exactly this reason.
+          */}
           <motion.aside
+            ref={panelRef}
+            // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
             role="dialog"
             aria-modal="true"
             aria-label="Design tokens"
@@ -123,6 +179,7 @@ export function StyleGuide({ open, onClose }: { open: boolean; onClose: () => vo
                 </p>
               </div>
               <button
+                ref={closeButtonRef}
                 onClick={onClose}
                 aria-label="Close design tokens"
                 className="glass rounded-full p-2.5 transition-colors hover:border-accent-500/50"

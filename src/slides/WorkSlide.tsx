@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Slide, slideItem } from '@/components/deck'
 import { SlideHeading } from '@/components/ui/SlideHeading'
+import { ActivePill } from '@/components/ui/ActivePill'
 import { ProjectCard } from '@/components/ui/ProjectCard'
 import { CarouselItem } from '@/components/ui/CarouselItem'
 import { projects } from '@/content'
@@ -15,6 +16,10 @@ const CATEGORIES: { id: ProjectCategory; label: string }[] = [
   { id: 'personal', label: 'Personal' },
 ]
 
+/** Shown first. A named constant rather than `CATEGORIES[0].id` so the
+ *  default doesn't silently change if the list above is ever reordered. */
+const DEFAULT_CATEGORY: ProjectCategory = 'company'
+
 /**
  * Projects live in a horizontal snap track so the slide stays one viewport
  * tall no matter how many projects the JSON grows to.
@@ -24,16 +29,19 @@ const CATEGORIES: { id: ProjectCategory; label: string }[] = [
  * very differently, and mixing them makes neither easy to scan.
  */
 export function WorkSlide({ label }: { label: string }) {
-  const [category, setCategory] = useState<ProjectCategory>(CATEGORIES[0].id)
+  const [category, setCategory] = useState<ProjectCategory>(DEFAULT_CATEGORY)
   const filtered = projects.filter((project) => project.category === category)
 
   const { trackRef, index, goTo, next, prev, canPrev, canNext } = useCarousel(filtered.length)
 
   // The track keeps its scroll position across a tab switch otherwise, which
-  // can land on blank space if the new category has fewer cards.
+  // can land on blank space if the new category has fewer cards. Reading
+  // `trackRef.current` in an effect is the documented, standard use of a
+  // ref — it deliberately isn't reactive, so there's nothing to add here.
   useEffect(() => {
     trackRef.current?.scrollTo({ left: 0, behavior: 'auto' })
-  }, [category, trackRef])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category])
 
   return (
     <Slide id="work" label={label}>
@@ -59,13 +67,7 @@ export function WorkSlide({ label }: { label: string }) {
                     active ? 'text-ink-950' : 'text-muted hover:text-[var(--text)]',
                   )}
                 >
-                  {active && (
-                    <motion.span
-                      layoutId="work-category-pill"
-                      className="absolute inset-0 -z-10 rounded-full bg-accent-500"
-                      transition={{ type: 'spring', stiffness: 420, damping: 36 }}
-                    />
-                  )}
+                  {active && <ActivePill layoutId="work-category-pill" className="-z-10 rounded-full bg-accent-500" />}
                   {c.label}
                 </button>
               )

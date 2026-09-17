@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { ActivePill } from '@/components/ui/ActivePill'
 import { useDeck } from './DeckContext'
 import { navSlides } from '@/content'
 import { cn } from '@/lib/utils'
@@ -40,11 +40,7 @@ export function SlideRail() {
                     )}
                   />
                   {active && (
-                    <motion.span
-                      layoutId="slide-rail-ring"
-                      className="absolute inset-0 rounded-full ring-1 ring-accent-400/60"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
+                    <ActivePill layoutId="slide-rail-ring" className="rounded-full ring-1 ring-accent-400/60" />
                   )}
                 </span>
               </button>

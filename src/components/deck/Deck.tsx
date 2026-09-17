@@ -4,6 +4,7 @@ import { useDeckNavigation } from './useDeckNavigation'
 import { useContentFits } from './useContentFits'
 import { useSlideScroller } from './useSlideScroller'
 import { useDeckWheel } from './useDeckWheel'
+import { invariant } from '@/lib/utils'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import type { SlideId } from '@/types/content'
 
@@ -61,7 +62,7 @@ export function Deck({ slideIds, children }: Props) {
       (entries) => {
         const visible = entries
           .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+          .toSorted((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
         if (!visible) return
 
         const index = slideIds.indexOf(visible.target.id as SlideId)
@@ -111,10 +112,18 @@ export function Deck({ slideIds, children }: Props) {
     onStep: (direction) => goToIndex(activeIndexRef.current + direction),
   })
 
+  // `activeIndex` only ever comes from `goToIndex`'s own clamp or from the
+  // IntersectionObserver above, which discards any index outside the array —
+  // so this is always in range. The assertion exists to say that out loud and
+  // fail fast if that invariant is ever broken, rather than quietly handing
+  // `undefined` on to everything that reads `activeId`.
+  const activeId = slideIds[activeIndex]
+  invariant(activeId, `Deck: activeIndex ${activeIndex} is out of range for ${slideIds.length} slides`)
+
   const value = useMemo<DeckState>(
     () => ({
       containerRef,
-      activeId: slideIds[activeIndex],
+      activeId,
       activeIndex,
       total: slideIds.length,
       goTo,
@@ -123,7 +132,7 @@ export function Deck({ slideIds, children }: Props) {
       prev,
       hasMoved,
     }),
-    [slideIds, activeIndex, goTo, goToIndex, next, prev, hasMoved],
+    [slideIds, activeId, activeIndex, goTo, goToIndex, next, prev, hasMoved],
   )
 
   return (

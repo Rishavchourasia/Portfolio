@@ -4,6 +4,7 @@ import { Menu, Palette, X } from 'lucide-react'
 import { useDeck } from '@/components/deck'
 import { navSlides, profile } from '@/content'
 import { useTheme } from '@/hooks/useTheme'
+import { ActivePill } from '@/components/ui/ActivePill'
 import { CandleToggle } from '@/components/ui/CandleToggle'
 import { StyleGuide } from '@/components/ui/StyleGuide'
 import { cn } from '@/lib/utils'
@@ -56,10 +57,9 @@ export function Navbar() {
                     )}
                   >
                     {activeId === slide.id && (
-                      <motion.span
+                      <ActivePill
                         layoutId="nav-pill"
-                        className="absolute inset-0 -z-10 rounded-full bg-[color-mix(in_oklab,var(--text)_10%,transparent)]"
-                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                        className="-z-10 rounded-full bg-[color-mix(in_oklab,var(--text)_10%,transparent)]"
                       />
                     )}
                     {slide.label}

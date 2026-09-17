@@ -37,5 +37,3 @@ export const hueBySlide: Record<string, number> = Object.fromEntries(
   site.slides.map((slide) => [slide.id, slide.hue]),
 )
 
-/** Every unique project tag, for the filter row. */
-export const projectTags = ['All', ...new Set(projects.flatMap((p) => p.tags))]

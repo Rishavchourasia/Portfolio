@@ -37,7 +37,9 @@ export function OrbField({ hue, drift, animate }: Props) {
     <>
       {ORBS.map((orb, i) => (
         <motion.div
-          key={i}
+          // `hueShift` is unique per orb and never changes — a more honest
+          // key than the array index, and one that survives reordering ORBS.
+          key={orb.hueShift}
           className="absolute rounded-full blur-[130px] will-change-transform"
           style={{
             width: orb.size,

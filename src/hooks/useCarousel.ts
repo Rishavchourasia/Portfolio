@@ -17,7 +17,7 @@ export function useCarousel(count: number) {
       (entries) => {
         const visible = entries
           .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+          .toSorted((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
         if (!visible) return
 
         const i = Number((visible.target as HTMLElement).dataset.index)
@@ -28,6 +28,10 @@ export function useCarousel(count: number) {
 
     track.querySelectorAll('[data-index]').forEach((item) => observer.observe(item))
     return () => observer.disconnect()
+    // `count` isn't read in this effect, but it's the right re-run signal:
+    // the track's children change whenever the item count does, and the
+    // observer has to be rebuilt against the new elements.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count])
 
   const goTo = useCallback(

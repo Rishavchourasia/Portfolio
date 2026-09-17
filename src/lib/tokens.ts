@@ -96,7 +96,12 @@ const ALIAS = /^var\(\s*(--[\w-]+)\s*\)$/
 export function resolveToken(varName: string, depth = 0): string {
   const value = readToken(varName)
   const alias = value.match(ALIAS)
-  return alias && depth < 8 ? resolveToken(alias[1], depth + 1) : value
+  if (!alias || depth >= 8) return value
+
+  // `alias[1]` is the regex's one capture group — always present when the
+  // whole match succeeds, since ALIAS has no optional groups. TS can't see
+  // that relationship between a match and its groups, hence the assertion.
+  return resolveToken(alias[1]!, depth + 1)
 }
 
 /** Every colour token's resolved value, keyed by custom-property name. */
