@@ -1,0 +1,15 @@
+{
+  "slides": [
+    { "id": "hero", "label": "Home", "hue": 199 },
+    { "id": "about", "label": "About", "hue": 260 },
+    { "id": "skills", "label": "Skills", "hue": 172 },
+    { "id": "experience", "label": "Experience", "hue": 220 },
+    { "id": "work", "label": "Work", "hue": 292 },
+    { "id": "contact", "label": "Contact", "hue": 199 }
+  ],
+  "meta": {
+    "title": "Rishav Chourasia — Frontend Engineer",
+    "description": "Frontend engineer building fast, accessible and delightfully animated interfaces with React and TypeScript.",
+    "themeColor": "#05060a"
+  }
+}

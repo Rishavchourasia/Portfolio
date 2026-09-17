@@ -2,10 +2,10 @@ import { ArrowUpRight, Link2 } from 'lucide-react'
 import { GithubIcon } from '@/components/ui/BrandIcons'
 import { SpotlightCard } from '@/components/ui/SpotlightCard'
 import { ProjectPreview } from '@/components/ui/ProjectPreview'
-import type { Project } from '@/data/projects'
+import type { Project } from '@/types/content'
 import { cn } from '@/lib/utils'
 
-function Links({ project }: { project: Project }) {
+function ProjectLinks({ project }: { project: Project }) {
   if (!project.live && !project.repo) {
     return <p className="font-mono text-[11px] text-muted">Links coming soon</p>
   }
@@ -39,50 +39,17 @@ function Links({ project }: { project: Project }) {
   )
 }
 
-function Meta({ project }: { project: Project }) {
+/**
+ * @param featured renders the wide two-column layout (preview beside the
+ * copy). The carousel uses it for every card; a stacked grid would not.
+ */
+export function ProjectCard({ project, featured }: { project: Project; featured?: boolean }) {
   return (
-    <>
-      <div className="flex items-center gap-3">
-        <span className="font-mono text-[11px] tracking-[0.18em] text-muted uppercase">{project.year}</span>
-        <span className="h-px flex-1 bg-[var(--border)]" />
-      </div>
-
-      <h3 className="font-display mt-3 text-xl font-semibold tracking-tight sm:text-2xl">{project.title}</h3>
-      <p className="mt-1.5 text-sm text-accent-400">{project.tagline}</p>
-
-      <p className="mt-4 text-sm leading-relaxed text-muted text-pretty">{project.description}</p>
-
-      {project.highlights && project.highlights.length > 0 && (
-        <ul className="mt-4 space-y-2">
-          {project.highlights.map((h) => (
-            <li key={h} className="flex items-start gap-2.5 text-[13px] leading-relaxed text-muted">
-              <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent-500" />
-              {h}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <ul className="mt-5 flex flex-wrap gap-2">
-        {project.tags.map((tag) => (
-          <li key={tag} className="glass rounded-full px-3 py-1 font-mono text-[11px] text-muted">
-            {tag}
-          </li>
-        ))}
-      </ul>
-    </>
-  )
-}
-
-export function ProjectCard({ project }: { project: Project }) {
-  const featured = Boolean(project.featured)
-
-  return (
-    <SpotlightCard className={cn('h-full', featured && 'lg:col-span-2')}>
+    <SpotlightCard className="h-full">
       <div
         className={cn(
           'flex h-full flex-col gap-6 p-5 sm:p-7',
-          featured && 'lg:grid lg:grid-cols-2 lg:items-center lg:gap-10 lg:p-9',
+          featured && 'lg:grid lg:grid-cols-2 lg:items-center lg:gap-9 lg:p-8',
         )}
       >
         <ProjectPreview
@@ -95,10 +62,45 @@ export function ProjectCard({ project }: { project: Project }) {
 
         <div className={cn('flex flex-1 flex-col', featured && 'lg:order-1')}>
           <div className="flex-1">
-            <Meta project={project} />
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[11px] tracking-[0.18em] text-muted uppercase">
+                {project.year}
+              </span>
+              <span className="h-px flex-1 bg-[var(--border)]" />
+            </div>
+
+            <h3 className="font-display mt-3 text-xl font-semibold tracking-tight sm:text-2xl">
+              {project.title}
+            </h3>
+            <p className="mt-1.5 text-sm text-accent-400">{project.tagline}</p>
+
+            <p className="mt-4 text-sm leading-relaxed text-muted text-pretty">{project.description}</p>
+
+            {project.highlights && project.highlights.length > 0 && (
+              <ul className="mt-4 space-y-2">
+                {project.highlights.map((highlight) => (
+                  <li
+                    key={highlight}
+                    className="flex items-start gap-2.5 text-[13px] leading-relaxed text-muted"
+                  >
+                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent-500" />
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
+                <li key={tag} className="glass rounded-full px-3 py-1 font-mono text-[11px] text-muted">
+                  {tag}
+                </li>
+              ))}
+            </ul>
           </div>
+
           <div className="mt-6">
-            <Links project={project} />
+            <ProjectLinks project={project} />
           </div>
         </div>
       </div>

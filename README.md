@@ -1,6 +1,9 @@
 # Portfolio — Rishav Chourasia
 
-A frontend portfolio built with **React 19 + TypeScript + Vite + Tailwind CSS v4 + Framer Motion**.
+A slide-deck portfolio built with **React 19 + TypeScript + Vite + Tailwind CSS v4 + Framer Motion**.
+
+Scrolling moves one full-viewport slide at a time, and the background re-tints
+itself as each slide takes focus.
 
 ## Quick start
 
@@ -11,67 +14,119 @@ npm run build    # production build → dist/
 npm run preview  # preview the production build
 ```
 
-## Where to edit your content
+## Editing content — it's all JSON
 
-Everything personal lives in `src/data/` — you never need to touch a component to update the site.
+Everything the site renders comes from `src/content/*.json`. You never touch a
+component to change what the site says.
 
 | File | What it controls |
 | --- | --- |
-| `src/data/profile.ts` | Name, role, tagline, bio, email, socials, résumé link, hero stats |
-| `src/data/skills.ts` | Skill groups (plain lists, no ratings) + the marquee strip |
-| `src/data/experience.ts` | Work timeline |
-| `src/data/projects.ts` | Project cards — live/repo links, screenshots, highlights |
-| `src/data/navigation.ts` | Nav links (id must match a section `id`) |
+| `site.json` | Slide order, nav labels, background hue per slide, page metadata |
+| `profile.json` | Name, role, tagline, bio, email, socials, résumé link, stats, values |
+| `skills.json` | Skill groups (plain lists, no ratings) + the marquee strip |
+| `experience.json` | Work history — rendered as tabs |
+| `projects.json` | Project cards — links, screenshots, highlights |
 
-Drop your résumé at `public/resume.pdf` and the "Résumé" buttons work.
-Social share image goes at `public/og.png` (1200×630).
+`src/content/index.ts` is the typed entry point. Import from `@/content`, never
+from a raw `.json`, so `src/types/content.ts` stays the single description of
+every shape — a typo in a JSON file fails the build rather than the page.
+
+Drop your résumé at `public/resume.pdf`. Social share image at `public/og.png`
+(1200×630).
+
+### Reordering or hiding a slide
+
+Edit the `slides` array in `site.json`. Each entry is:
+
+```json
+{ "id": "skills", "label": "Skills", "hue": 172, "hidden": false }
+```
+
+`hue` (0–360) is what the animated background springs to on that slide, so
+neighbouring slides should differ by 40° or more to make the shift readable.
+Adding a brand-new slide also needs a component and one line in
+`src/slides/registry.tsx`.
 
 ### Adding a project
 
-Append an entry to `projects` in `src/data/projects.ts`:
+Append to `projects.json`:
 
-```ts
+```json
 {
-  slug: 'unique-id',
-  title: 'Project name',
-  tagline: 'One line hook.',
-  description: 'What it does and the hard part you solved.',
-  highlights: ['A measurable outcome.'],
-  tags: ['React', 'TypeScript'],
-  year: '2025',
-  live: 'https://example.com',      // omit to hide the Live button
-  repo: 'https://github.com/...',   // omit to hide the Source button
-  image: '/projects/name.png',      // optional — falls back to a gradient
-  featured: true,                   // optional — wide two-column card
-  status: 'Live',                   // optional pill on the preview
+  "slug": "unique-id",
+  "title": "Project name",
+  "tagline": "One line hook.",
+  "description": "What it does and the hard part you solved.",
+  "highlights": ["A measurable outcome."],
+  "tags": ["React", "TypeScript"],
+  "year": "2025",
+  "live": "https://example.com",
+  "repo": "https://github.com/...",
+  "image": "/projects/name.png",
+  "status": "Live"
 }
 ```
 
-Screenshots live in `public/projects/` (PNG or WebP, ~1600×1000). The tag filter
-row above the grid builds itself from the `tags` you use, so nothing else to wire up.
+`live`, `repo`, `image` and `status` are all optional — a missing link hides its
+button, and a missing image falls back to a generated gradient so the card never
+looks broken. Screenshots go in `public/projects/` (PNG or WebP, ~1600×1000).
 
 ## Structure
 
 ```
 src/
+├── content/             ← all site content, as JSON + a typed loader
+├── types/content.ts     the shapes the JSON must satisfy
 ├── components/
-│   ├── layout/      Navbar, Footer
-│   └── ui/          Section, Reveal, SpotlightCard, Button, Aurora,
-│                    ScrollProgress, SkillMarquee, BrandIcons
-├── data/            ← all your content
-├── hooks/           useScrollSpy, useTheme, useMediaQuery
-├── lib/             utils (cn, scrollToId), motion presets
-├── sections/        Hero, About, Skills, Experience, Projects, Contact
-├── styles/          globals.css (design tokens, utilities, keyframes)
-├── App.tsx
-└── main.tsx
+│   ├── deck/            Deck, Slide, SlideRail, SlideProgress, SlideHint,
+│   │                    DeckContext, useDeckNavigation, slideMotion
+│   ├── background/      AnimatedBackground, OrbField, GridLayer, NoiseLayer
+│   ├── layout/          Navbar
+│   └── ui/              SlideHeading, SpotlightCard, ProjectCard,
+│                        ProjectPreview, SkillMarquee, Button, BrandIcons
+├── hooks/               useTheme, useMediaQuery, useCarousel
+├── lib/                 utils (cn), motion (shared easing)
+├── slides/              HeroSlide … ContactSlide + registry
+└── styles/globals.css   design tokens, deck/slide CSS, utilities, keyframes
 ```
+
+## How the deck works
+
+**Scrolling is the browser's, not ours.** `.deck` is a scroll container with
+`scroll-snap-type: y mandatory`; each `.slide` is `100dvh` with
+`scroll-snap-align: start` and `scroll-snap-stop: always` (which stops a fast
+trackpad flick from skipping a slide). JavaScript only *observes* which slide is
+in view via `IntersectionObserver` — it never hijacks the wheel or touch, so
+momentum, trackpad gestures and assistive-tech scrolling all behave normally.
+
+**Keyboard**: ↑/↓, PageUp/PageDown, Home/End move one slide at a time.
+Key handling is skipped while focus is in a form field, link or button.
+
+**It degrades on purpose.** Snapping turns off — slides revert to natural height
+and the page scrolls normally — when the viewport is shorter than 620px or the
+visitor has `prefers-reduced-motion: reduce`. Mandatory snapping plus content
+taller than the screen is how snap decks trap content; this avoids it. As a
+second guard, a slide's inner wrapper scrolls internally if its content ever
+outgrows the viewport.
+
+**Animations replay.** `<Slide>` flips a `motion` variant scope between `idle`
+and `active`, so anything using the exported `slideItem` variant animates in
+every time that slide is entered — going back up the deck feels as alive as
+going down.
+
+**The background reacts.** `AnimatedBackground` reads the active slide's `hue`
+from `site.json` and springs three blurred orbs to that colour, drifting them
+across the deck as you advance. A masked grid sits behind and an inlined SVG
+grain sits on top to kill gradient banding. The continuous float animation is
+dropped under reduced motion.
 
 ## Design notes
 
-- Dark-first with a light theme toggle; both are driven by CSS custom properties in `globals.css`.
+- Dark-first with a light theme toggle; both are driven by CSS custom properties
+  in `globals.css`. Gradient and accent colours resolve per theme so headings
+  stay readable on a light ground.
 - Colours, fonts and easing live in the `@theme` block — change them there once.
-- Respects `prefers-reduced-motion`, has a skip link, visible focus rings and semantic landmarks.
+- Skip link, visible focus rings, semantic landmarks, `aria-current` on nav.
 
 ## Deploy (free)
 
@@ -89,13 +144,14 @@ Every push to `main` redeploys automatically.
 `.github/workflows/deploy.yml` is already set up. After pushing:
 Settings → Pages → Source → **GitHub Actions**.
 
-If the repo is *not* named `username.github.io`, set the base path in `vite.config.ts`:
+If the repo is *not* named `username.github.io`, set the base path in
+`vite.config.ts`:
 
 ```ts
 export default defineConfig({ base: '/your-repo-name/', /* ... */ })
 ```
 
-Best free URL: `username.github.io` as the repo name — then no base path is needed.
+Best free URL: name the repo `username.github.io` — then no base path is needed.
 
 ### Netlify
 

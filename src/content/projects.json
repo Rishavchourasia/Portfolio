@@ -1,0 +1,49 @@
+[
+  {
+    "slug": "portfolio",
+    "title": "Developer Portfolio",
+    "tagline": "The deck you are looking at right now.",
+    "description": "A slide-based portfolio driven entirely by JSON content files. Native CSS scroll-snap gives it a deck feel without hijacking the scroll wheel, and the background re-tints itself as each slide takes focus.",
+    "highlights": [
+      "Zero-runtime theming with CSS custom properties and a persisted toggle.",
+      "Snap deck that degrades to normal scrolling on short screens and reduced motion.",
+      "Ships at ~130 kB gzipped with a clean accessibility audit."
+    ],
+    "tags": ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vite"],
+    "year": "2026",
+    "live": "",
+    "repo": "",
+    "status": "Live"
+  },
+  {
+    "slug": "project-two",
+    "title": "Project Two",
+    "tagline": "A one-line hook for what it does.",
+    "description": "Replace this with what the product is, who it is for, and the hard problem you solved — not \"a web app built with React\".",
+    "highlights": ["A measurable outcome.", "A technical decision you can defend."],
+    "tags": ["Next.js", "TypeScript", "GraphQL"],
+    "year": "2025",
+    "live": "",
+    "repo": ""
+  },
+  {
+    "slug": "project-three",
+    "title": "Project Three",
+    "tagline": "A one-line hook for what it does.",
+    "description": "What it is, the constraint you worked under, and the result it produced.",
+    "highlights": ["A measurable outcome."],
+    "tags": ["React", "Redux Toolkit", "REST"],
+    "year": "2025",
+    "live": "",
+    "repo": ""
+  },
+  {
+    "slug": "project-four",
+    "title": "Project Four",
+    "tagline": "A component library, tool or experiment.",
+    "description": "Smaller side projects still count — show the thing you would happily walk an interviewer through.",
+    "tags": ["React", "Storybook", "Accessibility"],
+    "year": "2024",
+    "repo": ""
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "company": "Company Name",
+    "role": "Frontend Engineer",
+    "period": "2023 — Present",
+    "location": "Remote",
+    "summary": "Own the customer-facing web app: component library, performance budget and release quality.",
+    "highlights": [
+      "Rebuilt the core dashboard in React + TypeScript, cutting time-to-interactive by ~40%.",
+      "Shipped a shared component library adopted by 3 product teams.",
+      "Drove the accessibility pass that took the app to WCAG 2.2 AA."
+    ],
+    "stack": ["React", "TypeScript", "Redux Toolkit", "Tailwind CSS"]
+  },
+  {
+    "company": "Previous Company",
+    "role": "Frontend Developer",
+    "period": "2021 — 2023",
+    "location": "India",
+    "summary": "Built and maintained responsive marketing and product surfaces end to end.",
+    "highlights": [
+      "Delivered 15+ responsive, pixel-accurate pages from Figma handoffs.",
+      "Introduced code splitting and image optimisation, lifting Lighthouse to 95+.",
+      "Integrated REST APIs and set up CI checks for every pull request."
+    ],
+    "stack": ["JavaScript", "React", "SCSS", "REST"]
+  }
+]

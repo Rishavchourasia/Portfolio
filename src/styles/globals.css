@@ -50,20 +50,91 @@
 * { border-color: var(--border); }
 
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 6rem;
   -webkit-font-smoothing: antialiased;
+}
+
+html,
+body,
+#root {
+  height: 100%;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
+  overflow: hidden;
+}
+
+/* ---- deck ----------------------------------------------------------------
+   The deck owns scrolling, not the window. Snapping is CSS-driven so the
+   browser keeps native momentum, trackpad gestures and assistive-tech
+   scrolling; JS only observes which slide is in view.                        */
+
+.deck {
+  height: 100dvh;
+  overflow-y: auto;
   overflow-x: hidden;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+  scrollbar-width: none;
+}
+
+.deck::-webkit-scrollbar {
+  display: none;
+}
+
+.deck[data-snap='on'] {
+  scroll-snap-type: y mandatory;
+}
+
+.slide {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 100dvh;
+}
+
+/* When snapping is on, a slide is exactly one viewport — that is what makes
+   the deck feel like slides rather than a long page. */
+.deck[data-snap='on'] .slide {
+  height: 100dvh;
+  min-height: 0;
+  scroll-snap-align: start;
+  /* stops fast trackpad flicks from skipping past a slide */
+  scroll-snap-stop: always;
+}
+
+/* Padding lives on the inner element, not the slide, so that content which
+   does outgrow the viewport scrolls instead of being clipped. Snapping must
+   never make content unreachable. */
+.slide__inner {
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  padding-block: 6.5rem 3.5rem;
+  scrollbar-width: none;
+}
+
+.slide__inner::-webkit-scrollbar {
+  display: none;
+}
+
+/* horizontal project track */
+.carousel {
+  scrollbar-width: none;
+  scroll-padding-inline: 1.5rem;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  .deck {
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
