@@ -112,34 +112,41 @@
 [data-theme="light"] {
   color-scheme: light;
 
-  /* A cool paper ground rather than pure white — white cards on a white page
-     have no edge to sit on, which is what made the old light theme look flat. */
-  --bg: #eef1f7;
-  --surface: rgba(255, 255, 255, 0.88);
-  --surface-strong: #ffffff;
-  --border: rgba(12, 18, 32, 0.09);
-  --border-strong: rgba(12, 18, 32, 0.16);
-  --text: #0b0e16;
-  --text-muted: #55607a;
+  /* Candlelight, not daylight: a warm wax-white ground with every neutral
+     pulled towards amber. Cards stay a shade lighter than the page so they
+     still have an edge to sit on, the way the cool theme did. */
+  --bg: #faf4e9;
+  --surface: rgba(255, 252, 245, 0.9);
+  --surface-strong: #fffdf7;
+  --border: rgba(92, 58, 18, 0.12);
+  --border-strong: rgba(92, 58, 18, 0.22);
+  --text: #211609;
+  --text-muted: #6d5b45;
 
-  /* accent-400 carries small text and links — darken it for contrast here. */
-  --color-accent-400: #0369a1;
-  --color-accent-500: #0284c7;
-  --grad-1: #0369a1;
-  --grad-2: #6d28d9;
-  --grad-3: #0f766e;
+  /* Amber accents, dark enough to stay readable on the warm ground. */
+  --color-accent-400: #a55a12;
+  --color-accent-500: #c2700f;
+  --grad-1: #a8500c;
+  --grad-2: #8a4b16;
+  --grad-3: #9a6a12;
 
-  /* On light, elevation is a soft cast shadow — no inset highlight. */
-  --elev-1: 0 1px 2px rgba(12, 18, 32, 0.05), 0 4px 12px -4px rgba(12, 18, 32, 0.08);
-  --elev-2: 0 2px 4px rgba(12, 18, 32, 0.05), 0 16px 32px -12px rgba(12, 18, 32, 0.14);
-  --elev-3: 0 4px 8px rgba(12, 18, 32, 0.06), 0 32px 64px -20px rgba(12, 18, 32, 0.2);
+  /* On light, elevation is a soft cast shadow — no inset highlight. Warmed to
+     brown so cards sit on the page rather than on a grey hole. */
+  --elev-1: 0 1px 2px rgba(92, 58, 18, 0.06), 0 4px 12px -4px rgba(92, 58, 18, 0.1);
+  --elev-2: 0 2px 4px rgba(92, 58, 18, 0.06), 0 16px 32px -12px rgba(92, 58, 18, 0.16);
+  --elev-3: 0 4px 8px rgba(92, 58, 18, 0.07), 0 32px 64px -20px rgba(92, 58, 18, 0.22);
 
-  /* Pale, desaturated orbs — the dark values turn to mud over paper. */
-  --orb-sat: 68%;
-  --orb-light: 74%;
-  --orb-alpha: 0.5;
-  --grid-ink: 9%;
-  --scrim: 0.5;
+  /* Pale, warm orbs — the dark theme's values turn to mud over paper. */
+  --orb-sat: 72%;
+  --orb-light: 76%;
+  --orb-alpha: 0.55;
+  --grid-ink: 10%;
+  --scrim: 0.45;
+
+  /* The candle itself: a warm pool of light, and how much it breathes. */
+  --candle-core: 42 96% 72%;
+  --candle-edge: 26 88% 62%;
+  --candle-reach: 68vmax;
 }
 
 * { border-color: var(--border); }
@@ -181,6 +188,14 @@ body {
 
 .deck[data-snap='mandatory'] {
   scroll-snap-type: y mandatory;
+}
+
+/* While the deck animates itself, the browser's snapping and smooth-scroll
+   both have to stand down: each would fight the frames being written, and
+   assigning `scrollTop` is itself subject to `scroll-behavior`. */
+.deck[data-animating] {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
 }
 
 .deck[data-snap='proximity'] {
@@ -376,6 +391,72 @@ body {
   to { background-position: 200% center; }
 }
 @keyframes blink { 50% { opacity: 0; } }
+
+/* ---- candle ----
+   A real flame is not a sine wave. The stops below are deliberately uneven —
+   a couple of quick dips, an occasional brighter surge, one longer settle —
+   so the light never falls into a rhythm the eye can predict. Light theme
+   only; the dark theme is untouched. */
+
+@keyframes candle-breathe {
+  0%   { opacity: 0.86; transform: scale(1)     translate3d(0, 0, 0); }
+  7%   { opacity: 0.97; transform: scale(1.013) translate3d(0.25%, -0.3%, 0); }
+  15%  { opacity: 0.79; transform: scale(0.994) translate3d(-0.2%, 0.2%, 0); }
+  23%  { opacity: 0.93; transform: scale(1.008) translate3d(0.1%, -0.15%, 0); }
+  31%  { opacity: 0.83; transform: scale(0.998) translate3d(-0.3%, 0.25%, 0); }
+  44%  { opacity: 1;    transform: scale(1.018) translate3d(0.3%, -0.35%, 0); }
+  52%  { opacity: 0.76; transform: scale(0.99)  translate3d(-0.15%, 0.3%, 0); }
+  61%  { opacity: 0.9;  transform: scale(1.006) translate3d(0.2%, -0.1%, 0); }
+  73%  { opacity: 0.81; transform: scale(0.996) translate3d(-0.25%, 0.2%, 0); }
+  84%  { opacity: 0.95; transform: scale(1.011) translate3d(0.15%, -0.25%, 0); }
+  92%  { opacity: 0.84; transform: scale(1.001) translate3d(-0.1%, 0.1%, 0); }
+  100% { opacity: 0.86; transform: scale(1)     translate3d(0, 0, 0); }
+}
+
+/* The flame on the theme toggle: quicker and sharper than the room's glow,
+   with a lean to it, since a wick is small enough to be pushed around. */
+@keyframes flame-flicker {
+  0%   { opacity: 1;    transform: scale(1)             translateY(0); }
+  9%   { opacity: 0.88; transform: scaleY(0.93) scaleX(1.05) translateY(0.4px); }
+  18%  { opacity: 1;    transform: scaleY(1.07) scaleX(0.95) translateY(-0.5px); }
+  27%  { opacity: 0.92; transform: scaleY(0.97) scaleX(1.02) translateY(0.2px); }
+  38%  { opacity: 1;    transform: scaleY(1.1)  scaleX(0.93) translateY(-0.6px); }
+  49%  { opacity: 0.85; transform: scaleY(0.9)  scaleX(1.07) translateY(0.5px); }
+  60%  { opacity: 1;    transform: scaleY(1.04) scaleX(0.97) translateY(-0.3px); }
+  72%  { opacity: 0.94; transform: scaleY(0.96) scaleX(1.03) translateY(0.25px); }
+  85%  { opacity: 1;    transform: scaleY(1.08) scaleX(0.94) translateY(-0.45px); }
+  100% { opacity: 1;    transform: scale(1)             translateY(0); }
+}
+
+@keyframes flame-halo {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  30%      { opacity: 0.8;  transform: scale(1.18); }
+  55%      { opacity: 0.42; transform: scale(0.94); }
+  78%      { opacity: 0.72; transform: scale(1.1); }
+}
+
+.candle-glow {
+  animation: candle-breathe 7.3s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+.candle-flame {
+  transform-origin: 50% 100%;
+  animation: flame-flicker 2.6s ease-in-out infinite;
+}
+
+.candle-halo {
+  transform-origin: 50% 60%;
+  animation: flame-halo 3.1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .candle-glow,
+  .candle-flame,
+  .candle-halo {
+    animation: none;
+  }
+}
 
 .animate-marquee { animation: marquee 38s linear infinite; }
 .animate-float-slow { animation: float-slow 16s ease-in-out infinite; }

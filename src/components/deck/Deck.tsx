@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import { DeckContext, type DeckState } from './DeckContext'
 import { useDeckNavigation } from './useDeckNavigation'
 import { useContentFits } from './useContentFits'
+import { useSlideScroller } from './useSlideScroller'
+import { useDeckWheel } from './useDeckWheel'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import type { SlideId } from '@/types/content'
 
@@ -38,6 +40,14 @@ export function Deck({ slideIds, children }: Props) {
 
   const snapMode = reducedMotion ? 'none' : roomy && fits ? 'mandatory' : 'proximity'
 
+  const { scrollTo, isAnimating } = useSlideScroller(containerRef)
+
+  // The active index, readable from inside listeners that outlive a render.
+  const activeIndexRef = useRef(0)
+  useEffect(() => {
+    activeIndexRef.current = activeIndex
+  }, [activeIndex])
+
   // Track the slide filling most of the viewport.
   useEffect(() => {
     const root = containerRef.current
@@ -72,9 +82,14 @@ export function Deck({ slideIds, children }: Props) {
       const root = containerRef.current
       const clamped = Math.max(0, Math.min(index, slideIds.length - 1))
       const target = root?.querySelector<HTMLElement>(`#${slideIds[clamped]}`)
-      target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      if (!root || !target) return
+
+      // Under reduced motion the deck does not animate at all; otherwise every
+      // route to a slide shares one timing, so a nav click, a dot and a wheel
+      // gesture all travel identically.
+      scrollTo(target.offsetTop, { instant: reducedMotion })
     },
-    [slideIds],
+    [slideIds, scrollTo, reducedMotion],
   )
 
   const goTo = useCallback(
@@ -86,6 +101,15 @@ export function Deck({ slideIds, children }: Props) {
   const prev = useCallback(() => goToIndex(activeIndex - 1), [goToIndex, activeIndex])
 
   useDeckNavigation({ next, prev, goToIndex, total: slideIds.length, enabled: snapMode !== 'none' })
+
+  useDeckWheel({
+    containerRef,
+    isAnimating,
+    // Only in the full one-screen mode. Where slides run longer than the
+    // viewport the page has to scroll freely, so the wheel stays native.
+    enabled: snapMode === 'mandatory',
+    onStep: (direction) => goToIndex(activeIndexRef.current + direction),
+  })
 
   const value = useMemo<DeckState>(
     () => ({

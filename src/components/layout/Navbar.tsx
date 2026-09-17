@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Menu, Moon, Palette, Sun, X } from 'lucide-react'
+import { Menu, Palette, X } from 'lucide-react'
 import { useDeck } from '@/components/deck'
 import { navSlides, profile } from '@/content'
 import { useTheme } from '@/hooks/useTheme'
+import { CandleToggle } from '@/components/ui/CandleToggle'
 import { StyleGuide } from '@/components/ui/StyleGuide'
 import { cn } from '@/lib/utils'
 import type { SlideId } from '@/types/content'
@@ -79,9 +80,16 @@ export function Navbar() {
             <button
               onClick={toggle}
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-              className="glass rounded-full p-2.5 transition-colors hover:border-accent-500/50"
+              title={theme === 'dark' ? 'Light the candle' : 'Snuff the candle'}
+              className={cn(
+                'glass grid h-10 w-10 place-items-center rounded-full transition-all duration-500',
+                'hover:border-accent-500/50',
+                // a lit candle throws light on its own holder
+                theme === 'light' &&
+                  'border-accent-500/40 shadow-[0_0_18px_-4px_var(--color-accent-500)]',
+              )}
             >
-              {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+              <CandleToggle lit={theme === 'light'} />
             </button>
             {profile.resumeUrl && (
               <a
