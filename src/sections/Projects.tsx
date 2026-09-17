@@ -1,80 +1,82 @@
-import { motion } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
-import { GithubIcon } from '@/components/ui/BrandIcons'
+import { useMemo, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Section } from '@/components/ui/Section'
-import { SpotlightCard } from '@/components/ui/SpotlightCard'
-import { projects } from '@/data/projects'
+import { ProjectCard } from '@/components/ui/ProjectCard'
+import { projects, projectTags } from '@/data/projects'
 import { fadeUp, stagger } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
 export function Projects() {
+  const [filter, setFilter] = useState('All')
+
+  const visible = useMemo(
+    () => (filter === 'All' ? projects : projects.filter((p) => p.tags.includes(filter))),
+    [filter],
+  )
+
   return (
     <Section
       id="work"
       eyebrow="Selected work"
       title={<>Things I&apos;ve <span className="text-gradient">built.</span></>}
-      subtitle="A few projects that show how I think about structure, performance and the feel of an interface."
+      subtitle="Projects that show how I think about structure, performance and the feel of an interface. Filter by the stack you care about."
     >
+      {/* tag filter */}
       <motion.div
-        variants={stagger(0.1)}
+        variants={stagger(0.03)}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, margin: '-80px' }}
-        className="grid gap-6 md:grid-cols-2"
+        viewport={{ once: true }}
+        className="mb-10 flex flex-wrap gap-2"
       >
-        {projects.map((project) => (
-          <motion.article
-            key={project.title}
-            variants={fadeUp}
-            className={cn(project.featured && 'md:col-span-2')}
-          >
-            <SpotlightCard className="flex h-full flex-col p-7 sm:p-9">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="font-mono text-[11px] tracking-[0.18em] text-muted uppercase">{project.year}</p>
-                  <h3 className="font-display mt-2 text-xl font-semibold sm:text-2xl">{project.title}</h3>
-                </div>
-                <div className="flex shrink-0 items-center gap-1">
-                  {project.repo && (
-                    <a
-                      href={project.repo}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${project.title} source code`}
-                      className="rounded-full p-2.5 text-muted transition-colors hover:text-accent-400"
-                    >
-                      <GithubIcon size={17} />
-                    </a>
-                  )}
-                  {project.live && (
-                    <a
-                      href={project.live}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${project.title} live site`}
-                      className="rounded-full p-2.5 text-muted transition-colors hover:text-accent-400"
-                    >
-                      <ArrowUpRight size={17} />
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              <p className="mt-4 max-w-2xl grow text-sm leading-relaxed text-muted text-pretty">
-                {project.description}
-              </p>
-
-              <ul className="mt-6 flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
-                  <li key={tag} className="glass rounded-full px-3 py-1 font-mono text-[11px] text-muted">
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-            </SpotlightCard>
-          </motion.article>
-        ))}
+        {projectTags.map((tag) => {
+          const active = filter === tag
+          return (
+            <motion.button
+              key={tag}
+              variants={fadeUp}
+              onClick={() => setFilter(tag)}
+              aria-pressed={active}
+              className={cn(
+                'relative rounded-full px-4 py-2 text-[13px] transition-colors duration-200',
+                active ? 'text-ink-950' : 'glass text-muted hover:text-[var(--text)]',
+              )}
+            >
+              {active && (
+                <motion.span
+                  layoutId="project-filter-pill"
+                  className="absolute inset-0 -z-10 rounded-full bg-accent-500"
+                  transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                />
+              )}
+              {tag}
+            </motion.button>
+          )
+        })}
       </motion.div>
+
+      <motion.div layout className="grid gap-6 lg:grid-cols-2">
+        <AnimatePresence mode="popLayout">
+          {visible.map((project) => (
+            <motion.article
+              key={project.slug}
+              layout
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.2 } }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className={cn(project.featured && 'lg:col-span-2')}
+            >
+              <ProjectCard project={project} />
+            </motion.article>
+          ))}
+        </AnimatePresence>
+      </motion.div>
+
+      {visible.length === 0 && (
+        <p className="py-16 text-center text-sm text-muted">No projects tagged “{filter}” yet.</p>
+      )}
     </Section>
   )
 }

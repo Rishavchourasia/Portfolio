@@ -28,26 +28,13 @@ function GroupCard({ group }: { group: SkillGroup }) {
           </div>
         </div>
 
-        <ul className="mt-6 space-y-4">
+        <ul className="mt-6 flex flex-wrap gap-2">
           {group.skills.map((skill) => (
-            <li key={skill.name}>
-              <div className="flex items-baseline justify-between gap-3">
-                <span className="text-sm">{skill.name}</span>
-                {skill.level != null && (
-                  <span className="font-mono text-[11px] text-muted">{skill.level}%</span>
-                )}
-              </div>
-              {skill.level != null && (
-                <div className="mt-2 h-1 overflow-hidden rounded-full bg-[color-mix(in_oklab,var(--text)_10%,transparent)]">
-                  <motion.div
-                    className="h-full rounded-full bg-gradient-to-r from-accent-500 to-[var(--color-violet-alt)]"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.level}%` }}
-                    viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                  />
-                </div>
-              )}
+            <li
+              key={skill}
+              className="rounded-lg border border-[var(--border)] bg-[color-mix(in_oklab,var(--text)_5%,transparent)] px-3 py-1.5 text-[13px] transition-colors duration-200 hover:border-accent-500/50 hover:text-accent-400"
+            >
+              {skill}
             </li>
           ))}
         </ul>

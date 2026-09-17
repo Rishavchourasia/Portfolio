@@ -18,13 +18,37 @@ Everything personal lives in `src/data/` — you never need to touch a component
 | File | What it controls |
 | --- | --- |
 | `src/data/profile.ts` | Name, role, tagline, bio, email, socials, résumé link, hero stats |
-| `src/data/skills.ts` | Skill groups with proficiency bars + the marquee strip |
+| `src/data/skills.ts` | Skill groups (plain lists, no ratings) + the marquee strip |
 | `src/data/experience.ts` | Work timeline |
-| `src/data/projects.ts` | Project cards |
+| `src/data/projects.ts` | Project cards — live/repo links, screenshots, highlights |
 | `src/data/navigation.ts` | Nav links (id must match a section `id`) |
 
 Drop your résumé at `public/resume.pdf` and the "Résumé" buttons work.
 Social share image goes at `public/og.png` (1200×630).
+
+### Adding a project
+
+Append an entry to `projects` in `src/data/projects.ts`:
+
+```ts
+{
+  slug: 'unique-id',
+  title: 'Project name',
+  tagline: 'One line hook.',
+  description: 'What it does and the hard part you solved.',
+  highlights: ['A measurable outcome.'],
+  tags: ['React', 'TypeScript'],
+  year: '2025',
+  live: 'https://example.com',      // omit to hide the Live button
+  repo: 'https://github.com/...',   // omit to hide the Source button
+  image: '/projects/name.png',      // optional — falls back to a gradient
+  featured: true,                   // optional — wide two-column card
+  status: 'Live',                   // optional pill on the preview
+}
+```
+
+Screenshots live in `public/projects/` (PNG or WebP, ~1600×1000). The tag filter
+row above the grid builds itself from the `tags` you use, so nothing else to wire up.
 
 ## Structure
 
