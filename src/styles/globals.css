@@ -194,9 +194,15 @@ body {
   min-height: 100dvh;
 }
 
+/* `scroll-snap-stop: always` applies under both modes, not just mandatory:
+   it is what makes a fast wheel or trackpad flick stop at every slide instead
+   of sailing past several — the one thing that must hold regardless of which
+   mode a given screen falls into. It only affects passive scrolling; a nav
+   click or a dot-rail jump still goes straight to its target on purpose. */
 .deck[data-snap='mandatory'] .slide,
 .deck[data-snap='proximity'] .slide {
   scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 /* Under mandatory snapping a slide is exactly one viewport — that is what
@@ -204,15 +210,25 @@ body {
 .deck[data-snap='mandatory'] .slide {
   height: 100dvh;
   min-height: 0;
-  /* stops fast trackpad flicks from skipping past a slide */
-  scroll-snap-stop: always;
 }
 
-/* Only a fixed-height slide has anything to fill. Scoping this to mandatory
-   keeps a slide's measured content height the same in every mode, which is
-   what stops the fit check below from flip-flopping between modes. */
+/* Only a fixed-height slide has anything to fill.
+   Under mandatory the slide is exactly one viewport, so `height: 100%` pins
+   the fill area to it exactly — this is also scoped to mandatory to keep a
+   slide's measured content height identical in both modes, which is what
+   stops the fit check below from flip-flopping between them.
+   Under proximity the slide's own height is its natural content height, so
+   percentages resolve against nothing useful — the footer this fill area
+   carries would end up wherever the content happens to end, not at the
+   bottom of the screen. `min-height: 100dvh` (viewport-relative, not
+   percentage) guarantees at least one full screen to justify-between across,
+   while still letting the slide grow past that if the content needs more. */
 .deck[data-snap='mandatory'] .slide__inner--fill {
   height: 100%;
+}
+
+.deck[data-snap='proximity'] .slide__inner--fill {
+  min-height: 100dvh;
 }
 
 /* Under proximity snapping slides keep their natural height, so long content
