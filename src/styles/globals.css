@@ -69,15 +69,15 @@
   }
 
   .skill-card {
-    margin-bottom: 0.65rem;
+    margin-bottom: 1rem;
   }
 
-  .skill-card > * {
+  .skill-card__body {
     padding: 0.85rem;
   }
 
   .skill-columns {
-    column-gap: 0.65rem;
+    column-gap: 1.35rem;
   }
 }
 
@@ -236,6 +236,29 @@ body {
 
 .slide__inner::-webkit-scrollbar {
   display: none;
+}
+
+/* ---- skills ----
+   Cards rest at a slight tilt and straighten under the cursor — only the one
+   being hovered. Rotation is paint-only, so it costs no layout height, but
+   rotated corners need the wider gutters the column flow now carries. Uses the
+   standalone `rotate` property so it composes with the card's own hover lift
+   (a `transform`) rather than overwriting it. */
+
+.skill-card__tilt {
+  rotate: var(--tilt, 0deg);
+  transition: rotate 0.5s var(--ease-out-expo);
+}
+
+.skill-card:hover .skill-card__tilt,
+.skill-card:focus-within .skill-card__tilt {
+  rotate: 0deg;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-card__tilt {
+    rotate: 0deg;
+  }
 }
 
 /* horizontal project track */
