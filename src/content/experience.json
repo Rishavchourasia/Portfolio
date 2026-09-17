@@ -1,28 +1,30 @@
 [
   {
-    "company": "Company Name",
-    "role": "Frontend Engineer",
-    "period": "2023 — Present",
-    "location": "Remote",
-    "summary": "Own the customer-facing web app: component library, performance budget and release quality.",
+    "company": "Troogue.ai",
+    "role": "Software Engineer",
+    "period": "Jan 2025 — Present",
+    "location": "Bengaluru",
+    "summary": "Own the frontend architecture for the core product end to end in React, Next.js and TypeScript — shipping responsive experiences used by 25,000+ people across desktop, tablet and mobile.",
     "highlights": [
-      "Rebuilt the core dashboard in React + TypeScript, cutting time-to-interactive by ~40%.",
-      "Shipped a shared component library adopted by 3 product teams.",
-      "Drove the accessibility pass that took the app to WCAG 2.2 AA."
+      "Built a reusable component library (tables, forms, modals, filters, notifications) before duplicate implementations piled up, cutting new-screen build time by 40% across 12+ modules.",
+      "Diagnosed slow, unindexed data-table interactions on high-traffic screens and rebuilt them with server-side search, filtering, sorting and pagination; paired with SSR/SSG to lift the Lighthouse/SEO score from 62 to 94.",
+      "Replaced spreadsheet-based candidate onboarding — 8 hours a week of operations time — with an internal ATS dashboard, cutting onboarding turnaround by 55%.",
+      "Closed a frontend access-control gap with JWT auth and role-based access control against Spring Boot REST APIs backed by PostgreSQL and Redis.",
+      "Raised frontend test coverage to 80% with Jest and React Testing Library."
     ],
-    "stack": ["React", "TypeScript", "Redux Toolkit", "Tailwind CSS"]
+    "stack": ["React", "Next.js", "TypeScript", "Node.js", "REST", "Jest"]
   },
   {
-    "company": "Previous Company",
-    "role": "Frontend Developer",
-    "period": "2021 — 2023",
-    "location": "India",
-    "summary": "Built and maintained responsive marketing and product surfaces end to end.",
+    "company": "goMensa",
+    "role": "Software Engineering Intern",
+    "period": "Sep 2024 — Dec 2024",
+    "location": "Bengaluru",
+    "summary": "Built dashboard views and the reusable UI components that standardised frontend patterns for the product team.",
     "highlights": [
-      "Delivered 15+ responsive, pixel-accurate pages from Figma handoffs.",
-      "Introduced code splitting and image optimisation, lifting Lighthouse to 95+.",
-      "Integrated REST APIs and set up CI checks for every pull request."
+      "Shipped React dashboard views and reusable UI components (tables, forms, cards, navigation) adopted across 12+ product screens.",
+      "Closed a testing gap with 45 component tests at 75% coverage using Jest and React Testing Library.",
+      "Shipped weekly through JIRA in an agile team."
     ],
-    "stack": ["JavaScript", "React", "SCSS", "REST"]
+    "stack": ["React", "JavaScript", "Jest", "React Testing Library"]
   }
 ]

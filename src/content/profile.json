@@ -23,8 +23,8 @@
     "twitter": ""
   },
   "stats": [
-    { "value": "3+", "label": "Years building for the web" },
-    { "value": "20+", "label": "Features shipped to production" },
-    { "value": "98", "label": "Median Lighthouse performance" }
+    { "value": "25K+", "label": "People using what I've shipped" },
+    { "value": "94", "label": "Lighthouse score, lifted from 62" },
+    { "value": "40%", "label": "Faster builds from a shared component library" }
   ]
 }

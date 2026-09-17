@@ -21,11 +21,17 @@ In `src/content/profile.json` → `socials`:
 
 An empty string hides that link everywhere.
 
-## 3. Your real work history
+## 3. Your real work history — ✅ done
 
-`src/content/experience.json` — two placeholder roles ("Company Name",
-"Previous Company"). Each entry needs `company`, `role`, `period`, `summary`,
-`highlights[]` and `stack[]`.
+`src/content/experience.json` now holds Troogue.ai and goMensa, taken from your
+résumé. Two things worth a second look:
+
+- [ ] The `summary` line on each role is mine, condensed from your bullets — check
+      it says what you'd say.
+- [ ] `stack` chips are the tools you worked in, not everything the system used.
+      Troogue lists React, Next.js, TypeScript, Node.js, REST, Jest; Spring Boot,
+      PostgreSQL and Redis appear in the bullet text instead, since you
+      integrated against them. Move them up if you'd rather claim them.
 
 ## 4. Your real projects
 
@@ -41,10 +47,13 @@ An empty string hides that link everywhere.
 ## 5. Check the copy is actually yours
 
 - [ ] `src/content/profile.json` → `bio`, `tagline`, `values`
-- [ ] `stats` — **these are invented.** "3+ years", "20+ features",
-      "98 Lighthouse". Replace with true numbers or delete the entries.
-- [ ] `src/content/skills.json` — trim anything you wouldn't want to be
-      interviewed on
+- [x] `stats` — now your real figures: 25K+ users, Lighthouse 62→94, 40% faster
+      builds. (Previously invented; replaced when the résumé came in.)
+- [ ] `src/content/skills.json` — **still my guesses, not your résumé.** It lists
+      Zustand, Framer Motion, SCSS, Storybook, Webpack and GraphQL, none of which
+      appear in your experience. Your résumé evidences React, Next.js, TypeScript,
+      Node.js, Jest, React Testing Library, REST, JWT/RBAC, PostgreSQL, Redis and
+      JIRA. Worth rewriting before you share the link.
 
 ## 6. Regenerate the social card
 
