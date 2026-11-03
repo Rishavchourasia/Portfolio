@@ -1,10 +1,10 @@
 {
   "name": "Rishav Chourasia",
   "firstName": "Rishav",
-  "role": "Frontend Engineer",
-  "tagline": "I build fast, accessible, delightfully animated interfaces for the web.",
+  "role": "Software Engineer",
+  "tagline": "Frontend-focused. I build fast, accessible, delightfully animated interfaces for the web.",
   "bio": [
-    "I'm a frontend engineer who cares about the details most people only feel \u2014 the 80ms that a page takes to become interactive, the easing curve on a modal, the focus ring that makes a form usable with a keyboard.",
+    "I'm a software engineer who spends most of my time on the frontend, and I care about the details most people only feel \u2014 the 80ms that a page takes to become interactive, the easing curve on a modal, the focus ring that makes a form usable with a keyboard.",
     "I work mostly in React and TypeScript, shaping design systems and product UI that scale past the first sprint. I like owning a feature end to end: from a Figma file and a vague ticket to a shipped, measured, accessible thing in production."
   ],
   "location": "India",
@@ -18,7 +18,7 @@
     "Motion with a purpose"
   ],
   "socials": {
-    "github": "https://github.com/",
+    "github": "https://github.com/Rishavchourasia",
     "linkedin": "https://www.linkedin.com/in/rishavchourasia/",
     "twitter": ""
   },

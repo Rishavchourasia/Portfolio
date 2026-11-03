@@ -9,16 +9,17 @@ import { CarouselItem } from '@/components/ui/CarouselItem'
 import { projects } from '@/content'
 import { useCarousel } from '@/hooks/useCarousel'
 import { cn } from '@/lib/utils'
+import { track } from '@/lib/analytics'
 import type { ProjectCategory } from '@/types/content'
 
 const CATEGORIES: { id: ProjectCategory; label: string }[] = [
-  { id: 'company', label: 'Company' },
   { id: 'personal', label: 'Personal' },
+  { id: 'company', label: 'Company' },
 ]
 
 /** Shown first. A named constant rather than `CATEGORIES[0].id` so the
  *  default doesn't silently change if the list above is ever reordered. */
-const DEFAULT_CATEGORY: ProjectCategory = 'company'
+const DEFAULT_CATEGORY: ProjectCategory = 'personal'
 
 /**
  * Projects live in a horizontal snap track so the slide stays one viewport
@@ -49,7 +50,7 @@ export function WorkSlide({ label }: { label: string }) {
         <SlideHeading
           eyebrow="Selected work"
           title={<>Things I&apos;ve <span className="text-gradient">built.</span></>}
-          subtitle="Company work and personal builds — same craft, different constraints."
+          subtitle="Personal builds and company work — same craft, different constraints."
         />
 
         <motion.div variants={slideItem} className="flex items-center gap-3">
@@ -61,7 +62,10 @@ export function WorkSlide({ label }: { label: string }) {
                   key={c.id}
                   role="tab"
                   aria-selected={active}
-                  onClick={() => setCategory(c.id)}
+                  onClick={() => {
+                    setCategory(c.id)
+                    track('work_tab', { category: c.id })
+                  }}
                   className={cn(
                     'relative rounded-full px-4 py-1.5 text-sm transition-colors duration-200',
                     active ? 'text-ink-950' : 'text-muted hover:text-[var(--text)]',

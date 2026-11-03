@@ -11,7 +11,14 @@
       "Role-based access control across every module.",
       "Bulk CSV import/export with per-row error reporting and audit logging."
     ],
-    "tags": ["React", "Next.js", "Redux", "Tailwind CSS", "Spring Boot", "PostgreSQL"],
+    "tags": [
+      "React",
+      "Next.js",
+      "Redux",
+      "Tailwind CSS",
+      "Spring Boot",
+      "PostgreSQL"
+    ],
     "year": "2025",
     "live": "",
     "repo": ""
@@ -26,60 +33,43 @@
       "Optimised images, fonts, bundle size and code splitting for page performance and SEO.",
       "Reusable Tailwind + TypeScript layout system for consistent page development."
     ],
-    "tags": ["Next.js", "React", "TypeScript", "Tailwind CSS", "CI/CD"],
+    "tags": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "CI/CD"
+    ],
     "year": "2025",
     "live": "",
     "repo": ""
   },
   {
-    "slug": "portfolio",
-    "title": "Developer Portfolio",
+    "slug": "goldstack",
+    "title": "GoldStack — Digital Gold Platform",
     "category": "personal",
-    "tagline": "The deck you are looking at right now.",
-    "description": "A slide-based portfolio driven entirely by JSON content files. Native CSS scroll-snap gives it a deck feel without hijacking the scroll wheel, and the background re-tints itself as each slide takes focus.",
+    "tagline": "Buy, sell and auto-invest in gold, with live prices and a money-safe ledger.",
+    "description": "A digital gold investment platform in the spirit of Jar and PhonePe Gold, using virtual coins instead of real money. Seven Spring Boot microservices talk over Kafka behind an API gateway, and a React + TypeScript frontend streams the live gold price over WebSocket.",
     "highlights": [
-      "Zero-runtime theming with CSS custom properties and a persisted toggle.",
-      "Snap deck that degrades to normal scrolling on short screens and reduced motion.",
-      "Ships at ~130 kB gzipped with a clean accessibility audit."
+      "Buy/sell sagas over Kafka with an outbox, idempotent consumers and refund compensation when a step fails.",
+      "Double-entry coin and gold ledgers that always balance to zero; money travels as strings, never JS floats.",
+      "5-minute locked quotes in Redis and one idempotency key per attempt, so retries can never double-charge.",
+      "Live price sparkline, P&L dashboard, SIP auto-invest and a what-if calculator with charts."
     ],
-    "tags": ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vite"],
+    "tags": [
+      "React",
+      "TypeScript",
+      "Redux Toolkit",
+      "Spring Boot",
+      "Kafka",
+      "Redis",
+      "PostgreSQL",
+      "Docker"
+    ],
     "year": "2026",
     "live": "",
     "repo": "",
-    "status": "Live"
-  },
-  {
-    "slug": "project-two",
-    "title": "Project Two",
-    "category": "personal",
-    "tagline": "A one-line hook for what it does.",
-    "description": "Replace this with what the product is, who it is for, and the hard problem you solved — not \"a web app built with React\".",
-    "highlights": ["A measurable outcome.", "A technical decision you can defend."],
-    "tags": ["Next.js", "TypeScript", "GraphQL"],
-    "year": "2025",
-    "live": "",
-    "repo": ""
-  },
-  {
-    "slug": "project-three",
-    "title": "Project Three",
-    "category": "personal",
-    "tagline": "A one-line hook for what it does.",
-    "description": "What it is, the constraint you worked under, and the result it produced.",
-    "highlights": ["A measurable outcome."],
-    "tags": ["React", "Redux Toolkit", "REST"],
-    "year": "2025",
-    "live": "",
-    "repo": ""
-  },
-  {
-    "slug": "project-four",
-    "title": "Project Four",
-    "category": "personal",
-    "tagline": "A component library, tool or experiment.",
-    "description": "Smaller side projects still count — show the thing you would happily walk an interviewer through.",
-    "tags": ["React", "Storybook", "Accessibility"],
-    "year": "2024",
-    "repo": ""
+    "image": "/projects/goldstack.webp",
+    "status": "In progress"
   }
 ]

@@ -10,7 +10,7 @@ export function AboutSlide({ label }: { label: string }) {
     <Slide id="about" label={label}>
       <SlideHeading
         eyebrow="About"
-        title={<>A frontend engineer who sweats the <span className="text-gradient">details.</span></>}
+        title={<>A frontend-focused software engineer who sweats the <span className="text-gradient">details.</span></>}
         className="mb-10"
       />
 

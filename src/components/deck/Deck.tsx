@@ -5,6 +5,7 @@ import { useContentFits } from './useContentFits'
 import { useSlideScroller } from './useSlideScroller'
 import { useDeckWheel } from './useDeckWheel'
 import { invariant } from '@/lib/utils'
+import { track } from '@/lib/analytics'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import type { SlideId } from '@/types/content'
 
@@ -119,6 +120,11 @@ export function Deck({ slideIds, children }: Props) {
   // `undefined` on to everything that reads `activeId`.
   const activeId = slideIds[activeIndex]
   invariant(activeId, `Deck: activeIndex ${activeIndex} is out of range for ${slideIds.length} slides`)
+
+  // The deck is one page, so slides stand in for page views in analytics.
+  useEffect(() => {
+    track('slide_view', { slide_id: activeId, slide_index: activeIndex + 1 })
+  }, [activeId, activeIndex])
 
   const value = useMemo<DeckState>(
     () => ({

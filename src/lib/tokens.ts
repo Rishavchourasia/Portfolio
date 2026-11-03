@@ -55,7 +55,7 @@ export const FONTS = [
     label: 'Display',
     varName: '--font-display',
     usage: 'Headings, stat figures, the wordmark',
-    sample: 'Frontend Engineer',
+    sample: 'Software Engineer',
     className: 'font-display',
   },
   {
