@@ -12,19 +12,13 @@
       "Closed a frontend access-control gap with JWT auth and role-based access control against Spring Boot REST APIs backed by PostgreSQL and Redis.",
       "Raised frontend test coverage to 80% with Jest and React Testing Library."
     ],
-    "stack": ["React", "Next.js", "TypeScript", "Node.js", "REST", "Jest"]
-  },
-  {
-    "company": "goMensa",
-    "role": "Software Engineering Intern",
-    "period": "Sep 2024 — Dec 2024",
-    "location": "Bengaluru",
-    "summary": "Built dashboard views and the reusable UI components that standardised frontend patterns for the product team.",
-    "highlights": [
-      "Shipped React dashboard views and reusable UI components (tables, forms, cards, navigation) adopted across 12+ product screens.",
-      "Closed a testing gap with 45 component tests at 75% coverage using Jest and React Testing Library.",
-      "Shipped weekly through JIRA in an agile team."
-    ],
-    "stack": ["React", "JavaScript", "Jest", "React Testing Library"]
+    "stack": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Node.js",
+      "REST",
+      "Jest"
+    ]
   }
 ]
