@@ -59,13 +59,7 @@ export function ProjectCard({ project, featured }: { project: Project; featured?
           featured && 'md:grid md:grid-cols-2 md:items-center md:gap-7 md:p-7 lg:gap-9 lg:p-8',
         )}
       >
-        <ProjectPreview
-          title={project.title}
-          slug={project.slug}
-          image={project.image}
-          status={project.status}
-          className={cn(featured && 'md:order-2')}
-        />
+        <ProjectPreview project={project} className={cn(featured && 'md:order-2')} />
 
         <div className={cn('flex flex-1 flex-col', featured && 'md:order-1')}>
           <div className="flex-1">
@@ -74,6 +68,11 @@ export function ProjectCard({ project, featured }: { project: Project; featured?
                 {project.year}
               </span>
               <span className="h-px flex-1 bg-[var(--border)]" />
+              {project.status && (
+                <span className="rounded-full bg-[var(--color-mint)]/15 px-2 py-0.5 font-mono text-[10px] text-[var(--color-mint)]">
+                  {project.status}
+                </span>
+              )}
             </div>
 
             <h3 className="font-display mt-3 text-xl font-semibold tracking-tight sm:text-2xl">

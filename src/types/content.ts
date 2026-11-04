@@ -88,6 +88,48 @@ export type Project = {
   year: string
   live?: string
   repo?: string
-  image?: string
+  /** Screenshots for the preview slider, in display order. */
+  screens?: ProjectScreen[]
+  /** Drawn as an animated flow diagram on the preview's Architecture tab. */
+  architecture?: Architecture
   status?: string
+}
+
+export type ProjectScreen = {
+  src: string
+  /** Shown in the preview's address bar and used as alt text. */
+  caption: string
+}
+
+/** Which edge of a node a connection leaves from or arrives at. */
+export type NodeSide = 'left' | 'right' | 'top' | 'bottom'
+
+export type ArchitectureNode = {
+  id: string
+  label: string
+  sub?: string
+  /** Centre position in the diagram's 1000×625 coordinate space. */
+  x: number
+  y: number
+  /** Width in diagram units; defaults to 150. */
+  w?: number
+  kind: 'client' | 'edge' | 'service' | 'data' | 'queue' | 'external'
+  /** Sub-components listed inside the node, e.g. the services behind a gateway. */
+  items?: string[]
+}
+
+export type ArchitectureEdge = {
+  from: string
+  to: string
+  label?: string
+  /** Traffic flows both ways, e.g. request/reply over a queue. */
+  bidirectional?: boolean
+  /** Override the automatically chosen sides when the default route crosses something. */
+  fromSide?: NodeSide
+  toSide?: NodeSide
+}
+
+export type Architecture = {
+  nodes: ArchitectureNode[]
+  edges: ArchitectureEdge[]
 }

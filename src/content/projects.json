@@ -68,8 +68,339 @@
     ],
     "year": "2026",
     "live": "",
-    "repo": "",
-    "image": "/projects/goldstack.webp",
-    "status": "In progress"
+    "repo": "https://github.com/Rishavchourasia/goldstackplatform",
+    "status": "In progress",
+    "screens": [
+      {
+        "src": "/projects/goldstack/dashboard.webp",
+        "caption": "Dashboard"
+      },
+      {
+        "src": "/projects/goldstack/trade.webp",
+        "caption": "Buy · locked quote"
+      },
+      {
+        "src": "/projects/goldstack/what-if.webp",
+        "caption": "What-if calculator"
+      },
+      {
+        "src": "/projects/goldstack/portfolio.webp",
+        "caption": "Portfolio"
+      },
+      {
+        "src": "/projects/goldstack/sips.webp",
+        "caption": "SIPs"
+      },
+      {
+        "src": "/projects/goldstack/notifications.webp",
+        "caption": "Notifications"
+      }
+    ],
+    "architecture": {
+      "nodes": [
+        {
+          "id": "browser",
+          "label": "Browser",
+          "sub": "React · TypeScript",
+          "x": 110,
+          "y": 62,
+          "w": 160,
+          "kind": "client"
+        },
+        {
+          "id": "nginx",
+          "label": "Nginx",
+          "sub": "static + /api proxy",
+          "x": 400,
+          "y": 62,
+          "w": 160,
+          "kind": "edge"
+        },
+        {
+          "id": "gateway",
+          "label": "API Gateway",
+          "sub": "Spring Cloud · JWT",
+          "x": 690,
+          "y": 62,
+          "w": 170,
+          "kind": "service"
+        },
+        {
+          "id": "services",
+          "label": "Microservices",
+          "sub": "Spring Boot 3 · Java 21 · a database each",
+          "x": 400,
+          "y": 245,
+          "w": 760,
+          "kind": "service",
+          "items": [
+            "User",
+            "Wallet",
+            "Price",
+            "Order",
+            "SIP",
+            "Portfolio",
+            "Notification"
+          ]
+        },
+        {
+          "id": "postgres",
+          "label": "PostgreSQL",
+          "sub": "7 databases",
+          "x": 140,
+          "y": 432,
+          "w": 180,
+          "kind": "data"
+        },
+        {
+          "id": "redis",
+          "label": "Redis",
+          "sub": "locked quotes · prices",
+          "x": 400,
+          "y": 432,
+          "w": 180,
+          "kind": "data"
+        },
+        {
+          "id": "kafka",
+          "label": "Kafka",
+          "sub": "outbox → saga events",
+          "x": 660,
+          "y": 432,
+          "w": 180,
+          "kind": "queue"
+        }
+      ],
+      "edges": [
+        {
+          "from": "browser",
+          "to": "nginx",
+          "label": "HTTPS"
+        },
+        {
+          "from": "nginx",
+          "to": "gateway",
+          "label": "REST · WS",
+          "bidirectional": true
+        },
+        {
+          "from": "gateway",
+          "to": "services",
+          "label": "routes"
+        },
+        {
+          "from": "services",
+          "to": "postgres",
+          "label": "JPA"
+        },
+        {
+          "from": "services",
+          "to": "redis",
+          "label": "cache"
+        },
+        {
+          "from": "services",
+          "to": "kafka",
+          "label": "saga",
+          "bidirectional": true
+        }
+      ]
+    }
+  },
+  {
+    "slug": "showdrop",
+    "title": "Showdrop — Ticket Booking Platform",
+    "category": "personal",
+    "tagline": "BookMyShow-style booking with live seat maps, 5-minute holds and an AI booking assistant.",
+    "description": "Browse movies, stand-up and theatre, pick seats on a live map and hold them while you pay. A Spring Boot API guards every seat with Redis locks and optimistic versioning, Kafka fans out confirmations, and a Python agent answers questions and holds seats from chat.",
+    "highlights": [
+      "Seat holds with Redis SET NX and a 5-minute TTL, plus @Version optimistic locking so two people can never book one seat.",
+      "Kafka publishes booking.confirmed to a separate notifications service; scheduled jobs release expired holds.",
+      "AI assistant (FastAPI) with RAG over Qdrant and tool calls into the booking API. It can hold seats, but only the user can pay.",
+      "React + TypeScript + Redux-Saga frontend behind Nginx; runs as 8 containers in Docker Compose or on a local Kubernetes (kind) cluster."
+    ],
+    "tags": [
+      "React",
+      "TypeScript",
+      "Redux-Saga",
+      "Spring Boot",
+      "Redis",
+      "Kafka",
+      "Python",
+      "RAG",
+      "Kubernetes"
+    ],
+    "year": "2026",
+    "live": "",
+    "repo": "https://github.com/Rishavchourasia/Showdrop",
+    "status": "In progress",
+    "screens": [
+      {
+        "src": "/projects/showdrop/home.webp",
+        "caption": "Discover"
+      },
+      {
+        "src": "/projects/showdrop/event.webp",
+        "caption": "Event · showtimes"
+      },
+      {
+        "src": "/projects/showdrop/seats.webp",
+        "caption": "Live seat map"
+      },
+      {
+        "src": "/projects/showdrop/checkout.webp",
+        "caption": "Checkout · 5-min hold"
+      },
+      {
+        "src": "/projects/showdrop/bookings.webp",
+        "caption": "My tickets"
+      },
+      {
+        "src": "/projects/showdrop/ai.webp",
+        "caption": "AI booking assistant"
+      }
+    ],
+    "architecture": {
+      "nodes": [
+        {
+          "id": "browser",
+          "label": "React app",
+          "sub": "React · Redux-Saga",
+          "x": 110,
+          "y": 62,
+          "w": 170,
+          "kind": "client"
+        },
+        {
+          "id": "nginx",
+          "label": "Nginx",
+          "sub": "/api · /agent proxy",
+          "x": 330,
+          "y": 62,
+          "w": 160,
+          "kind": "edge"
+        },
+        {
+          "id": "llm",
+          "label": "LLM API",
+          "sub": "hosted model",
+          "x": 660,
+          "y": 62,
+          "w": 150,
+          "kind": "external"
+        },
+        {
+          "id": "backend",
+          "label": "Backend API",
+          "sub": "Spring Boot · JWT · Flyway",
+          "x": 170,
+          "y": 232,
+          "w": 240,
+          "kind": "service",
+          "items": [
+            "Auth",
+            "Events",
+            "Bookings",
+            "Seat holds"
+          ]
+        },
+        {
+          "id": "agent",
+          "label": "AI agent",
+          "sub": "FastAPI · tool calling",
+          "x": 600,
+          "y": 232,
+          "w": 230,
+          "kind": "service",
+          "items": [
+            "RAG · Qdrant",
+            "Chat memory"
+          ]
+        },
+        {
+          "id": "postgres",
+          "label": "PostgreSQL",
+          "sub": "source of truth",
+          "x": 85,
+          "y": 432,
+          "w": 150,
+          "kind": "data"
+        },
+        {
+          "id": "redis",
+          "label": "Redis",
+          "sub": "5-min seat holds",
+          "x": 255,
+          "y": 432,
+          "w": 150,
+          "kind": "data"
+        },
+        {
+          "id": "kafka",
+          "label": "Kafka",
+          "sub": "booking events",
+          "x": 440,
+          "y": 432,
+          "w": 150,
+          "kind": "queue"
+        },
+        {
+          "id": "notifications",
+          "label": "Notifications",
+          "sub": "Kafka consumer",
+          "x": 665,
+          "y": 432,
+          "w": 170,
+          "kind": "service"
+        }
+      ],
+      "edges": [
+        {
+          "from": "browser",
+          "to": "nginx",
+          "label": "HTTPS"
+        },
+        {
+          "from": "nginx",
+          "to": "backend",
+          "label": "/api"
+        },
+        {
+          "from": "nginx",
+          "to": "agent",
+          "label": "/agent"
+        },
+        {
+          "from": "agent",
+          "to": "llm",
+          "label": "prompt"
+        },
+        {
+          "from": "agent",
+          "to": "backend",
+          "label": "tools · REST"
+        },
+        {
+          "from": "backend",
+          "to": "postgres",
+          "label": "SQL"
+        },
+        {
+          "from": "backend",
+          "to": "redis",
+          "label": "SET NX"
+        },
+        {
+          "from": "backend",
+          "to": "kafka",
+          "label": "confirmed"
+        },
+        {
+          "from": "kafka",
+          "to": "notifications",
+          "label": "consume"
+        }
+      ]
+    }
   }
 ]
