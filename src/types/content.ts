@@ -24,6 +24,8 @@ export type SiteContent = {
     description: string
     themeColor: string
   }
+  /** Google Tag Manager container; loaded in production builds only. */
+  analytics?: { gtmId: string }
 }
 
 export type Education = {

@@ -95,13 +95,16 @@ function seo(siteUrl: string, gtmId: string | undefined): Plugin {
   }
 }
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const env = { ...loadEnv(mode, process.cwd(), ''), ...process.env }
 
   const productionHost = env.VERCEL_PROJECT_PRODUCTION_URL
   const siteUrl = (env.SITE_URL || (productionHost ? `https://${productionHost}` : 'http://localhost:5173')).replace(/\/+$/, '')
 
-  const gtmId = env.GTM_ID?.trim()
+  // Production builds only, so local dev and Vercel preview deploys don't
+  // pollute analytics. A GTM_ID env var overrides the ID in site.json.
+  const isProductionBuild = command === 'build' && (!env.VERCEL_ENV || env.VERCEL_ENV === 'production')
+  const gtmId = env.GTM_ID?.trim() || (isProductionBuild ? readJson('./src/content/site.json').analytics?.gtmId : undefined)
   if (gtmId && !/^GTM-[A-Z0-9]+$/.test(gtmId)) {
     throw new Error(`GTM_ID must look like GTM-XXXXXXX, got "${gtmId}"`)
   }
