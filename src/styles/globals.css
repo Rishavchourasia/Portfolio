@@ -1,473 +1,227 @@
 @import "tailwindcss";
 
+/* ---- design tokens ----
+   Ink-black page, cream "paper" sheets that slide up over it, one lavender
+   accent for italic serif voice and numbers, and a stamp red. Type pairs a
+   heavy grotesk with an italic serif, plus a signature script for the name. */
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-signature: "Mrs Saint Delafield", "Instrument Serif", cursive;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --color-ink-950: #05060a;
-  --color-ink-900: #0a0c14;
-  --color-ink-800: #11141f;
-  --color-ink-700: #1a1e2d;
-  --color-ink-600: #262b3d;
+  --color-ink-950: #0b0a0f;
+  --color-ink-900: #121118;
+  --color-ink-800: #1a1822;
+  --color-cream: #ece6dc;
+  --color-cream-ink: #17151c;
+  --color-lavender: #a99cff;
+  --color-stamp: #c2433a;
+  --color-paper-red: #9b3a30;
 
-  --color-accent-400: #7dd3fc;
-  --color-accent-500: #38bdf8;
-  --color-accent-600: #0ea5e9;
-  --color-violet-alt: #a78bfa;
-  --color-mint: #5eead4;
+  /* Kept for the project preview and architecture diagram. */
+  --color-accent-400: #bcb2ff;
+  --color-accent-500: #a99cff;
+  --color-violet-alt: #c9a4ff;
+  --color-mint: #7fe0c4;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* Fluid rhythm — every slide's breathing room scales with the viewport
-     rather than stepping at breakpoints. */
-  --slide-pad-top: clamp(5.5rem, 4rem + 6vh, 7.5rem);
-  --slide-pad-bottom: clamp(2rem, 1rem + 4vh, 3.5rem);
-  --slide-gutter: clamp(1.25rem, 0.5rem + 3vw, 2.5rem);
-  --stack-sm: clamp(1rem, 0.6rem + 1.4vh, 1.5rem);
-  --stack-md: clamp(1.75rem, 1rem + 3vh, 3rem);
-}
-
-/* Short laptop screens: scale the whole UI with viewport height so a slide
-   still fits one screen and the deck keeps snapping, instead of falling back
-   to plain scrolling. Every size in the app is rem-based, so this shrinks
-   type and spacing together and keeps proportions intact. Clamped at 13px so
-   body copy never drops below a comfortable reading size. */
-@media (min-width: 768px) and (max-height: 900px) {
-  html {
-    font-size: clamp(13px, 1.62vh, 16px);
-  }
-
-  /* A featured card's height should not depend on how many bullets a given
-     project happens to list — cap what's shown so one longer project can't
-     push the whole deck out of mandatory snapping the way a 4th highlight
-     did at this height. The full list is still there for anyone reading on a
-     screen with room (proximity mode leaves this rule inactive). */
-  .project-highlights > :nth-child(n + 4) {
-    display: none;
-  }
-}
-
-/* Below the font-size floor, trim the frame instead of the type: drop the
-   optional slide subtitles and tighten the project card. Keeps a 1280x720
-   laptop on the full deck rather than dropping it to proximity snapping. */
-@media (min-width: 768px) and (max-height: 780px) {
-  .slide-subtitle {
-    display: none;
-  }
-
-  .project-card__body {
-    padding: 1.15rem;
-    gap: 1.15rem;
-  }
-
-  .project-preview__frame {
-    aspect-ratio: 16 / 9;
-  }
-
-  .project-dots {
-    margin-top: 0.5rem;
-  }
-
-  .work-header {
-    margin-bottom: 0.9rem;
-  }
-
-  .carousel {
-    padding-block: 0.4rem;
-  }
-
-
-  .skill-card {
-    margin-bottom: 1rem;
-  }
-
-  .skill-card__body {
-    padding: 0.85rem;
-  }
-
-  .skill-columns {
-    column-gap: 1.35rem;
-  }
 }
 
 :root {
   color-scheme: dark;
-
   --bg: var(--color-ink-950);
   --surface: rgba(255, 255, 255, 0.04);
-  --surface-strong: rgba(255, 255, 255, 0.06);
-  --border: rgba(255, 255, 255, 0.09);
-  --border-strong: rgba(255, 255, 255, 0.16);
-  --text: #e8ebf2;
-  --text-muted: #8b94a8;
+  --surface-strong: #15141b;
+  --border: rgba(236, 230, 220, 0.1);
+  --border-strong: rgba(236, 230, 220, 0.2);
+  --text: #ece6dc;
+  --text-muted: #8f8a99;
+  --gutter: clamp(1.25rem, 0.5rem + 3.2vw, 3rem);
+  --voice: var(--color-lavender);
 
-  --grad-1: var(--color-accent-400);
-  --grad-2: var(--color-violet-alt);
-  --grad-3: var(--color-mint);
-
-  /* Elevation reads as depth on dark: a cast shadow plus a lit top edge. */
   --elev-1: 0 1px 0 0 rgba(255, 255, 255, 0.05) inset, 0 8px 24px -12px rgba(0, 0, 0, 0.8);
   --elev-2: 0 1px 0 0 rgba(255, 255, 255, 0.07) inset, 0 24px 48px -20px rgba(0, 0, 0, 0.9);
   --elev-3: 0 1px 0 0 rgba(255, 255, 255, 0.09) inset, 0 40px 80px -28px rgba(0, 0, 0, 0.95);
-
-  /* Background orbs: saturated and bright against near-black. */
-  --orb-sat: 85%;
-  --orb-light: 58%;
-  --orb-alpha: 1;
-  --grid-ink: 6%;
-  --scrim: 0.25;
-}
-
-[data-theme="light"] {
-  color-scheme: light;
-
-  /* Candlelight, not daylight: a warm wax-white ground with every neutral
-     pulled towards amber. Cards stay a shade lighter than the page so they
-     still have an edge to sit on, the way the cool theme did. */
-  --bg: #faf4e9;
-  --surface: rgba(255, 252, 245, 0.9);
-  --surface-strong: #fffdf7;
-  --border: rgba(92, 58, 18, 0.12);
-  --border-strong: rgba(92, 58, 18, 0.22);
-  --text: #211609;
-  --text-muted: #6d5b45;
-
-  /* Amber accents, dark enough to stay readable on the warm ground. */
-  --color-accent-400: #a55a12;
-  --color-accent-500: #c2700f;
-  --grad-1: #a8500c;
-  --grad-2: #8a4b16;
-  --grad-3: #9a6a12;
-
-  /* On light, elevation is a soft cast shadow — no inset highlight. Warmed to
-     brown so cards sit on the page rather than on a grey hole. */
-  --elev-1: 0 1px 2px rgba(92, 58, 18, 0.06), 0 4px 12px -4px rgba(92, 58, 18, 0.1);
-  --elev-2: 0 2px 4px rgba(92, 58, 18, 0.06), 0 16px 32px -12px rgba(92, 58, 18, 0.16);
-  --elev-3: 0 4px 8px rgba(92, 58, 18, 0.07), 0 32px 64px -20px rgba(92, 58, 18, 0.22);
-
-  /* Pale, warm orbs — the dark theme's values turn to mud over paper. */
-  --orb-sat: 72%;
-  --orb-light: 76%;
-  --orb-alpha: 0.55;
-  --grid-ink: 10%;
-  --scrim: 0.45;
-
-  /* The candle itself: a warm pool of light, and how much it breathes. */
-  --candle-core: 42 96% 72%;
-  --candle-edge: 26 88% 62%;
-  --candle-reach: 68vmax;
 }
 
 * { border-color: var(--border); }
 
 html {
   -webkit-font-smoothing: antialiased;
-}
-
-html,
-body,
-#root {
-  height: 100%;
+  background: var(--bg);
 }
 
 body {
+  margin: 0;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
+  overflow-x: clip;
+}
+
+/* Lenis owns wheel scrolling; these are its documented base styles. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+::selection { background: var(--color-lavender); color: var(--color-ink-950); }
+
+/* Film grain over everything, the way the dark sections read as print. */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: -50%;
+  z-index: 100;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 0.9s steps(4) infinite;
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -3%); }
+  75% { transform: translate(-1%, 3%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* A line clipped by its own box so its text can rise into view. The padding
+   keeps descenders inside the clip; the negative margin gives it back. */
+.mask-line {
+  display: block;
   overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
 }
 
-/* ---- deck ----------------------------------------------------------------
-   The deck owns scrolling, not the window. Snapping is CSS-driven so the
-   browser keeps native momentum, trackpad gestures and assistive-tech
-   scrolling; JS only observes which slide is in view.                        */
-
-.deck {
-  height: 100dvh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  overscroll-behavior-y: none;
-  scrollbar-width: none;
-}
-
-.deck::-webkit-scrollbar {
-  display: none;
-}
-
-.deck[data-snap='mandatory'] {
-  scroll-snap-type: y mandatory;
-}
-
-/* While the deck animates itself, the browser's snapping and smooth-scroll
-   both have to stand down: each would fight the frames being written, and
-   assigning `scrollTop` is itself subject to `scroll-behavior`. */
-.deck[data-animating] {
-  scroll-snap-type: none;
-  scroll-behavior: auto;
-}
-
-.deck[data-snap='proximity'] {
-  scroll-snap-type: y proximity;
-}
-
-.slide {
+/* Cream paper: a sheet that slides over the dark page with a rounded top. */
+.paper {
   position: relative;
-  display: flex;
-  align-items: center;
-  min-height: 100dvh;
+  background: var(--color-cream);
+  color: var(--color-cream-ink);
+  border-radius: clamp(1.25rem, 3vw, 2.5rem) clamp(1.25rem, 3vw, 2.5rem) 0 0;
+  --text: var(--color-cream-ink);
+  --text-muted: #6d6676;
+  --voice: #5a48d8;
+  --border: rgba(23, 21, 28, 0.14);
+  --border-strong: rgba(23, 21, 28, 0.3);
 }
 
-/* `scroll-snap-stop: always` applies under both modes, not just mandatory:
-   it is what makes a fast wheel or trackpad flick stop at every slide instead
-   of sailing past several — the one thing that must hold regardless of which
-   mode a given screen falls into. It only affects passive scrolling; a nav
-   click or a dot-rail jump still goes straight to its target on purpose. */
-.deck[data-snap='mandatory'] .slide,
-.deck[data-snap='proximity'] .slide {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+.paper--red {
+  background: var(--color-paper-red);
+  color: #f3e9de;
+  --text: #f3e9de;
+  --text-muted: rgba(243, 233, 222, 0.7);
+  --voice: #f3e9de;
+  --border: rgba(243, 233, 222, 0.22);
+  --border-strong: rgba(243, 233, 222, 0.45);
 }
 
-/* Under mandatory snapping a slide is exactly one viewport — that is what
-   makes the deck feel like slides rather than a long page. */
-.deck[data-snap='mandatory'] .slide {
-  height: 100dvh;
-  min-height: 0;
+/* Fibre texture on the paper sheets. */
+.paper::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
 }
 
-/* Only a fixed-height slide has anything to fill.
-   Under mandatory the slide is exactly one viewport, so `height: 100%` pins
-   the fill area to it exactly — this is also scoped to mandatory to keep a
-   slide's measured content height identical in both modes, which is what
-   stops the fit check below from flip-flopping between them.
-   Under proximity the slide's own height is its natural content height, so
-   percentages resolve against nothing useful — the footer this fill area
-   carries would end up wherever the content happens to end, not at the
-   bottom of the screen. `min-height: 100dvh` (viewport-relative, not
-   percentage) guarantees at least one full screen to justify-between across,
-   while still letting the slide grow past that if the content needs more. */
-.deck[data-snap='mandatory'] .slide__inner--fill {
-  height: 100%;
+/* ---- hero ---- */
+.hero {
+  --spot-x: 72%;
+  --spot-y: 40%;
+  background:
+    radial-gradient(55% 60% at 78% 42%, rgba(169, 156, 255, 0.1), transparent 70%),
+    radial-gradient(45% 50% at 8% 100%, rgba(194, 67, 58, 0.06), transparent 70%);
 }
 
-.deck[data-snap='proximity'] .slide__inner--fill {
-  min-height: 100dvh;
+/* A soft light that trails the cursor across the hero. */
+.hero-spot {
+  background: radial-gradient(520px circle at var(--spot-x) var(--spot-y), rgba(169, 156, 255, 0.09), transparent 65%);
+  transition: background 0.2s;
 }
 
-/* Under proximity snapping slides keep their natural height, so long content
-   on a phone scrolls normally instead of hiding inside a fixed-height slide. */
-.deck[data-snap='proximity'] .slide__inner {
-  max-height: none;
-  overflow-y: visible;
+/* The glowing edge on top of the proof bar. */
+.hero-horizon {
+  background: linear-gradient(90deg, transparent, rgba(236, 230, 220, 0.7), transparent);
+  box-shadow: 0 0 18px 2px rgba(169, 156, 255, 0.35);
 }
 
-/* Padding lives on the inner element, not the slide, so that content which
-   does outgrow the viewport scrolls instead of being clipped. Snapping must
-   never make content unreachable. */
-.slide__inner {
-  position: relative; /* makes children's offsetTop measurable against it */
-  width: 100%;
-  max-height: 100%;
-  overflow-y: auto;
-  padding-block: var(--slide-pad-top) var(--slide-pad-bottom);
-  scrollbar-width: none;
+.hero-marquee {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
 
-.slide__inner::-webkit-scrollbar {
-  display: none;
+.hero-marquee__track {
+  animation: marquee 40s linear infinite;
 }
 
-/* ---- skills ----
-   Cards rest at a slight tilt and straighten under the cursor — only the one
-   being hovered. Rotation is paint-only, so it costs no layout height, but
-   rotated corners need the wider gutters the column flow now carries. Uses the
-   standalone `rotate` property so it composes with the card's own hover lift
-   (a `transform`) rather than overwriting it. */
-
-.skill-card__tilt {
-  rotate: var(--tilt, 0deg);
-  transition: rotate 0.5s var(--ease-out-expo);
+.hero-marquee:hover .hero-marquee__track {
+  animation-play-state: paused;
 }
 
-.skill-card:hover .skill-card__tilt,
-.skill-card:focus-within .skill-card__tilt {
-  rotate: 0deg;
+@keyframes marquee {
+  to { transform: translateX(calc(-50% - 1.25rem)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .skill-card__tilt {
-    rotate: 0deg;
-  }
-}
-
-/* horizontal project track */
-.carousel {
-  scrollbar-width: none;
-  scroll-padding-inline: 1.5rem;
-  /* room for the cards' lift and shadow, which would otherwise be clipped */
-  perspective: 1400px;
-}
-
-.carousel::-webkit-scrollbar {
-  display: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .deck {
-    scroll-behavior: auto;
-    scroll-snap-type: none;
-  }
-
-  .deck .slide {
-    height: auto;
-    min-height: 100dvh;
-  }
-
-  .deck .slide__inner {
-    max-height: none;
-    overflow-y: visible;
-  }
+  .hero-marquee__track { animation: none; }
+  .grain { animation: none; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
 }
 
-::selection { background: var(--color-accent-500); color: #05060a; }
-
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: color-mix(in oklab, var(--text-muted) 40%, transparent);
-  border-radius: 999px;
-  border: 3px solid var(--bg);
-}
-::-webkit-scrollbar-thumb:hover { background: var(--color-accent-500); }
-
 /* ---- utilities ---- */
 @utility text-muted { color: var(--text-muted); }
 
-/* Horizontal padding that tracks the viewport instead of stepping. */
 @utility px-gutter {
-  padding-inline: var(--slide-gutter);
-}
-
-@utility -mx-gutter {
-  margin-inline: calc(var(--slide-gutter) * -1);
+  padding-inline: var(--gutter);
 }
 
 @utility glass {
-  background: var(--surface);
+  background: color-mix(in oklab, var(--bg) 55%, transparent);
   border: 1px solid var(--border);
-  backdrop-filter: blur(16px) saturate(140%);
-  box-shadow: var(--elev-1);
+  backdrop-filter: blur(14px) saturate(140%);
 }
 
-@utility elevate-2 {
-  box-shadow: var(--elev-2);
-}
-
-@utility elevate-3 {
-  box-shadow: var(--elev-3);
-}
-
-@utility text-gradient {
-  background-image: linear-gradient(100deg, var(--grad-1) 0%, var(--grad-2) 55%, var(--grad-3) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-@utility grid-bg {
-  background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--text) var(--grid-ink), transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--text) var(--grid-ink), transparent) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
-}
-
-/* ---- keyframes ---- */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-@keyframes float-slow {
-  0%, 100% { transform: translate3d(0,0,0) scale(1); }
-  50% { transform: translate3d(2%, -4%, 0) scale(1.08); }
-}
-@keyframes shimmer {
-  to { background-position: 200% center; }
-}
-@keyframes blink { 50% { opacity: 0; } }
-
-/* ---- candle ----
-   A real flame is not a sine wave. The stops below are deliberately uneven —
-   a couple of quick dips, an occasional brighter surge, one longer settle —
-   so the light never falls into a rhythm the eye can predict. Light theme
-   only; the dark theme is untouched. */
-
-@keyframes candle-breathe {
-  0%   { opacity: 0.86; transform: scale(1)     translate3d(0, 0, 0); }
-  7%   { opacity: 0.97; transform: scale(1.013) translate3d(0.25%, -0.3%, 0); }
-  15%  { opacity: 0.79; transform: scale(0.994) translate3d(-0.2%, 0.2%, 0); }
-  23%  { opacity: 0.93; transform: scale(1.008) translate3d(0.1%, -0.15%, 0); }
-  31%  { opacity: 0.83; transform: scale(0.998) translate3d(-0.3%, 0.25%, 0); }
-  44%  { opacity: 1;    transform: scale(1.018) translate3d(0.3%, -0.35%, 0); }
-  52%  { opacity: 0.76; transform: scale(0.99)  translate3d(-0.15%, 0.3%, 0); }
-  61%  { opacity: 0.9;  transform: scale(1.006) translate3d(0.2%, -0.1%, 0); }
-  73%  { opacity: 0.81; transform: scale(0.996) translate3d(-0.25%, 0.2%, 0); }
-  84%  { opacity: 0.95; transform: scale(1.011) translate3d(0.15%, -0.25%, 0); }
-  92%  { opacity: 0.84; transform: scale(1.001) translate3d(-0.1%, 0.1%, 0); }
-  100% { opacity: 0.86; transform: scale(1)     translate3d(0, 0, 0); }
-}
-
-/* The flame on the theme toggle: quicker and sharper than the room's glow,
-   with a lean to it, since a wick is small enough to be pushed around. */
-@keyframes flame-flicker {
-  0%   { opacity: 1;    transform: scale(1)             translateY(0); }
-  9%   { opacity: 0.88; transform: scaleY(0.93) scaleX(1.05) translateY(0.4px); }
-  18%  { opacity: 1;    transform: scaleY(1.07) scaleX(0.95) translateY(-0.5px); }
-  27%  { opacity: 0.92; transform: scaleY(0.97) scaleX(1.02) translateY(0.2px); }
-  38%  { opacity: 1;    transform: scaleY(1.1)  scaleX(0.93) translateY(-0.6px); }
-  49%  { opacity: 0.85; transform: scaleY(0.9)  scaleX(1.07) translateY(0.5px); }
-  60%  { opacity: 1;    transform: scaleY(1.04) scaleX(0.97) translateY(-0.3px); }
-  72%  { opacity: 0.94; transform: scaleY(0.96) scaleX(1.03) translateY(0.25px); }
-  85%  { opacity: 1;    transform: scaleY(1.08) scaleX(0.94) translateY(-0.45px); }
-  100% { opacity: 1;    transform: scale(1)             translateY(0); }
-}
-
-@keyframes flame-halo {
-  0%, 100% { opacity: 0.55; transform: scale(1); }
-  30%      { opacity: 0.8;  transform: scale(1.18); }
-  55%      { opacity: 0.42; transform: scale(0.94); }
-  78%      { opacity: 0.72; transform: scale(1.1); }
-}
-
-.candle-glow {
-  animation: candle-breathe 7.3s ease-in-out infinite;
-  will-change: opacity, transform;
-}
-
-.candle-flame {
-  transform-origin: 50% 100%;
-  animation: flame-flicker 2.6s ease-in-out infinite;
-}
-
-.candle-halo {
-  transform-origin: 50% 60%;
-  animation: flame-halo 3.1s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .candle-glow,
-  .candle-flame,
-  .candle-halo {
-    animation: none;
+/* Small uppercase label with a leading rule: "—— ABOUT". */
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  &::before {
+    content: "";
+    width: 2rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.6;
   }
 }
 
-.animate-marquee { animation: marquee 38s linear infinite; }
-.animate-float-slow { animation: float-slow 16s ease-in-out infinite; }
-.animate-blink { animation: blink 1.1s step-end infinite; }
+/* The italic serif voice: the second, spoken line of every heading. */
+@utility voice {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  color: var(--voice);
+}
