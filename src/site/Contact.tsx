@@ -30,7 +30,7 @@ export function Contact() {
   const links = [
     profile.socials.github && { label: 'GitHub', value: profile.socials.github.replace(/^https?:\/\/(www\.)?/, ''), href: profile.socials.github },
     profile.socials.linkedin && { label: 'LinkedIn', value: profile.name, href: profile.socials.linkedin },
-    profile.resumeUrl && { label: 'Résumé', value: 'Download PDF', href: profile.resumeUrl },
+    profile.resumeUrl && { label: 'Résumé', value: 'View résumé', href: profile.resumeUrl },
   ].filter(Boolean) as { label: string; value: string; href: string }[]
 
   return (
