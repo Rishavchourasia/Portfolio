@@ -68,7 +68,7 @@ export function About() {
     <section id="about" aria-label="About" className="relative grid items-center gap-10 px-gutter py-[18vh] lg:grid-cols-[1fr_1.15fr]">
       <FadeUp className="relative aspect-square w-full max-w-[560px] justify-self-center" y={0}>
         <ParticleCloud className="h-full w-full" />
-        <p className="voice absolute bottom-[8%] left-[6%] text-lg text-muted">— the stuff interfaces are made of</p>
+        <p className="voice absolute bottom-[8%] left-[6%] text-lg text-muted">— the stuff products are made of</p>
       </FadeUp>
 
       <div>
@@ -77,7 +77,7 @@ export function About() {
         </FadeUp>
         <RevealLines
           className="mt-6 text-[clamp(2.1rem,4.6vw,3.8rem)] leading-[1.02] font-bold tracking-[-0.035em]"
-          lines={['Frontend-minded engineering.', <span key="v" className="voice text-[1.08em]">Product-level care.</span>]}
+          lines={['Full-stack engineering.', <span key="v" className="voice text-[1.08em]">Product-level care.</span>]}
         />
         <FadeUp delay={0.15}>
           <p className="mt-6 text-xs font-semibold tracking-[0.2em] text-[var(--color-lavender)] uppercase">

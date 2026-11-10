@@ -4,20 +4,24 @@
     "role": "Software Engineer",
     "period": "Jan 2025 — Present",
     "location": "Bengaluru",
-    "summary": "Own the frontend architecture for the core product end to end in React, Next.js and TypeScript — shipping responsive experiences used by 25,000+ people across desktop, tablet and mobile.",
+    "summary": "Own the core product end to end: React, Next.js and TypeScript on the frontend, wired into Spring Boot and Node.js services backed by PostgreSQL and Redis, used by 25,000+ people across desktop, tablet and mobile.",
     "highlights": [
+      "Proposed and led the move to micro-frontends with Webpack Module Federation so teams deploy independently, cutting release cycles from 2 weeks to 2 days and the main bundle by 36%.",
       "Built a reusable component library (tables, forms, modals, filters, notifications) before duplicate implementations piled up, cutting new-screen build time by 40% across 12+ modules.",
-      "Diagnosed slow, unindexed data-table interactions on high-traffic screens and rebuilt them with server-side search, filtering, sorting and pagination; paired with SSR/SSG to lift the Lighthouse/SEO score from 62 to 94.",
-      "Replaced spreadsheet-based candidate onboarding — 8 hours a week of operations time — with an internal ATS dashboard, cutting onboarding turnaround by 55%.",
-      "Closed a frontend access-control gap with JWT auth and role-based access control against Spring Boot REST APIs backed by PostgreSQL and Redis.",
-      "Raised frontend test coverage to 80% with Jest and React Testing Library."
+      "Diagnosed slow, unindexed data-table interactions on high-traffic screens and rebuilt them with server-side search, filtering, sorting and pagination; paired with SSR/SSG to lift the Lighthouse/SEO score from 62 to 98.",
+      "Replaced spreadsheet-based candidate onboarding, which cost operations 8 hours a week, with an internal ATS dashboard in React and Node.js, cutting onboarding turnaround by 55%.",
+      "Closed an access-control gap with JWT auth and role-based access control across Spring Boot REST APIs, PostgreSQL and Redis, so each role sees only the data it's allowed to.",
+      "Raised test coverage to 80% with Jest and React Testing Library, and brought AI-assisted development (Claude Code, Cursor, Copilot) into the team's daily workflow."
     ],
     "stack": [
       "React",
       "Next.js",
       "TypeScript",
       "Node.js",
-      "REST",
+      "Spring Boot",
+      "PostgreSQL",
+      "Redis",
+      "Module Federation",
       "Jest"
     ]
   }

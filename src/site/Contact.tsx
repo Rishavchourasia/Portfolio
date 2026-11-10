@@ -60,7 +60,7 @@ export function Contact() {
           </h2>
           <FadeUp delay={0.2} className="max-w-sm pb-4">
             <p className="leading-relaxed">
-              Open to full-time frontend and software engineering roles, remote or in {profile.location}. I reply within a day.
+              Open to full-time full-stack and software engineering roles, remote or in {profile.location}. I reply within a day.
             </p>
             <p className="mt-4 flex items-center gap-2 text-sm font-semibold">
               <span className="h-2 w-2 rounded-full bg-[#2f9e6e]" />

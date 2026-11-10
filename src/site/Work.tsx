@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
-import { ArrowRight, ArrowUpRight, X } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Play, X } from 'lucide-react'
 import { projects } from '@/content'
 import { ProjectPreview } from '@/components/ui/ProjectPreview'
 import { track } from '@/lib/analytics'
@@ -201,6 +201,12 @@ function CaseCard({
                 {project.status ? `${project.year} · ${project.status}` : project.year} · {project.tags.slice(0, 4).join(' · ')}
               </p>
             </div>
+            <div className="flex flex-wrap items-center gap-4">
+            {project.videos?.length ? (
+              <button type="button" onClick={onOpen} className="voice inline-flex items-center gap-2 text-lg underline decoration-1 underline-offset-[6px] transition-opacity hover:opacity-70">
+                <Play size={14} className="fill-current" /> Watch it run
+              </button>
+            ) : null}
             <button
               type="button"
               onClick={onOpen}
@@ -209,12 +215,59 @@ function CaseCard({
               Open case
               <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
             </button>
+            </div>
           </div>
         </div>
 
         <motion.div aria-hidden style={{ opacity: dim }} className="pointer-events-none absolute inset-0 bg-black" />
       </motion.div>
     </section>
+  )
+}
+
+/** The proof: the few numbers that show the build does what it claims. */
+function Results({ results }: { results: NonNullable<Project['results']> }) {
+  return (
+    <dl className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--border)] sm:grid-cols-3">
+      {results.map((r) => (
+        <div key={r.label} className="bg-[var(--color-ink-900)] p-5 sm:p-6">
+          <dt className="voice text-[clamp(2.2rem,4vw,3rem)] leading-none text-[var(--color-lavender)]">{r.value}</dt>
+          <dd className="mt-2 text-sm leading-snug text-muted">{r.label}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
+/** Recorded demos and test runs, e.g. an automated load test. */
+function Videos({ project }: { project: Project }) {
+  return (
+    <div className="mt-10">
+      <p className="eyebrow">See it working</p>
+      <div className={`mt-4 grid gap-6 ${(project.videos?.length ?? 0) > 1 ? 'md:grid-cols-2' : ''}`}>
+        {project.videos?.map((v) => (
+          <figure key={v.src} className="overflow-hidden rounded-2xl border border-[var(--border-strong)] bg-black">
+            <video
+              src={v.src}
+              poster={v.poster}
+              controls
+              playsInline
+              preload="metadata"
+              onPlay={() => track('case_video_play', { project: project.slug, video: v.title })}
+              className="aspect-video w-full bg-black"
+            >
+              {/* Silent screen recordings may have no captions file; an empty track is ignored. */}
+              <track kind="captions" src={v.captions} srcLang="en" label="English" default />
+
+            </video>
+            <figcaption className="border-t border-[var(--border)] bg-[var(--color-ink-900)] px-5 py-4">
+              <p className="font-semibold">{v.title}</p>
+              {v.caption && <p className="mt-1 text-sm text-muted">{v.caption}</p>}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -264,13 +317,24 @@ function CaseDialog({ project, index, onClose }: { project: Project | null; inde
         {kind && <p className="voice mt-2 text-2xl">{kind}</p>}
         <p className="mt-6 max-w-3xl text-lg leading-relaxed text-[color-mix(in_oklab,var(--text)_85%,transparent)]">{project.tagline}</p>
 
+        {project.problem && (
+          <div className="mt-10 rounded-2xl border border-[color-mix(in_oklab,var(--color-stamp)_55%,transparent)] bg-[color-mix(in_oklab,var(--color-stamp)_8%,transparent)] p-6 sm:p-8">
+            <p className="eyebrow text-[#f08a7f]">The problem</p>
+            <p className="voice mt-4 max-w-3xl text-[clamp(1.35rem,2.6vw,1.9rem)] leading-snug text-[var(--color-cream)]">{project.problem}</p>
+          </div>
+        )}
+
+        {project.results?.length ? <Results results={project.results} /> : null}
+
+        {project.videos?.length ? <Videos project={project} /> : null}
+
         {(project.screens?.length || project.architecture) && (
-          <ProjectPreview project={project} className="mt-8" />
+          <ProjectPreview project={project} className="mt-10" />
         )}
 
         <div className="mt-10 grid gap-10 md:grid-cols-[1fr_1.2fr]">
           <div>
-            <p className="eyebrow">Overview</p>
+            <p className="eyebrow">The approach</p>
             <p className="mt-4 leading-relaxed text-muted">{project.description}</p>
             <ul className="mt-6 flex flex-wrap gap-2">
               {project.tags.map((tag) => (

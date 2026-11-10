@@ -56,7 +56,7 @@ export type Profile = {
 export type SkillGroup = {
   title: string
   blurb: string
-  icon: 'braces' | 'layout' | 'wrench' | 'flask' | 'gauge' | 'database' | 'bot' | 'sparkles'
+  icon: 'braces' | 'layout' | 'wrench' | 'flask' | 'gauge' | 'database' | 'bot' | 'sparkles' | 'cloud'
   skills: string[]
 }
 
@@ -84,8 +84,14 @@ export type Project = {
   /** Company work vs. personal builds — drives the tab filter on the Work slide. */
   category: ProjectCategory
   tagline: string
+  /** The real-world problem, in a sentence or two. Leads the case study. */
+  problem?: string
   description: string
   highlights?: string[]
+  /** Headline numbers that prove it works, shown as a strip in the case study. */
+  results?: ProjectResult[]
+  /** Demo or test-run recordings, e.g. a load test booking 10,000 seats. */
+  videos?: ProjectVideo[]
   tags: string[]
   year: string
   live?: string
@@ -95,6 +101,23 @@ export type Project = {
   /** Drawn as an animated flow diagram on the preview's Architecture tab. */
   architecture?: Architecture
   status?: string
+}
+
+export type ProjectResult = {
+  value: string
+  label: string
+}
+
+export type ProjectVideo = {
+  /** A file under `public/`, e.g. `/projects/showdrop/load-test.mp4`. */
+  src: string
+  /** Still frame shown before playback. */
+  poster?: string
+  title: string
+  /** One line on what the recording proves. */
+  caption?: string
+  /** WebVTT captions for narrated recordings. */
+  captions?: string
 }
 
 export type ProjectScreen = {

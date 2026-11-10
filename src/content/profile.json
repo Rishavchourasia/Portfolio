@@ -2,20 +2,20 @@
   "name": "Rishav Chourasia",
   "firstName": "Rishav",
   "role": "Software Engineer",
-  "tagline": "Frontend-focused. I build fast, accessible, delightfully animated interfaces for the web.",
+  "tagline": "Full-stack software engineer. React and TypeScript in front, Spring Boot, Kafka and Redis behind it.",
   "bio": [
-    "I'm a software engineer who spends most of my time on the frontend, and I care about the details most people only feel \u2014 the 80ms that a page takes to become interactive, the easing curve on a modal, the focus ring that makes a form usable with a keyboard.",
-    "I work mostly in React and TypeScript, shaping design systems and product UI that scale past the first sprint. I like owning a feature end to end: from a Figma file and a vague ticket to a shipped, measured, accessible thing in production."
+    "I'm a full-stack software engineer. I build the screen people touch and the services behind it, and I care about the parts most people only feel — pages that respond instantly, systems that stay correct under load, and software that keeps working when something goes wrong.",
+    "Day to day that means React, Next.js and TypeScript on the frontend, and Java, Spring Boot, PostgreSQL, Redis and Kafka on the backend. I like owning a feature end to end: from a vague ticket to an API, a UI, tests and a deploy that's measured in production."
   ],
   "location": "India",
   "email": "rishav.chourasia4@gmail.com",
-  "resumeUrl": "",
+  "resumeUrl": "https://drive.google.com/file/d/15_ZSR6W_TnJjG2UTjaacR3Y2_SR29Q4e/view",
   "availability": "Open to opportunities",
   "values": [
-    "Accessibility by default",
+    "Correct under load and failure",
     "Performance budgets, not vibes",
-    "Design systems that scale",
-    "Motion with a purpose"
+    "Accessibility by default",
+    "Systems that scale past the first sprint"
   ],
   "socials": {
     "github": "https://github.com/Rishavchourasia",

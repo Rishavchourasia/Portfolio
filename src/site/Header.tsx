@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { profile } from '@/content'
+import { track } from '@/lib/analytics'
 import { EASE } from '@/lib/motion'
 import { scrollToId, setScrollLocked } from '@/lib/smoothScroll'
 import { cn } from '@/lib/utils'
@@ -73,6 +74,17 @@ export function Header() {
               </span>
               {profile.availability}
             </span>
+            {profile.resumeUrl && (
+              <a
+                href={profile.resumeUrl}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => track('resume_open', { from: 'header' })}
+                className="rounded-lg border border-[var(--border-strong)] px-3 py-1.5 font-medium transition-colors hover:border-[var(--color-lavender)] hover:text-[var(--color-lavender)]"
+              >
+                Résumé
+              </a>
+            )}
             <button type="button" onClick={() => go('contact')} className="hidden font-medium transition-colors hover:text-[var(--color-lavender)] sm:block">
               Let&apos;s talk
             </button>

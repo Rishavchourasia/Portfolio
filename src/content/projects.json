@@ -4,7 +4,13 @@
     "title": "Contact Center Admin — Internal Data Portal",
     "category": "company",
     "tagline": "Replaced manual DB edits and ad-hoc scripts with a real admin portal.",
-    "description": "Frontend architecture for a multi-module internal admin portal used to manage contact center data, built to replace direct database edits and one-off scripts with a proper interface.",
+    "problem": "Operations changed contact center data by editing the production database directly or asking an engineer to run a one-off script. Every change was slow, risky and left no trail.",
+    "description": "A multi-module internal admin portal that gives non-engineers safe, self-serve access to production data. I owned the frontend architecture and integrated it with the Spring Boot APIs, so every change is validated, permission-checked, traceable and reversible.",
+    "results": [
+      { "value": "10K+", "label": "Rows per table, searched and paged on the server" },
+      { "value": "0", "label": "Direct database edits needed for routine changes" },
+      { "value": "100%", "label": "Of changes validated and audit-logged" }
+    ],
     "highlights": [
       "Reusable data-table components with server-driven search, filtering, sorting and pagination for 10K+ rows.",
       "Schema-driven form flows with client and server validation, inline errors and optimistic updates.",
@@ -27,11 +33,17 @@
     "slug": "static-marketing-site",
     "title": "Static Site — Public Marketing & Content Website",
     "category": "company",
-    "tagline": "A statically-generated marketing site with automated rebuilds on every content change.",
-    "description": "Public marketing and content website built with Next.js SSG, consuming Spring Boot APIs, with automated CI/CD rebuilds and CDN delivery.",
+    "tagline": "Content goes live on its own: every edit rebuilds and ships the site, no engineer needed.",
+    "problem": "Every copy or content change on the public site needed an engineer to make a manual deploy, so marketing waited on engineering and pages were slow to load and rank.",
+    "description": "A public marketing and content site built with Next.js static generation on top of Spring Boot content APIs. A CI/CD pipeline rebuilds and redeploys to the CDN on every content change, so updates go live without anyone touching a deploy.",
     "highlights": [
-      "Optimised images, fonts, bundle size and code splitting for page performance and SEO.",
-      "Reusable Tailwind + TypeScript layout system for consistent page development."
+      "Static generation from Spring Boot content APIs, with CI/CD rebuilds triggered by every content change.",
+      "Served from a CDN, with optimised images and fonts, a smaller bundle and code splitting for speed and SEO.",
+      "A reusable Tailwind + TypeScript layout system, so new pages ship faster with the same look and feel."
+    ],
+    "results": [
+      { "value": "0", "label": "Manual deploys for a content update" },
+      { "value": "CDN", "label": "Static pages served from the edge" }
     ],
     "tags": [
       "Next.js",
@@ -48,8 +60,14 @@
     "slug": "goldstack",
     "title": "GoldStack — Digital Gold Platform",
     "category": "personal",
-    "tagline": "Buy, sell and auto-invest in gold, with live prices and a money-safe ledger.",
-    "description": "A digital gold investment platform in the spirit of Jar and PhonePe Gold, using virtual coins instead of real money. Seven Spring Boot microservices talk over Kafka behind an API gateway, and a React + TypeScript frontend streams the live gold price over WebSocket.",
+    "tagline": "A gold-investing platform where a crash halfway through a payment can never lose or duplicate money.",
+    "problem": "In a fintech app, one purchase touches the wallet, the order book and the portfolio. If any service crashes halfway, or the user taps Buy twice on a bad network, money gets lost or charged twice.",
+    "description": "Buy, sell and auto-invest in gold at live prices, using virtual coins. Seven Spring Boot microservices coordinate every purchase as a saga over Kafka, so a failure at any step is compensated automatically, and a React + TypeScript frontend streams the live price over WebSocket.",
+    "results": [
+      { "value": "7", "label": "Spring Boot services, each with its own database" },
+      { "value": "0", "label": "Balance drift: double-entry ledgers always sum to zero" },
+      { "value": "1×", "label": "Charge per purchase, however many times it's retried" }
+    ],
     "highlights": [
       "Buy/sell sagas over Kafka with an outbox, idempotent consumers and refund compensation when a step fails.",
       "Double-entry coin and gold ledgers that always balance to zero; money travels as strings, never JS floats.",
@@ -211,8 +229,14 @@
     "slug": "showdrop",
     "title": "Showdrop — Ticket Booking Platform",
     "category": "personal",
-    "tagline": "BookMyShow-style booking with live seat maps, 5-minute holds and an AI booking assistant.",
-    "description": "Browse movies, stand-up and theatre, pick seats on a live map and hold them while you pay. A Spring Boot API guards every seat with Redis locks and optimistic versioning, Kafka fans out confirmations, and a Python agent answers questions and holds seats from chat.",
+    "tagline": "Ticket booking built for the rush, when thousands of people want the same seat in the same second.",
+    "problem": "When a big show opens for booking, thousands of people click the same seats at once. Without the right locking, two people pay for one seat, or the site falls over under the rush.",
+    "description": "Browse movies, stand-up and theatre, pick seats on a live map and hold them while you pay. A Spring Boot API guards every seat with a Redis lock plus optimistic versioning in PostgreSQL, Kafka fans out confirmations, and a Python AI agent answers questions and holds seats from chat.",
+    "results": [
+      { "value": "0", "label": "Double bookings: two locks guard every seat" },
+      { "value": "5 min", "label": "Seat hold, released automatically if you don't pay" },
+      { "value": "8", "label": "Containers, on Docker Compose or Kubernetes" }
+    ],
     "highlights": [
       "Seat holds with Redis SET NX and a 5-minute TTL, plus @Version optimistic locking so two people can never book one seat.",
       "Kafka publishes booking.confirmed to a separate notifications service; scheduled jobs release expired holds.",

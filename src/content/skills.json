@@ -4,62 +4,82 @@
       "title": "Languages",
       "blurb": "What I think in every day.",
       "icon": "braces",
-      "skills": ["JavaScript (ES6+)", "TypeScript", "Java", "HTML5", "CSS3"]
+      "skills": ["Java", "TypeScript", "JavaScript (ES6+)", "SQL", "HTML5", "CSS3"]
     },
     {
       "title": "Frontend",
-      "blurb": "Turning designs into products.",
+      "blurb": "Interfaces that load fast and work for everyone.",
       "icon": "layout",
       "skills": [
         "React.js",
         "Next.js",
         "Redux",
         "Redux-Saga",
-        "Context API",
         "Tailwind CSS",
-        "SSR",
-        "SSG",
-        "Responsive design",
+        "SSR / SSG",
+        "Micro-frontends",
         "Accessibility (a11y)",
-        "SEO",
-        "Figma"
+        "SEO"
       ]
     },
     {
-      "title": "Build & Tooling",
-      "blurb": "Getting it out the door.",
-      "icon": "wrench",
-      "skills": ["Webpack", "Vite", "npm", "Git", "GitHub", "GitHub Actions (CI/CD)"]
+      "title": "Backend & Data",
+      "blurb": "APIs, data and the plumbing between them.",
+      "icon": "database",
+      "skills": [
+        "Spring Boot",
+        "Node.js",
+        "REST APIs",
+        "GraphQL",
+        "Microservices",
+        "Kafka",
+        "PostgreSQL",
+        "Redis"
+      ]
+    },
+    {
+      "title": "Cloud & DevOps",
+      "blurb": "Shipping it, and seeing what it does.",
+      "icon": "cloud",
+      "skills": [
+        "Docker",
+        "Kubernetes",
+        "AWS (EC2, S3)",
+        "Terraform",
+        "GitHub Actions (CI/CD)",
+        "Prometheus",
+        "Grafana"
+      ]
     },
     {
       "title": "Testing",
       "blurb": "Confidence before the merge.",
       "icon": "flask",
-      "skills": ["Jest", "React Testing Library", "Cypress (E2E)", "Unit testing", "Integration testing"]
+      "skills": ["JUnit", "Testcontainers", "Jest", "React Testing Library", "Cypress (E2E)", "Integration testing"]
     },
     {
-      "title": "Performance & Quality",
+      "title": "Performance & Reliability",
       "blurb": "Measured, not guessed.",
       "icon": "gauge",
-      "skills": ["Lighthouse", "Core Web Vitals", "Code splitting", "Lazy loading"]
+      "skills": ["Core Web Vitals", "Lighthouse", "Code splitting", "Caching", "Idempotency", "Distributed locking"]
     },
     {
-      "title": "Backend & Data",
-      "blurb": "Familiar with — enough to integrate cleanly.",
-      "icon": "database",
-      "skills": ["Node.js", "REST APIs", "Spring Boot", "PostgreSQL", "Redis", "Kafka"]
+      "title": "AI Engineering",
+      "blurb": "Agents that do real work, safely.",
+      "icon": "sparkles",
+      "skills": ["RAG", "LLM tool calling", "MCP", "AI agents", "Vector search (Qdrant)"]
     },
     {
-      "title": "AI-Assisted Development",
+      "title": "Tooling",
       "blurb": "Part of how I actually work.",
-      "icon": "bot",
-      "skills": ["Cursor", "GitHub Copilot", "Claude Code", "ChatGPT"]
+      "icon": "wrench",
+      "skills": ["Git", "Maven", "Vite", "Webpack", "Claude Code", "Cursor", "GitHub Copilot"]
     }
   ],
   "marquee": [
-    "React.js", "Next.js", "TypeScript", "JavaScript", "Redux", "Redux-Saga",
-    "Tailwind CSS", "SSR", "SSG", "Accessibility", "SEO", "Vite", "Webpack",
-    "GitHub Actions", "Jest", "React Testing Library", "Cypress", "Core Web Vitals",
-    "Node.js", "REST APIs", "PostgreSQL", "Redis", "Kafka"
+    "React.js", "Next.js", "TypeScript", "Java", "Spring Boot", "Node.js",
+    "Kafka", "Redis", "PostgreSQL", "Microservices", "Docker", "Kubernetes",
+    "AWS", "GitHub Actions", "RAG", "MCP", "Tailwind CSS", "Accessibility",
+    "Core Web Vitals", "JUnit", "Jest", "Testcontainers"
   ]
 }

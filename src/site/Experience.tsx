@@ -61,7 +61,7 @@ export function Experience() {
           />
         </div>
         <FadeUp delay={0.2} className="max-w-sm text-muted">
-          Owning features from a Figma file and a vague ticket to something shipped, measured and accessible.
+          Owning features from a vague ticket to the API, the UI, the tests and the deploy, then measuring them in production.
         </FadeUp>
       </div>
 
