@@ -62,7 +62,8 @@ export function ProjectPreview({ project, className }: Props) {
   const screens = project.screens ?? []
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
 
-  const [tab, setTab] = useState<Tab>('screens')
+  // Work with nothing to screenshot opens on its diagram.
+  const [tab, setTab] = useState<Tab>(screens.length > 0 ? 'screens' : 'architecture')
   const [[index, direction], setSlide] = useState<[number, number]>([0, 0])
   const [paused, setPaused] = useState(false)
   const [visible, setVisible] = useState(false)
@@ -314,7 +315,14 @@ export function ProjectPreview({ project, className }: Props) {
           {expanded && (
             <>
               {chrome(true)}
-              <div className="relative aspect-[16/10] overflow-hidden">{body(true)}</div>
+              {tab === 'architecture' ? (
+                // On a phone the diagram keeps a readable size and pans sideways.
+                <div className="overflow-x-auto overscroll-x-contain">
+                  <div className="relative aspect-[16/10] min-w-[680px] overflow-hidden">{body(true)}</div>
+                </div>
+              ) : (
+                <div className="relative aspect-[16/10] overflow-hidden">{body(true)}</div>
+              )}
             </>
           )}
         </dialog>

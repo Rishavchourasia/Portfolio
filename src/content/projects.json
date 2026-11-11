@@ -7,9 +7,18 @@
     "problem": "Operations changed contact center data by editing the production database directly or asking an engineer to run a one-off script. Every change was slow, risky and left no trail.",
     "description": "A multi-module internal admin portal that gives non-engineers safe, self-serve access to production data. I owned the frontend architecture and integrated it with the Spring Boot APIs, so every change is validated, permission-checked, traceable and reversible.",
     "results": [
-      { "value": "10K+", "label": "Rows per table, searched and paged on the server" },
-      { "value": "0", "label": "Direct database edits needed for routine changes" },
-      { "value": "100%", "label": "Of changes validated and audit-logged" }
+      {
+        "value": "10K+",
+        "label": "Rows per table, searched and paged on the server"
+      },
+      {
+        "value": "0",
+        "label": "Direct database edits needed for routine changes"
+      },
+      {
+        "value": "100%",
+        "label": "Of changes validated and audit-logged"
+      }
     ],
     "highlights": [
       "Reusable data-table components with server-driven search, filtering, sorting and pagination for 10K+ rows.",
@@ -27,7 +36,75 @@
     ],
     "year": "2025",
     "live": "",
-    "repo": ""
+    "repo": "",
+    "architecture": {
+      "nodes": [
+        {
+          "id": "ops",
+          "label": "Operations team",
+          "sub": "self-serve, no engineer",
+          "x": 180,
+          "y": 80,
+          "w": 230,
+          "kind": "client"
+        },
+        {
+          "id": "portal",
+          "label": "Admin portal",
+          "sub": "React · Next.js · Redux · Tailwind",
+          "x": 570,
+          "y": 80,
+          "w": 340,
+          "kind": "client",
+          "items": [
+            "Data tables",
+            "Schema forms",
+            "Bulk CSV"
+          ]
+        },
+        {
+          "id": "api",
+          "label": "REST APIs",
+          "sub": "Spring Boot",
+          "x": 400,
+          "y": 265,
+          "w": 600,
+          "kind": "service",
+          "items": [
+            "Validation",
+            "Role-based access",
+            "Audit logging",
+            "Server-side paging"
+          ]
+        },
+        {
+          "id": "postgres",
+          "label": "PostgreSQL",
+          "sub": "10K+ rows per table",
+          "x": 400,
+          "y": 435,
+          "w": 230,
+          "kind": "data"
+        }
+      ],
+      "edges": [
+        {
+          "from": "ops",
+          "to": "portal",
+          "label": "browser"
+        },
+        {
+          "from": "portal",
+          "to": "api",
+          "label": "REST"
+        },
+        {
+          "from": "api",
+          "to": "postgres",
+          "label": "SQL"
+        }
+      ]
+    }
   },
   {
     "slug": "static-marketing-site",
@@ -42,8 +119,14 @@
       "A reusable Tailwind + TypeScript layout system, so new pages ship faster with the same look and feel."
     ],
     "results": [
-      { "value": "0", "label": "Manual deploys for a content update" },
-      { "value": "CDN", "label": "Static pages served from the edge" }
+      {
+        "value": "0",
+        "label": "Manual deploys for a content update"
+      },
+      {
+        "value": "CDN",
+        "label": "Static pages served from the edge"
+      }
     ],
     "tags": [
       "Next.js",
@@ -54,7 +137,102 @@
     ],
     "year": "2025",
     "live": "",
-    "repo": ""
+    "repo": "",
+    "architecture": {
+      "nodes": [
+        {
+          "id": "editor",
+          "label": "Content edit",
+          "sub": "no engineer needed",
+          "x": 150,
+          "y": 75,
+          "w": 210,
+          "kind": "client"
+        },
+        {
+          "id": "api",
+          "label": "Content APIs",
+          "sub": "Spring Boot",
+          "x": 580,
+          "y": 75,
+          "w": 220,
+          "kind": "service"
+        },
+        {
+          "id": "pipeline",
+          "label": "CI/CD pipeline",
+          "sub": "rebuilds on every change",
+          "x": 150,
+          "y": 255,
+          "w": 210,
+          "kind": "queue"
+        },
+        {
+          "id": "build",
+          "label": "Next.js build",
+          "sub": "static generation",
+          "x": 580,
+          "y": 255,
+          "w": 390,
+          "kind": "service",
+          "items": [
+            "Optimised assets",
+            "Smaller bundle",
+            "Code splitting"
+          ]
+        },
+        {
+          "id": "visitors",
+          "label": "Visitors",
+          "sub": "fast pages, better SEO",
+          "x": 150,
+          "y": 435,
+          "w": 210,
+          "kind": "client"
+        },
+        {
+          "id": "cdn",
+          "label": "CDN",
+          "sub": "static pages at the edge",
+          "x": 580,
+          "y": 435,
+          "w": 220,
+          "kind": "edge"
+        }
+      ],
+      "edges": [
+        {
+          "from": "editor",
+          "to": "api",
+          "label": "saves"
+        },
+        {
+          "from": "editor",
+          "to": "pipeline",
+          "label": "triggers"
+        },
+        {
+          "from": "pipeline",
+          "to": "build",
+          "label": "runs"
+        },
+        {
+          "from": "build",
+          "to": "api",
+          "label": "fetches"
+        },
+        {
+          "from": "build",
+          "to": "cdn",
+          "label": "deploys"
+        },
+        {
+          "from": "cdn",
+          "to": "visitors",
+          "label": "HTML"
+        }
+      ]
+    }
   },
   {
     "slug": "goldstack",
@@ -64,9 +242,18 @@
     "problem": "In a fintech app, one purchase touches the wallet, the order book and the portfolio. If any service crashes halfway, or the user taps Buy twice on a bad network, money gets lost or charged twice.",
     "description": "Buy, sell and auto-invest in gold at live prices, using virtual coins. Seven Spring Boot microservices coordinate every purchase as a saga over Kafka, so a failure at any step is compensated automatically, and a React + TypeScript frontend streams the live price over WebSocket.",
     "results": [
-      { "value": "7", "label": "Spring Boot services, each with its own database" },
-      { "value": "0", "label": "Balance drift: double-entry ledgers always sum to zero" },
-      { "value": "1×", "label": "Charge per purchase, however many times it's retried" }
+      {
+        "value": "7",
+        "label": "Spring Boot services, each with its own database"
+      },
+      {
+        "value": "0",
+        "label": "Balance drift: double-entry ledgers always sum to zero"
+      },
+      {
+        "value": "1×",
+        "label": "Charge per purchase, however many times it's retried"
+      }
     ],
     "highlights": [
       "Buy/sell sagas over Kafka with an outbox, idempotent consumers and refund compensation when a step fails.",
@@ -233,9 +420,18 @@
     "problem": "When a big show opens for booking, thousands of people click the same seats at once. Without the right locking, two people pay for one seat, or the site falls over under the rush.",
     "description": "Browse movies, stand-up and theatre, pick seats on a live map and hold them while you pay. A Spring Boot API guards every seat with a Redis lock plus optimistic versioning in PostgreSQL, Kafka fans out confirmations, and a Python AI agent answers questions and holds seats from chat.",
     "results": [
-      { "value": "0", "label": "Double bookings: two locks guard every seat" },
-      { "value": "5 min", "label": "Seat hold, released automatically if you don't pay" },
-      { "value": "8", "label": "Containers, on Docker Compose or Kubernetes" }
+      {
+        "value": "0",
+        "label": "Double bookings: two locks guard every seat"
+      },
+      {
+        "value": "5 min",
+        "label": "Seat hold, released automatically if you don't pay"
+      },
+      {
+        "value": "8",
+        "label": "Containers, on Docker Compose or Kubernetes"
+      }
     ],
     "highlights": [
       "Seat holds with Redis SET NX and a 5-minute TTL, plus @Version optimistic locking so two people can never book one seat.",

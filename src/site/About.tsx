@@ -65,10 +65,15 @@ function Stats() {
 export function About() {
   const { education } = profile
   return (
-    <section id="about" aria-label="About" className="relative grid items-center gap-10 px-gutter py-[18vh] lg:grid-cols-[1fr_1.15fr]">
-      <FadeUp className="relative aspect-square w-full max-w-[560px] justify-self-center" y={0}>
+    <section
+      id="about"
+      aria-label="About"
+      className="relative grid items-center gap-6 px-gutter py-[12vh] md:grid-cols-[0.7fr_1.3fr] md:gap-10 md:py-[18vh] lg:grid-cols-[1fr_1.15fr]"
+    >
+      {/* A short band on phones, so the words start on the first screen; a full square beside them from tablet up. */}
+      <FadeUp className="relative h-[240px] w-full justify-self-center pb-8 md:aspect-square md:h-auto md:max-w-[560px] md:pb-0" y={0}>
         <ParticleCloud className="h-full w-full" />
-        <p className="voice absolute bottom-[8%] left-[6%] text-lg text-muted">— the stuff products are made of</p>
+        <p className="voice absolute bottom-0 left-0 text-base text-muted md:-bottom-8 lg:bottom-[8%] lg:left-[6%] lg:text-lg">— the stuff products are made of</p>
       </FadeUp>
 
       <div>

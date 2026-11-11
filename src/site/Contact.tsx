@@ -77,8 +77,13 @@ export function Contact() {
                 <a href={`mailto:${profile.email}`} className="truncate font-semibold hover:underline">
                   {profile.email}
                 </a>
-                <button type="button" onClick={copy} aria-label={copied ? 'Email copied' : 'Copy email'} className="shrink-0 text-muted hover:text-[var(--text)]">
-                  {copied ? <Check size={15} /> : <Copy size={15} />}
+                <button
+                  type="button"
+                  onClick={copy}
+                  aria-label={copied ? 'Email copied' : 'Copy email'}
+                  className="-my-2 grid h-11 w-11 shrink-0 place-items-center rounded-full text-muted transition-colors hover:bg-[color-mix(in_oklab,var(--text)_8%,transparent)] hover:text-[var(--text)]"
+                >
+                  {copied ? <Check size={17} /> : <Copy size={17} />}
                 </button>
               </div>
             </li>

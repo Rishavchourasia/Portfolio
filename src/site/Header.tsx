@@ -29,7 +29,7 @@ export function Header() {
   })
 
   useEffect(() => {
-    setScrollLocked(open)
+    setScrollLocked(open, 'menu')
     if (!open) return
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
     window.addEventListener('keydown', onKey)
@@ -66,8 +66,22 @@ export function Header() {
             <Stamp />
           </button>
 
+          {/* On a wide screen the sections are one click away, without opening the menu. */}
+          <nav aria-label="Sections" className="hidden items-center gap-7 text-sm lg:flex">
+            {NAV.filter((item) => item.id !== 'contact').map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => go(item.id)}
+                className="font-medium text-[color-mix(in_oklab,var(--text)_80%,transparent)] transition-colors hover:text-[var(--color-lavender)]"
+              >
+                {item.label}
+              </button>
+            ))}
+          </nav>
+
           <div className="flex items-center gap-5 text-sm">
-            <span className="hidden items-center gap-2 text-xs text-muted sm:flex">
+            <span className="hidden items-center gap-2 text-xs text-muted sm:flex lg:hidden xl:flex">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-mint)] opacity-70" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--color-mint)]" />

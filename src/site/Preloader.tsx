@@ -9,8 +9,11 @@ const CURTAIN = [0.76, 0, 0.24, 1] as const
 const VIEW = { w: 900, h: 320, x: 450, y: 215, size: 230 }
 const SIGNATURE_FONT = '"Mrs Saint Delafield", "Instrument Serif", cursive'
 
-const DRAW_S = 2.1
-const DISSOLVE_MS = 1500
+// Kept short on purpose: the whole intro is about a second and a half, and
+// any click, key, scroll or touch ends it at once.
+const DRAW_S = 0.9
+const DISSOLVE_MS = 900
+const SKIP_EVENTS = ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const
 
 type Particle = { x: number; y: number; vx: number; vy: number; life: number; size: number; color: string }
 
@@ -79,8 +82,9 @@ function dissolve(canvas: HTMLCanvasElement, svg: SVGSVGElement, colors: string[
 /**
  * Opening curtain: the first name is signed in ink while a counter runs to
  * 100, then the signature breaks into dust and the panel lifts away with the
- * hero playing in underneath. Shown once per session, and never under
- * reduced motion (the app starts ready there).
+ * hero playing in underneath. It lasts about a second and a half and any
+ * input skips it. Shown once per session, and never under reduced motion
+ * (the app starts ready there).
  */
 export function Preloader({ ready, markReady }: { ready: boolean; markReady: () => void }) {
   const [count, setCount] = useState(0)
@@ -94,14 +98,14 @@ export function Preloader({ ready, markReady }: { ready: boolean; markReady: () 
     let timer = 0
     let cancelled = false
     const counter = animate(0, 100, {
-      duration: DRAW_S + 0.25,
+      duration: DRAW_S + 0.15,
       ease: [0.7, 0, 0.3, 1],
       onUpdate: (v) => setCount(Math.round(v)),
     })
 
     // Don't start inking until the script face is in, or it signs in Georgia.
     const fontReady = document.fonts?.load(`100px ${SIGNATURE_FONT}`).catch(() => []) ?? Promise.resolve([])
-    const loaded = Promise.race([fontReady, new Promise((r) => setTimeout(r, 1200))])
+    const loaded = Promise.race([fontReady, new Promise((r) => setTimeout(r, 400))])
     void loaded.then(() => {
       if (cancelled) return
       setPhase('signing')
@@ -115,15 +119,26 @@ export function Preloader({ ready, markReady }: { ready: boolean; markReady: () 
           stopDust = dissolve(canvas, svg, [text, text, text, accent])
         }
         setPhase('dust')
-        timer = window.setTimeout(markReady, 650)
-      }, (DRAW_S + 0.35) * 1000)
+        timer = window.setTimeout(markReady, 300)
+      }, (DRAW_S + 0.2) * 1000)
     })
+
+    // Nobody should have to sit through an intro: the first sign of intent lifts it.
+    const skip = () => {
+      if (cancelled) return
+      cancelled = true
+      window.clearTimeout(timer)
+      counter.stop()
+      markReady()
+    }
+    for (const type of SKIP_EVENTS) window.addEventListener(type, skip, { once: true, passive: true })
 
     return () => {
       cancelled = true
       counter.stop()
       stopDust()
       window.clearTimeout(timer)
+      for (const type of SKIP_EVENTS) window.removeEventListener(type, skip)
     }
     // Runs once; `ready` only ever flips from false to true.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -138,7 +153,7 @@ export function Preloader({ ready, markReady }: { ready: boolean; markReady: () 
           className="fixed inset-0 z-[90] flex flex-col justify-between overflow-hidden bg-[var(--bg)] p-6 sm:p-8"
           initial={{ clipPath: 'inset(0 0 0% 0)' }}
           exit={{ clipPath: 'inset(0 0 100% 0)' }}
-          transition={{ duration: 1.1, ease: CURTAIN }}
+          transition={{ duration: 0.8, ease: CURTAIN }}
         >
           <div className="flex justify-between font-mono text-[10px] tracking-[0.2em] text-muted uppercase">
             <span>Portfolio ©{new Date().getFullYear()}</span>
@@ -170,7 +185,7 @@ export function Preloader({ ready, markReady }: { ready: boolean; markReady: () 
                   }
                   transition={{
                     strokeDashoffset: { duration: DRAW_S, ease: [0.45, 0, 0.25, 1] },
-                    fillOpacity: { duration: 0.7, delay: DRAW_S - 0.6 },
+                    fillOpacity: { duration: 0.45, delay: DRAW_S - 0.45 },
                   }}
                 >
                   {profile.firstName}
@@ -181,7 +196,7 @@ export function Preloader({ ready, markReady }: { ready: boolean; markReady: () 
               className="-mt-4 font-serif text-[clamp(1.1rem,2.2vw,1.6rem)] text-muted italic"
               initial={{ opacity: 0, y: 12 }}
               animate={phase === 'dust' ? { opacity: 0, y: -12 } : phase === 'signing' ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.9, ease: EASE, delay: phase === 'signing' ? 1 : 0 }}
+              transition={{ duration: 0.5, ease: EASE, delay: phase === 'signing' ? 0.25 : 0 }}
             >
               {profile.role}, building for the web.
             </motion.p>

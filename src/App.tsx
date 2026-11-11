@@ -16,9 +16,11 @@ import { Work } from '@/site/Work'
 
 const INTRO_KEY = 'portfolio:intro-seen'
 
-// The intro plays once per browser session, and never under reduced motion.
+// The intro plays once per browser session, never under reduced motion, and
+// never in front of a case study someone opened from a direct link.
 const introAlreadySeen = () => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true
+  if (window.location.pathname.startsWith('/work/')) return true
   try {
     return sessionStorage.getItem(INTRO_KEY) === '1'
   } catch {
@@ -31,7 +33,7 @@ export default function App() {
   const [introDone, setIntroDone] = useState(introAlreadySeen)
 
   useEffect(() => startSmoothScroll(), [])
-  useEffect(() => setScrollLocked(!introDone), [introDone])
+  useEffect(() => setScrollLocked(!introDone, 'intro'), [introDone])
 
   const finishIntro = useCallback(() => {
     setIntroDone(true)

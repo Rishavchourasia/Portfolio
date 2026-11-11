@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 
 const setMeta = (selector: string, content: string) => {
   document.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', content)
@@ -18,7 +18,9 @@ export function useDocumentMeta({
   description: string
   themeColor: string
 }) {
-  useEffect(() => {
+  // A layout effect, so it lands before the effects of anything further down the
+  // tree: a case study opened from a direct link puts its own title on top of this.
+  useLayoutEffect(() => {
     document.title = title
     setMeta('meta[name="description"]', description)
     setMeta('meta[property="og:title"]', title)
