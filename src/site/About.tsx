@@ -1,38 +1,10 @@
-import { useEffect, useState } from 'react'
-import { animate, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { profile, skills } from '@/content'
+import { CountUp } from '@/components/ui/CountUp'
 import { EASE } from '@/lib/motion'
 import { FadeUp, RevealLines } from './Reveal'
 import { useReveal } from './intro'
 import { ParticleCloud } from './ParticleCloud'
-
-/** "98" → 98, "25K+" → 25 with suffix "K+", so numbers can count up. */
-function parseStat(value: string) {
-  const match = /^(\d+(?:\.\d+)?)(.*)$/.exec(value)
-  return match ? { n: Number(match[1]), suffix: match[2] ?? '' } : null
-}
-
-function CountUp({ value, run }: { value: string; run: boolean }) {
-  const parsed = parseStat(value)
-  const target = parsed?.n ?? 0
-  const [n, setN] = useState(0)
-  useEffect(() => {
-    if (!run) return
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const controls = animate(0, target, { duration: reduced ? 0 : 1.8, ease: EASE, onUpdate: setN })
-    return () => controls.stop()
-  }, [run, target])
-
-  if (!parsed) return <>{value}</>
-  return (
-    <span aria-label={value} className="tabular-nums">
-      <span aria-hidden>
-        {Math.round(n)}
-        {parsed.suffix}
-      </span>
-    </span>
-  )
-}
 
 function Stats() {
   const [ref, shown] = useReveal<HTMLDListElement>(0.4)

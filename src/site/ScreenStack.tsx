@@ -72,7 +72,7 @@ const card =
  * number pinned in front of them. The whole stack turns towards the cursor;
  * each card opens its case study.
  */
-export function ScreenStack({ lift }: { lift: MotionValue<string> }) {
+export function ScreenStack({ lift }: { lift?: MotionValue<string> }) {
   const introDone = useIntroDone()
   const tiltX = useMotionValue(0)
   const tiltY = useMotionValue(0)

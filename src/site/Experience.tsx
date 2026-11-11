@@ -1,6 +1,7 @@
-import { useRef, type ReactNode } from 'react'
+import { useRef } from 'react'
 import { motion, useScroll, useSpring } from 'framer-motion'
 import { experiences, profile } from '@/content'
+import { withFigures } from '@/lib/figures'
 import { FadeUp, RevealLines } from './Reveal'
 
 const year = (s: string) => /\d{4}/.exec(s)?.[0] ?? s
@@ -9,24 +10,6 @@ const year = (s: string) => /\d{4}/.exec(s)?.[0] ?? s
 function years(period: string): [string, string] {
   const [from = '', to = ''] = period.split(/\s+—\s+/)
   return [year(from), /present/i.test(to) ? 'now' : year(to)]
-}
-
-/** A measured result inside a sentence: "36%", "12+", "62 to 98", "2 weeks to 2 days", "8 hours a week". */
-const FIGURE = /(\d+(?:[.,]\d+)*(?:%|\+)?(?: (?:weeks?|days?|hours? a week|hours?))?(?: to \d+(?:[.,]\d+)*%?(?: (?:weeks?|days?|hours?))?)?)/
-
-/** Sets the numbers in a line apart, so a skim down the list lands on the results. */
-function withFigures(text: string): ReactNode[] {
-  return text.split(FIGURE).map((part, i) =>
-    i % 2 ? (
-      // Split keeps the order fixed; the position is the identity.
-      // eslint-disable-next-line react/no-array-index-key
-      <strong key={i} className="font-semibold whitespace-nowrap text-[var(--color-cream)]">
-        {part}
-      </strong>
-    ) : (
-      part
-    ),
-  )
 }
 
 type Row = {

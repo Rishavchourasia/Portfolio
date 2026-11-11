@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-
 import { profile } from '@/content'
 import { track } from '@/lib/analytics'
 import { EASE } from '@/lib/motion'
+import { navigate, PAGES } from '@/lib/route'
 import { scrollToId, setScrollLocked } from '@/lib/smoothScroll'
 import { cn } from '@/lib/utils'
 import { NAV, useIntroDone } from './intro'
@@ -38,6 +39,12 @@ export function Header() {
 
   const go = (id: string) => {
     setOpen(false)
+    // Work, About, Experience and Skills each open as a page of their own.
+    if ((PAGES as readonly string[]).includes(id)) {
+      track('nav_page', { page: id })
+      navigate(`/${id}`)
+      return
+    }
     // Let the menu start closing before the page glides.
     window.setTimeout(() => scrollToId(id), open ? 250 : 0)
   }

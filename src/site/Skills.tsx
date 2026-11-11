@@ -44,7 +44,7 @@ function fall(h: number, i: number, tilt: number) {
   }
 }
 
-function SkillRow({ title, blurb, items, row }: { title: string; blurb: string; items: string[]; row: number }) {
+export function SkillRow({ title, blurb, items, row }: { title: string; blurb: string; items: string[]; row: number }) {
   const [ref, shown] = useReveal<HTMLLIElement>(0.4)
   return (
     <li ref={ref} className="grid gap-4 border-b border-[var(--border)] py-6 md:grid-cols-[16rem_1fr] md:items-center">

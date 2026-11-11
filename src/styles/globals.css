@@ -133,6 +133,16 @@ html.lenis body {
   --border-strong: rgba(243, 233, 222, 0.45);
 }
 
+/* Dark media (screenshots, diagrams, video) set on a paper sheet keep the ink theme. */
+.on-ink {
+  color: #ece6dc;
+  --text: #ece6dc;
+  --text-muted: #8f8a99;
+  --voice: var(--color-lavender);
+  --border: rgba(236, 230, 220, 0.1);
+  --border-strong: rgba(236, 230, 220, 0.2);
+}
+
 /* Fibre texture on the paper sheets. */
 .paper::before {
   content: "";
