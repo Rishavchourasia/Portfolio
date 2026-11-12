@@ -18,7 +18,7 @@ function FillName({ text }: { text: string }) {
   const { scrollYProgress } = useScroll({ container, target: ref, offset: ['start 90%', 'start 35%'] })
   const clip = useTransform(scrollYProgress, (p) => `inset(0 ${100 - 100 * clamp01(p)}% 0 0)`)
   return (
-    <h2 ref={ref} className="relative text-[clamp(3rem,11vw,10rem)] leading-[0.86] font-extrabold tracking-[-0.05em] uppercase">
+    <h2 ref={ref} className="relative text-[clamp(2.4rem,11vw,10rem)] break-words leading-[0.86] font-extrabold tracking-[-0.05em] uppercase">
       <span className="text-transparent [-webkit-text-stroke:1.5px_var(--border-strong)]">{text}</span>
       <motion.span aria-hidden className="absolute inset-0 text-[var(--text)]" style={{ clipPath: clip }}>
         {text}
@@ -91,7 +91,7 @@ export function ExperiencePage({ covered }: { covered: boolean }) {
         </FadeUp>
         <RevealLines
           as="h1"
-          className="mt-6 text-[clamp(3rem,9vw,8.5rem)] leading-[0.92] font-bold tracking-[-0.045em]"
+          className="mt-6 text-[clamp(2.5rem,9vw,8.5rem)] leading-[0.92] font-bold tracking-[-0.045em]"
           lines={['Shipping product,', <span key="v" className="voice text-[1.06em]">end to end.</span>]}
         />
         <FadeUp delay={0.3} className="mt-8 max-w-xl text-lg text-muted">

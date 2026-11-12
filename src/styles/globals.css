@@ -55,6 +55,24 @@
 }
 dialog:focus-visible { outline: none; }
 
+/* Tailwind's reset leaves buttons with the arrow; everything clickable gets the hand. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  summary,
+  label[for],
+  select,
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
 html {
   -webkit-font-smoothing: antialiased;
   background: var(--bg);
@@ -207,6 +225,10 @@ html.lenis body {
 
 @utility px-gutter {
   padding-inline: var(--gutter);
+}
+
+@utility mx-gutter {
+  margin-inline: var(--gutter);
 }
 
 @utility glass {

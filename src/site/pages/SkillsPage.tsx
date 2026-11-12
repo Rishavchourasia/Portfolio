@@ -43,7 +43,7 @@ export function SkillsPage({ covered }: { covered: boolean }) {
         </FadeUp>
         <RevealLines
           as="h1"
-          className="mt-6 text-[clamp(3rem,9vw,8.5rem)] leading-[0.92] font-bold tracking-[-0.045em]"
+          className="mt-6 text-[clamp(2.5rem,9vw,8.5rem)] leading-[0.92] font-bold tracking-[-0.045em]"
           lines={['What I reach for', <span key="v" className="voice text-[1.06em]">when it has to ship.</span>]}
         />
       </section>

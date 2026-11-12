@@ -201,7 +201,7 @@ export function NameZoom({
 
         <motion.div style={{ opacity: captionOpacity }} className="absolute inset-x-[var(--gutter)] bottom-8 flex items-end justify-between gap-6">
           {caption}
-          {!REDUCED && <p className="text-right text-[11px] font-bold tracking-[0.2em] text-muted uppercase">Scroll to zoom in</p>}
+          {!REDUCED && <p className="shrink-0 text-right text-[11px] font-bold tracking-[0.2em] whitespace-nowrap text-muted uppercase">Scroll<span className="hidden sm:inline"> to zoom in</span></p>}
         </motion.div>
       </div>
     </section>

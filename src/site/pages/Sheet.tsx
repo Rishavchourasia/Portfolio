@@ -103,13 +103,13 @@ export function Sheet({
         </div>
       </div>
 
-      {/* Difference blending keeps the controls legible over dark and paper alike. */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between px-gutter py-5 text-[#ece6dc] mix-blend-difference">
-        <button type="button" onClick={leavePage} className="group pointer-events-auto inline-flex items-center gap-2 text-sm font-semibold">
+      {/* Solid pills, so the controls stay legible over dark, paper and running text alike. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between px-gutter py-4 sm:py-5">
+        <button type="button" onClick={leavePage} className="group pointer-events-auto rounded-full border border-[rgba(236,230,220,0.16)] bg-[rgba(11,10,15,0.72)] text-[#ece6dc] shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] backdrop-blur-md transition-colors hover:border-[rgba(236,230,220,0.4)] inline-flex h-10 items-center gap-2 px-4 text-sm font-semibold">
           <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" /> Home
         </button>
-        <p className="text-[11px] font-bold tracking-[0.2em] uppercase">{labelOf(page)}</p>
-        <button type="button" onClick={leavePage} aria-label={`Close ${labelOf(page)}`} className="pointer-events-auto grid h-10 w-10 place-items-center rounded-full border border-current">
+        <p className="rounded-full border border-[rgba(236,230,220,0.16)] bg-[rgba(11,10,15,0.72)] text-[#ece6dc] shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] backdrop-blur-md hidden px-4 py-2 text-[11px] font-bold tracking-[0.2em] uppercase sm:block">{labelOf(page)}</p>
+        <button type="button" onClick={leavePage} aria-label={`Close ${labelOf(page)}`} className="pointer-events-auto rounded-full border border-[rgba(236,230,220,0.16)] bg-[rgba(11,10,15,0.72)] text-[#ece6dc] shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] backdrop-blur-md transition-colors hover:border-[rgba(236,230,220,0.4)] grid h-10 w-10 place-items-center">
           <X size={16} />
         </button>
       </div>

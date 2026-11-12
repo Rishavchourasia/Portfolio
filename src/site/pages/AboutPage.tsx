@@ -113,7 +113,7 @@ export function AboutPage({ covered }: { covered: boolean }) {
           </FadeUp>
           <RevealLines
             as="h1"
-            className="mt-6 text-[clamp(3rem,8.5vw,8rem)] leading-[0.92] font-bold tracking-[-0.045em]"
+            className="mt-6 text-[clamp(2.5rem,8.5vw,8rem)] leading-[0.92] font-bold tracking-[-0.045em]"
             lines={['Full-stack', 'engineering.', <span key="v" className="voice text-[1.06em]">Product-level care.</span>]}
           />
         </div>

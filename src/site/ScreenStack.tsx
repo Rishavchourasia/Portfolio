@@ -104,7 +104,7 @@ export function ScreenStack({ lift }: { lift?: MotionValue<string> }) {
       onPointerMove={onMove}
       onPointerLeave={onLeave}
       // Full column width, but never taller than the screen leaves room for.
-      className="relative mx-auto aspect-[1.45] w-full max-w-[calc((100svh-26rem)*1.45)] [perspective:1400px] md:max-w-[calc((100svh-12rem)*1.45)]"
+      className="relative mx-auto aspect-[1.45] w-[88%] max-w-[calc((100svh-33rem)*1.45)] [perspective:1400px] md:w-full md:max-w-[calc((100svh-12rem)*1.45)]"
     >
       <motion.div
         aria-hidden
@@ -141,7 +141,7 @@ export function ScreenStack({ lift }: { lift?: MotionValue<string> }) {
         </motion.button>
         {proof && (
           <motion.p
-            className="absolute right-[1%] bottom-[6%] rounded-lg bg-[var(--color-cream)] px-3 py-2 text-xs text-[var(--color-cream-ink)] sm:text-sm"
+            className="absolute right-[1%] bottom-[6%] max-w-[78%] rounded-lg bg-[var(--color-cream)] px-3 py-2 text-[11px] leading-snug text-[var(--color-cream-ink)] sm:max-w-none sm:text-sm"
             style={{ z: 90 }}
             {...enter(1.25, 20)}
           >

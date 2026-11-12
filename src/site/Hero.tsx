@@ -199,14 +199,14 @@ export function Hero() {
     >
       {/* Everything in the hero zooms together, anchored on the hole of the "o". */}
       <motion.div
-        className="relative flex h-full flex-col px-gutter pt-24"
+        className="relative flex h-full flex-col px-gutter pt-20 md:pt-24"
         style={{ scale, opacity: heroGone, filter: heroBlur, transformOrigin: hole ? `${hole.ox}px ${hole.oy}px` : '50% 50%' }}
       >
       <div aria-hidden className="hero-spot pointer-events-none absolute inset-0" />
       <Starfield className="pointer-events-none absolute inset-0 h-full w-full" />
 
       {/* Copy and screens side by side, centred in the space above the proof bar. */}
-      <div className="relative grid min-h-0 w-full flex-1 items-center gap-8 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] md:gap-10">
+      <div className="relative grid min-h-0 w-full flex-1 items-center gap-5 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] md:gap-10">
         <div className="order-first md:order-none md:col-start-2 md:row-start-1">
           <ScreenStack />
         </div>
@@ -247,12 +247,12 @@ export function Hero() {
             React, TypeScript, Node and Spring Boot. Shipped to {profile.stats[0]?.value ?? 'thousands of'} people, based in {profile.location}.
           </motion.p>
 
-          <motion.div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4" {...rise(0.9)} animate={show}>
+          <motion.div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 md:mt-7" {...rise(0.9)} animate={show}>
             <Magnetic>
               <button
                 type="button"
                 onClick={() => scrollToId('work')}
-                className="group inline-flex items-center gap-3 rounded-xl bg-[var(--color-cream)] px-6 py-3.5 text-sm font-semibold text-[var(--color-cream-ink)] transition-transform hover:-translate-y-0.5"
+                className="group inline-flex items-center gap-3 rounded-xl bg-[var(--color-cream)] px-6 py-3 text-sm md:py-3.5 font-semibold text-[var(--color-cream-ink)] transition-transform hover:-translate-y-0.5"
               >
                 See the work
                 <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
@@ -267,7 +267,7 @@ export function Hero() {
 
       {/* Proof bar: anchors the bottom of the screen like a launch page's logo strip. */}
       <motion.div
-        className="relative mt-6 flex items-center gap-8 border-t border-[var(--border)] py-5"
+        className="relative mt-4 flex items-center gap-8 border-t border-[var(--border)] py-4 md:mt-6 md:py-5"
         initial={{ opacity: 0 }}
         animate={introDone ? { opacity: 1 } : undefined}
         transition={{ duration: 1, delay: 1.3 }}

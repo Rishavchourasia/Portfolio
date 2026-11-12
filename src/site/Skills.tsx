@@ -30,7 +30,9 @@ const SETTLE: [number, number, number, number] = [0.34, 1.56, 0.64, 1]
  * gravity), hits its place, bounces twice and settles at its final tilt.
  */
 function fall(h: number, i: number, tilt: number) {
-  const height = 220 + (h % 6) * 30
+  // A shorter drop on phones, where rows are narrow and a long fall crosses the heading above.
+  const narrow = typeof window !== 'undefined' && window.innerWidth < 768
+  const height = (220 + (h % 6) * 30) * (narrow ? 0.4 : 1)
   const bounce = 12 + (h % 4) * 4
   const delay = 0.04 + i * 0.07 + (h % 5) * 0.02
   return {
