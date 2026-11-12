@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Screens too short for the full layout: landscape phones, small laptop windows. */
+@custom-variant short (@media (max-height: 520px));
+/* A phone held sideways, or a very small one: too little height for the screenshots and the copy. */
+@custom-variant short-phone (@media (max-height: 600px) and (max-width: 767px));
+
 /* ---- design tokens ----
    Ink-black page, cream "paper" sheets that slide up over it, one lavender
    accent for italic serif voice and numbers, and a stamp red. Type pairs a
@@ -47,6 +52,11 @@
 }
 
 * { border-color: var(--border); }
+
+/* A grid with no column template (every grid on a phone) gets one column that can
+   shrink: otherwise its longest unbreakable line sets the column width and pushes
+   everything in it past the screen. */
+.grid { grid-auto-columns: minmax(0, 1fr); }
 
 /* One clear focus ring for keyboard users, on every link and button. */
 :focus-visible {
@@ -218,6 +228,14 @@ html.lenis body {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* A work card's quote poster gives up its tags, then itself, as the screen gets shorter. */
+@container (max-height: 230px) {
+  .poster-tags { display: none; }
+}
+@container (max-height: 70px) {
+  .poster { display: none; }
 }
 
 /* ---- utilities ---- */

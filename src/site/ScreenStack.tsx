@@ -100,11 +100,12 @@ export function ScreenStack({ lift }: { lift?: MotionValue<string> }) {
   if (!FRONT) return null
 
   return (
+    <div className="mx-auto w-[88%] max-w-[calc((100svh-34rem)*1.45)] md:w-full md:max-w-[calc((100svh-13rem)*1.45)]">
     <div
       onPointerMove={onMove}
       onPointerLeave={onLeave}
       // Full column width, but never taller than the screen leaves room for.
-      className="relative mx-auto aspect-[1.45] w-[88%] max-w-[calc((100svh-33rem)*1.45)] [perspective:1400px] md:w-full md:max-w-[calc((100svh-12rem)*1.45)]"
+      className="relative aspect-[1.45] w-full [perspective:1400px]"
     >
       <motion.div
         aria-hidden
@@ -148,10 +149,11 @@ export function ScreenStack({ lift }: { lift?: MotionValue<string> }) {
             <b className="font-extrabold">{proof.value}</b> {sentence(proof.label)}
           </motion.p>
         )}
-        <motion.p className="voice absolute right-[2%] -bottom-[7%] text-base" style={{ z: 40 }} {...enter(1.4, 10)}>
-          01 / {String(projects.length).padStart(2, '0')} · {nameOf(FRONT)}
-        </motion.p>
       </motion.div>
+    </div>
+      <motion.p className="voice mt-2 text-right text-sm sm:text-base" {...enter(1.4, 10)}>
+        01 / {String(projects.length).padStart(2, '0')} · {nameOf(FRONT)}
+      </motion.p>
     </div>
   )
 }

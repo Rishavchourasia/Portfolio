@@ -167,7 +167,7 @@ export function AboutPage({ covered }: { covered: boolean }) {
                   target={l.href.startsWith('mailto') ? undefined : '_blank'}
                   rel="noreferrer"
                   onClick={() => track('about_link', { link: l.label })}
-                  className="group inline-flex items-center gap-1 font-semibold underline decoration-1 underline-offset-4"
+                  className="group inline-flex max-w-full items-center gap-1 font-semibold [overflow-wrap:anywhere] underline decoration-1 underline-offset-4"
                 >
                   {l.label}
                   <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

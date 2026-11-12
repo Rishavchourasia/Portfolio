@@ -165,7 +165,8 @@ export function Hero() {
     const fit = () => {
       const narrow = section.clientWidth < 768
       const room = title.clientWidth
-      const cap = Math.min(section.clientHeight * (narrow ? 0.065 : 0.1), 116)
+      const short = section.clientHeight < 640
+      const cap = Math.min(section.clientHeight * (narrow ? 0.065 : short ? 0.08 : 0.1), 116)
       // Bricolage's optical size widens the letters as they shrink, so width
       // isn't proportional to size: rescale at the new size until it fits.
       let px = 100
@@ -195,7 +196,7 @@ export function Hero() {
       ref={ref}
       id="top"
       onPointerMove={followCursor}
-      className="hero sticky top-0 min-h-[660px] overflow-hidden [height:100svh]"
+      className="hero sticky top-0 min-h-[520px] overflow-hidden [height:100svh]"
     >
       {/* Everything in the hero zooms together, anchored on the hole of the "o". */}
       <motion.div
@@ -207,11 +208,12 @@ export function Hero() {
 
       {/* Copy and screens side by side, centred in the space above the proof bar. */}
       <div className="relative grid min-h-0 w-full flex-1 items-center gap-5 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] md:gap-10">
-        <div className="order-first md:order-none md:col-start-2 md:row-start-1">
+        <div className="order-first short-phone:hidden md:order-none md:col-start-2 md:row-start-1">
           <ScreenStack />
         </div>
 
-        <div className="relative md:col-start-1 md:row-start-1">
+        {/* contain: inline-size keeps the no-wrap headline from stretching this column past the screen before it is fitted. */}
+        <div className="relative min-w-0 [contain:inline-size] md:col-start-1 md:row-start-1">
           <motion.p
             className="inline-flex items-center gap-2.5 rounded-full border border-[var(--border-strong)] bg-[color-mix(in_oklab,var(--color-ink-950)_60%,transparent)] py-1.5 pr-4 pl-3 text-xs backdrop-blur"
             {...rise(0.25)}
@@ -222,7 +224,7 @@ export function Hero() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-mint)]" />
             </span>
             {profile.availability}
-            {company && <span className="text-muted">· now at {company}</span>}
+            {company && <span className="hidden text-muted min-[360px]:inline">· now at {company}</span>}
           </motion.p>
 
           <h1 ref={titleRef} className="mt-6 leading-[0.95] font-extrabold tracking-[-0.045em]">
@@ -273,11 +275,11 @@ export function Hero() {
         transition={{ duration: 1, delay: 1.3 }}
       >
         <span aria-hidden className="hero-horizon pointer-events-none absolute inset-x-[10%] -top-px h-px" />
-        <dl className="flex shrink-0 gap-8">
+        <dl className="flex min-w-0 shrink-0 gap-6 sm:gap-8">
           {[speed, builds].filter(Boolean).map((stat) => (
             <div key={stat?.label}>
               <dt className="voice text-2xl leading-none">{stat?.value}</dt>
-              <dd className="mt-1 max-w-[9rem] text-[11px] leading-snug text-muted">{stat?.label}</dd>
+              <dd className="mt-1 max-w-[7rem] text-[11px] leading-snug text-muted sm:max-w-[9rem]">{stat?.label}</dd>
             </div>
           ))}
         </dl>

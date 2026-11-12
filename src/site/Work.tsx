@@ -115,11 +115,11 @@ function ScreenCycler({ project, active }: { project: Project; active: boolean }
 /** For work without screenshots (the architecture lives inside the case): the tagline set as a poster over a light line. */
 function Poster({ project }: { project: Project }) {
   return (
-    <div className="flex flex-col items-center text-center">
-      <p className="voice max-w-3xl text-[clamp(1.8rem,4vw,3.4rem)] leading-[1.1] text-[var(--color-cream)]">
+    <div className="poster flex flex-col items-center text-center">
+      <p className="voice max-w-3xl text-[clamp(1rem,min(4cqw,16cqh),3.4rem)] leading-[1.1] text-[var(--color-cream)]">
         “{project.tagline}”
       </p>
-      <ul className="mt-8 flex max-w-2xl flex-wrap justify-center gap-2">
+      <ul className="poster-tags mt-[min(2rem,6cqh)] flex max-w-2xl flex-wrap justify-center gap-2">
         {project.tags.map((tag, i) => (
           <li
             key={tag}
@@ -175,12 +175,14 @@ function CaseCard({
         />
         <div aria-hidden className="absolute inset-x-[12%] top-[62%] h-px bg-[var(--color-cream)] opacity-70 shadow-[0_0_24px_4px_rgba(236,230,220,0.45),0_0_80px_14px_hsl(var(--h)_80%_60%/0.35)]" style={{ ['--h' as string]: hue }} />
 
-        <div className="absolute top-20 right-[var(--gutter)] text-right sm:top-24">
-          <p className="voice text-4xl leading-none">
+        {/* Number, visual, title: stacked in flow, so on short screens the visual gives up room instead of overlapping. */}
+        <div className="relative flex h-full flex-col px-gutter pt-[clamp(3.5rem,14svh,6rem)] pb-[clamp(1.25rem,5svh,2.5rem)]">
+        <div className="shrink-0 self-end text-right">
+          <p className="voice text-[clamp(1.8rem,6svh,2.25rem)] leading-none">
             {pad(index + 1)}
             <span className="text-base text-muted not-italic"> / {pad(TOTAL)}</span>
           </p>
-          <p className="voice mt-1 text-base text-[var(--color-cream)]">
+          <p className="voice mt-1 text-base text-[var(--color-cream)] short:hidden">
             {project.category === 'personal' ? 'Personal build' : 'Company work'} · {project.year}
           </p>
         </div>
@@ -188,10 +190,10 @@ function CaseCard({
         <motion.div
           ref={visualRef}
           style={{ y: visualY, rotateX: visualTilt, transformPerspective: 1400 }}
-          className="absolute inset-x-[var(--gutter)] top-[16%] bottom-[30%] flex items-center justify-center"
+          className="my-[clamp(0.5rem,2.5svh,1rem)] flex min-h-0 flex-1 items-center justify-center [container-type:size]"
         >
           {project.screens?.length ? (
-            <div className="w-full max-w-[min(860px,calc((100svh*0.54)*1.6))]">
+            <div className="w-[min(100cqw,calc(100cqh*1.25),860px)]">
               <ScreenCycler project={project} active={inView} />
             </div>
           ) : (
@@ -199,14 +201,14 @@ function CaseCard({
           )}
         </motion.div>
 
-        <div className="absolute inset-x-[var(--gutter)] bottom-8 sm:bottom-10">
-          <h3 className="text-[clamp(2.6rem,9vw,8rem)] leading-[0.85] font-extrabold tracking-[-0.045em] uppercase">
+        <div className="shrink-0">
+          <h3 className="text-[clamp(2.2rem,min(9vw,12svh),8rem)] leading-[0.85] font-extrabold tracking-[-0.045em] uppercase">
             {name}
           </h3>
-          <div className="mt-4 flex flex-wrap items-end justify-between gap-4 border-t border-[var(--border-strong)] pt-4">
+          <div className="mt-[clamp(0.5rem,2svh,1rem)] flex flex-wrap items-end justify-between gap-x-4 gap-y-2 border-t border-[var(--border-strong)] pt-[clamp(0.5rem,2svh,1rem)]">
             <div>
               <p className="voice text-xl text-[var(--color-cream)] sm:text-2xl">{kind || project.tagline}</p>
-              <p className="mt-1 text-xs text-muted">
+              <p className="mt-1 text-xs text-muted short:hidden">
                 {project.status ? `${project.year} · ${project.status}` : project.year} · {project.tags.slice(0, 4).join(' · ')}
               </p>
             </div>
@@ -237,6 +239,7 @@ function CaseCard({
             </button>
             </div>
           </div>
+        </div>
         </div>
 
         <motion.div aria-hidden style={{ opacity: dim }} className="pointer-events-none absolute inset-0 bg-black" />
