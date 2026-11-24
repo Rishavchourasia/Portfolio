@@ -95,6 +95,7 @@ export function Header() {
               </span>
               {profile.availability}
             </span>
+            {/* Résumé link hidden for now; uncomment to bring it back.
             {profile.resumeUrl && (
               <a
                 href={profile.resumeUrl}
@@ -105,7 +106,7 @@ export function Header() {
               >
                 Résumé
               </a>
-            )}
+            )} */}
             <button type="button" onClick={() => go('contact')} className="hidden font-medium transition-colors hover:text-[var(--color-lavender)] sm:block">
               Let&apos;s talk
             </button>

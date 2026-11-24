@@ -98,7 +98,8 @@ function Values() {
 export function AboutPage({ covered }: { covered: boolean }) {
   const { education } = profile
   const links = [
-    profile.resumeUrl && { label: 'Résumé', href: profile.resumeUrl },
+    // Résumé hidden for now; uncomment to bring it back.
+    // profile.resumeUrl && { label: 'Résumé', href: profile.resumeUrl },
     profile.socials.github && { label: 'GitHub', href: profile.socials.github },
     profile.socials.linkedin && { label: 'LinkedIn', href: profile.socials.linkedin },
     { label: profile.email, href: `mailto:${profile.email}` },
