@@ -80,7 +80,7 @@ export function ParticleCloud({ className }: { className?: string }) {
         const py = h / 2 + y1 * scale * persp * breathe
         const near = (z2 + 1) / 2
         ctx.globalAlpha = 0.15 + near * 0.75
-        ctx.fillStyle = `hsl(${p.hue} 90% ${62 + near * 18}%)`
+        ctx.fillStyle = p.hue % 7 === 0 ? '#ff4f00' : `rgba(17, 17, 16, ${(0.35 + near * 0.55).toFixed(2)})`
         const s = 0.6 + near * 1.6
         ctx.fillRect(px, py, s, s)
       }

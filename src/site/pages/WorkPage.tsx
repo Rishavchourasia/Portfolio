@@ -8,7 +8,7 @@ import { caseUrl, navigate } from '@/lib/route'
 import type { Project } from '@/types/content'
 import { FadeUp, RevealLines } from '../Reveal'
 import { useReveal } from '../intro'
-import { ORDERED, TOTAL, hueFor, pad, splitTitle } from '../workData'
+import { ORDERED, TOTAL, pad, splitTitle } from '../workData'
 import { Sheet } from './Sheet'
 
 const WORDS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']
@@ -23,13 +23,11 @@ const openCase = (p: Project) => {
 /** What a project looks like in a glance: its first screen, or a card in its colour. */
 function Thumb({ project, className = '' }: { project: Project; className?: string }) {
   const screen = project.screens?.[0]
-  const hue = hueFor(project.slug)
   if (screen)
     return <img src={screen.src} alt="" decoding="async" loading="lazy" className={`aspect-[16/10] w-full object-cover object-top ${className}`} />
   return (
     <div
-      className={`grid aspect-[16/10] w-full place-items-center p-[8%] ${className}`}
-      style={{ background: `radial-gradient(90% 90% at 20% 0%, hsl(${hue} 70% 45%), hsl(${(hue + 60) % 360} 50% 18%))` }}
+      className={`on-ink grid aspect-[16/10] w-full place-items-center bg-[#161614] p-[8%] ${className}`}
     >
       <p className="voice text-center text-[clamp(1rem,2vw,1.6rem)] leading-tight text-[var(--color-cream)]">“{project.tagline}”</p>
     </div>

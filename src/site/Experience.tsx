@@ -70,7 +70,7 @@ export function Experience() {
         <motion.span
           aria-hidden
           style={{ scaleY: fill }}
-          className="absolute top-0 -left-px h-full w-px origin-top bg-[var(--color-lavender)] shadow-[0_0_12px_rgba(169,156,255,0.8)]"
+          className="absolute top-0 -left-px h-full w-px origin-top bg-[var(--color-lavender)]"
         />
         {rows.map((row) => {
           const [from, to] = years(row.period)

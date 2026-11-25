@@ -78,7 +78,7 @@ export function Starfield({ className }: { className?: string }) {
         s.ox += s.vx
         s.oy += s.vy
         ctx.globalAlpha = 0.18 + 0.45 * Math.sin(now / 700 + s.phase) ** 2
-        ctx.fillStyle = s.size > 1.4 ? '#a99cff' : '#ece6dc'
+        ctx.fillStyle = s.size > 1.4 ? '#ff4f00' : '#111110'
         ctx.fillRect(px, py, s.size, s.size)
       }
     }

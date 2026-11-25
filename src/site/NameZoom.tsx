@@ -103,7 +103,6 @@ export function NameZoom({
   label,
   id,
   tiles,
-  hue,
   caption,
   container,
   endDim = 0.35,
@@ -113,7 +112,6 @@ export function NameZoom({
   label: string
   id: string
   tiles: Tile[]
-  hue: number
   caption: ReactNode
   container?: RefObject<HTMLDivElement | null>
   endDim?: number
@@ -152,9 +150,7 @@ export function NameZoom({
           aria-hidden
           className="absolute inset-0"
           style={{
-            background: `radial-gradient(70% 60% at 50% 50%, hsl(${hue} 60% 38%), transparent 75%),
-                         radial-gradient(50% 50% at 85% 15%, hsl(${(hue + 60) % 360} 70% 45% / 0.6), transparent 70%),
-                         var(--color-ink-900)`,
+            background: '#161614',
           }}
         />
         {tiles.map((tile) => (

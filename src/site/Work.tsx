@@ -2,7 +2,7 @@ import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
 import { AnimatePresence, motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
 import { ArrowRight, ArrowUpRight, Play } from 'lucide-react'
 import { projects } from '@/content'
-import { ORDERED, TOTAL, hueFor, pad, splitTitle } from './workData'
+import { ORDERED, TOTAL, pad, splitTitle } from './workData'
 import { track } from '@/lib/analytics'
 import { EASE } from '@/lib/motion'
 import { caseUrl, navigate, useCaseSlug } from '@/lib/route'
@@ -146,7 +146,6 @@ function CaseCard({
   onOpen: () => void
 }) {
   const { name, kind } = splitTitle(project.title)
-  const hue = hueFor(project.slug)
   const steps = Math.max(1, TOTAL - 1)
   // 0 → 1 while the next card slides over this one, after this one has had its hold.
   const exit = useTransform(progress, (p) => clamp01((p * steps - index - HOLD) / (1 - HOLD)))
@@ -169,11 +168,10 @@ function CaseCard({
           aria-hidden
           className="absolute inset-0"
           style={{
-            background: `radial-gradient(60% 55% at 50% 58%, hsl(${hue} 70% 45% / 0.28), transparent 70%),
-                         radial-gradient(40% 30% at 85% 10%, hsl(${(hue + 60) % 360} 70% 50% / 0.12), transparent 70%)`,
+            background: 'transparent',
           }}
         />
-        <div aria-hidden className="absolute inset-x-[12%] top-[62%] h-px bg-[var(--color-cream)] opacity-70 shadow-[0_0_24px_4px_rgba(236,230,220,0.45),0_0_80px_14px_hsl(var(--h)_80%_60%/0.35)]" style={{ ['--h' as string]: hue }} />
+        <div aria-hidden className="absolute inset-x-[12%] top-[62%] h-px bg-[var(--color-cream)] opacity-20" />
 
         {/* Number, visual, title: stacked in flow, so on short screens the visual gives up room instead of overlapping. */}
         <div className="relative flex h-full flex-col px-gutter pt-[clamp(3.5rem,14svh,6rem)] pb-[clamp(1.25rem,5svh,2.5rem)]">

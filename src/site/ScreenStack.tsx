@@ -109,9 +109,9 @@ export function ScreenStack({ lift }: { lift?: MotionValue<string> }) {
     >
       <motion.div
         aria-hidden
-        className="absolute top-1/2 right-[8%] aspect-square h-[110%] -translate-y-1/2 rounded-full bg-[var(--color-lavender)] blur-[110px]"
+        className="absolute top-1/2 right-[8%] aspect-square h-[110%] -translate-y-1/2 rounded-full bg-[var(--text)] blur-[110px]"
         initial={{ opacity: 0 }}
-        animate={introDone ? { opacity: 0.13 } : undefined}
+        animate={introDone ? { opacity: 0.07 } : undefined}
         transition={{ duration: 2, delay: 0.4 }}
       />
       <motion.div

@@ -9,10 +9,6 @@ import { EASE } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/content'
 
-/** Deterministic hue per project so generated placeholders stay stable. */
-const hueFor = (seed: string) =>
-  [...seed].reduce((acc, ch) => (acc * 31 + ch.charCodeAt(0)) % 360, 7)
-
 const AUTOPLAY_MS = 4500
 
 type Tab = 'screens' | 'architecture'
@@ -22,8 +18,7 @@ type Props = {
   className?: string
 }
 
-function Placeholder({ title, slug }: { title: string; slug: string }) {
-  const hue = hueFor(slug)
+function Placeholder({ title }: { title: string }) {
   const initials = title
     .split(/\s+/)
     .slice(0, 2)
@@ -36,14 +31,12 @@ function Placeholder({ title, slug }: { title: string; slug: string }) {
       aria-hidden
       className="grid h-full w-full place-items-center transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.04]"
       style={{
-        background: `radial-gradient(120% 120% at 20% 0%, hsl(${hue} 85% 55% / 0.35), transparent 60%),
-                     radial-gradient(120% 120% at 90% 100%, hsl(${(hue + 70) % 360} 85% 60% / 0.3), transparent 55%),
-                     color-mix(in oklab, var(--text) 4%, transparent)`,
+        background: '#161614',
       }}
     >
       <span
         className="font-display text-5xl font-bold tracking-tight opacity-25 select-none sm:text-6xl"
-        style={{ color: `hsl(${hue} 80% 70%)` }}
+        style={{ color: '#ff4f00' }}
       >
         {initials}
       </span>
@@ -282,7 +275,7 @@ export function ProjectPreview({ project, className }: Props) {
           )}
         </motion.div>
       ) : (
-        <Placeholder title={title} slug={slug} />
+        <Placeholder title={title} />
       )}
     </AnimatePresence>
   )

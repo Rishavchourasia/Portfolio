@@ -19,7 +19,7 @@ import type { Project } from '@/types/content'
 import { Frame } from './Work'
 import { NameZoom } from './NameZoom'
 import { REDUCED, toTiles, type Tile } from './zoomTiles'
-import { ORDERED, TOTAL, hueFor, pad, splitTitle } from './workData'
+import { ORDERED, TOTAL, pad, splitTitle } from './workData'
 
 const CURTAIN = [0.76, 0, 0.24, 1] as const
 
@@ -28,7 +28,6 @@ const CURTAIN = [0.76, 0, 0.24, 1] as const
 /* ------------------------------------------------------------------ */
 
 function tilesFor(project: Project): Tile[] {
-  const hue = hueFor(project.slug)
   const screens = project.screens ?? []
   const pieces: ReactNode[] = screens.length
     ? screens.map((s) => (
@@ -43,7 +42,7 @@ function tilesFor(project: Project): Tile[] {
             ]
           : []),
         ...(project.results ?? []).map((r) => (
-          <div key={r.label} className="aspect-[16/10] rounded-md p-[6%]" style={{ background: `hsl(${hue} 45% 22%)` }}>
+          <div key={r.label} className="on-ink aspect-[16/10] rounded-md bg-[#1f1f1c] p-[6%]">
             <p className="voice text-[clamp(1.6rem,4vw,3.4rem)] leading-none text-[var(--color-cream)]">{r.value}</p>
             <p className="mt-2 text-[clamp(0.6rem,1vw,0.85rem)] text-[var(--color-cream)]/70">{r.label}</p>
           </div>
@@ -55,7 +54,7 @@ function tilesFor(project: Project): Tile[] {
             </span>
           ))}
         </div>,
-        <div key="tagline" className="grid aspect-[16/10] place-items-center rounded-md p-[6%]" style={{ background: `hsl(${(hue + 50) % 360} 55% 35%)` }}>
+        <div key="tagline" className="on-ink grid aspect-[16/10] place-items-center rounded-md bg-[#ff4f00] p-[6%]">
           <p className="voice text-center text-[clamp(0.9rem,1.8vw,1.5rem)] leading-tight text-[var(--color-cream)]">“{project.tagline}”</p>
         </div>,
       ]
@@ -70,7 +69,6 @@ function ZoomOpening({ project, index, container }: { project: Project; index: n
       label={`${name}, opening`}
       id={project.slug}
       tiles={tilesFor(project)}
-      hue={hueFor(project.slug)}
       container={container}
       caption={
         <div>

@@ -133,7 +133,7 @@ function Timeline({ children }: { children: ReactNode }) {
       <motion.span
         aria-hidden
         style={{ scaleY: fill }}
-        className="absolute top-0 -left-px h-full w-px origin-top bg-[var(--color-lavender)] shadow-[0_0_14px_rgba(169,156,255,0.8)]"
+        className="absolute top-0 -left-px h-full w-px origin-top bg-[var(--color-lavender)]"
       />
       {children}
     </div>

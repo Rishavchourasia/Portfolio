@@ -6,49 +6,55 @@
 @custom-variant short-phone (@media (max-height: 600px) and (max-width: 767px));
 
 /* ---- design tokens ----
-   Ink-black page, cream "paper" sheets that slide up over it, one lavender
-   accent for italic serif voice and numbers, and a stamp red. Type pairs a
-   heavy grotesk with an italic serif, plus a signature script for the name. */
+   A spec sheet: off-white paper, near-black ink and one signal orange, used
+   only to mark the thing to look at. One typeface, Geist, with its mono for
+   labels; no serif, no script, no glow.
+   The old token names are kept so every component picks up the new look:
+   "ink-9xx" are now the paper tones, "cream" is now the ink. */
 @theme {
-  --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
-  --font-signature: "Mrs Saint Delafield", "Instrument Serif", cursive;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-signature: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --color-ink-950: #0b0a0f;
-  --color-ink-900: #121118;
-  --color-ink-800: #1a1822;
-  --color-cream: #ece6dc;
-  --color-cream-ink: #17151c;
-  --color-lavender: #a99cff;
-  --color-stamp: #c2433a;
-  --color-paper-red: #9b3a30;
+  --color-ink-950: #eeede8;
+  --color-ink-900: #e6e4de;
+  --color-ink-800: #dcdad3;
+  --color-cream: #111110;
+  --color-cream-ink: #eeede8;
+  --color-lavender: #ff4f00;
+  --color-stamp: #ff4f00;
+  --color-paper-red: #111110;
 
   /* Kept for the project preview and architecture diagram. */
-  --color-accent-400: #bcb2ff;
-  --color-accent-500: #a99cff;
-  --color-violet-alt: #c9a4ff;
+  --color-accent-400: #ff7a3d;
+  --color-accent-500: #ff4f00;
+  --color-violet-alt: #ffb08a;
   --color-mint: #7fe0c4;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Geist reads best a step lighter than the old grotesk: headings sit at medium. */
+  --font-weight-bold: 600;
+  --font-weight-extrabold: 500;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   --bg: var(--color-ink-950);
-  --surface: rgba(255, 255, 255, 0.04);
-  --surface-strong: #15141b;
-  --border: rgba(236, 230, 220, 0.1);
-  --border-strong: rgba(236, 230, 220, 0.2);
-  --text: #ece6dc;
-  --text-muted: #8f8a99;
+  --surface: rgba(17, 17, 16, 0.03);
+  --surface-strong: #f6f5f1;
+  --border: rgba(17, 17, 16, 0.12);
+  --border-strong: rgba(17, 17, 16, 0.3);
+  --text: #111110;
+  --text-muted: #6e6c66;
   --gutter: clamp(1.25rem, 0.5rem + 3.2vw, 3rem);
-  --voice: var(--color-lavender);
+  --voice: #111110;
 
-  --elev-1: 0 1px 0 0 rgba(255, 255, 255, 0.05) inset, 0 8px 24px -12px rgba(0, 0, 0, 0.8);
-  --elev-2: 0 1px 0 0 rgba(255, 255, 255, 0.07) inset, 0 24px 48px -20px rgba(0, 0, 0, 0.9);
-  --elev-3: 0 1px 0 0 rgba(255, 255, 255, 0.09) inset, 0 40px 80px -28px rgba(0, 0, 0, 0.95);
+  --elev-1: 0 1px 2px rgba(17, 17, 16, 0.06), 0 8px 24px -16px rgba(17, 17, 16, 0.18);
+  --elev-2: 0 1px 2px rgba(17, 17, 16, 0.06), 0 24px 48px -28px rgba(17, 17, 16, 0.25);
+  --elev-3: 0 2px 4px rgba(17, 17, 16, 0.06), 0 40px 80px -36px rgba(17, 17, 16, 0.3);
 }
 
 * { border-color: var(--border); }
@@ -85,6 +91,7 @@ dialog:focus-visible { outline: none; }
 
 html {
   -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01";
   background: var(--bg);
 }
 
@@ -108,10 +115,11 @@ html.lenis body {
   overscroll-behavior: contain;
 }
 
-::selection { background: var(--color-lavender); color: var(--color-ink-950); }
+::selection { background: var(--color-signal, #ff4f00); color: #fff; }
 
 /* Film grain over everything, the way the dark sections read as print. */
 .grain {
+  display: none;
   pointer-events: none;
   position: fixed;
   inset: -50%;
@@ -138,42 +146,53 @@ html.lenis body {
   margin-bottom: -0.12em;
 }
 
-/* Cream paper: a sheet that slides over the dark page with a rounded top. */
+/* A lighter sheet that slides over the page with a rounded top and a hairline edge. */
 .paper {
   position: relative;
-  background: var(--color-cream);
-  color: var(--color-cream-ink);
+  background: #f7f6f2;
+  color: #111110;
   border-radius: clamp(1.25rem, 3vw, 2.5rem) clamp(1.25rem, 3vw, 2.5rem) 0 0;
-  --text: var(--color-cream-ink);
-  --text-muted: #6d6676;
-  --voice: #5a48d8;
-  --border: rgba(23, 21, 28, 0.14);
-  --border-strong: rgba(23, 21, 28, 0.3);
+  box-shadow: 0 -1px 0 rgba(17, 17, 16, 0.12);
+  --text: #111110;
+  --text-muted: #6e6c66;
+  --voice: #111110;
+  --border: rgba(17, 17, 16, 0.12);
+  --border-strong: rgba(17, 17, 16, 0.3);
 }
 
+/* The one ink sheet: inverted, paper type on near-black. */
 .paper--red {
-  background: var(--color-paper-red);
-  color: #f3e9de;
-  --text: #f3e9de;
-  --text-muted: rgba(243, 233, 222, 0.7);
-  --voice: #f3e9de;
-  --border: rgba(243, 233, 222, 0.22);
-  --border-strong: rgba(243, 233, 222, 0.45);
+  background: #111110;
+  color: #eeede8;
+  box-shadow: none;
+  --text: #eeede8;
+  --text-muted: #8c8a84;
+  --voice: #eeede8;
+  --border: rgba(238, 237, 232, 0.16);
+  --border-strong: rgba(238, 237, 232, 0.4);
 }
 
-/* Dark media (screenshots, diagrams, video) set on a paper sheet keep the ink theme. */
+/* Dark media (screenshots, diagrams, video) keep a dark frame on the light page:
+   the old ink tokens are restored inside them. */
 .on-ink {
-  color: #ece6dc;
-  --text: #ece6dc;
-  --text-muted: #8f8a99;
-  --voice: var(--color-lavender);
-  --border: rgba(236, 230, 220, 0.1);
-  --border-strong: rgba(236, 230, 220, 0.2);
+  --color-ink-950: #0e0e0d;
+  --color-ink-900: #161614;
+  --color-ink-800: #1f1f1c;
+  --color-cream: #eeede8;
+  --color-cream-ink: #111110;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-strong: #161614;
+  color: #eeede8;
+  --text: #eeede8;
+  --text-muted: #8c8a84;
+  --voice: #eeede8;
+  --border: rgba(238, 237, 232, 0.12);
+  --border-strong: rgba(238, 237, 232, 0.24);
 }
 
 /* Fibre texture on the paper sheets. */
 .paper::before {
-  content: "";
+  content: none;
   pointer-events: none;
   position: absolute;
   inset: 0;
@@ -187,21 +206,17 @@ html.lenis body {
 .hero {
   --spot-x: 72%;
   --spot-y: 40%;
-  background:
-    radial-gradient(55% 60% at 78% 42%, rgba(169, 156, 255, 0.1), transparent 70%),
-    radial-gradient(45% 50% at 8% 100%, rgba(194, 67, 58, 0.06), transparent 70%);
+  background: none;
 }
 
 /* A soft light that trails the cursor across the hero. */
 .hero-spot {
-  background: radial-gradient(520px circle at var(--spot-x) var(--spot-y), rgba(169, 156, 255, 0.09), transparent 65%);
-  transition: background 0.2s;
+  background: none;
 }
 
 /* The glowing edge on top of the proof bar. */
 .hero-horizon {
-  background: linear-gradient(90deg, transparent, rgba(236, 230, 220, 0.7), transparent);
-  box-shadow: 0 0 18px 2px rgba(169, 156, 255, 0.35);
+  background: rgba(17, 17, 16, 0.3);
 }
 
 .hero-marquee {
@@ -256,29 +271,26 @@ html.lenis body {
 }
 
 /* Small uppercase label with a leading rule: "—— ABOUT". */
+/* Small mono label: "WORK", "THE PROBLEM". */
 @utility eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-muted);
-  &::before {
-    content: "";
-    width: 2rem;
-    height: 1px;
-    background: currentColor;
-    opacity: 0.6;
-  }
 }
 
-/* The italic serif voice: the second, spoken line of every heading. */
+/* The second line of a heading: the same face, upright, a touch lighter. */
 @utility voice {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.005em;
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.035em;
   color: var(--voice);
 }
+
+/* No synthetic italics anywhere: Geist is set upright. */
+.italic { font-style: normal; }
